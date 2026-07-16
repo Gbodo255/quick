@@ -1,0 +1,365 @@
+body,
+body *:not(html):not(style):not(br):not(tr):not(code) {
+    box-sizing: border-box;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    position: relative;
+}
+
+body {
+    -webkit-text-size-adjust: none;
+    background-color: #f6f7f9;
+    color: #3d3f40;
+    height: 100%;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    width: 100% !important;
+}
+
+.preheader {
+    color: transparent;
+    display: none !important;
+    font-size: 1px;
+    height: 0;
+    line-height: 1px;
+    max-height: 0;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+p,
+ul,
+ol,
+blockquote {
+    line-height: 1.55;
+    text-align: left;
+}
+
+a {
+    color: #5c46c2;
+}
+
+a img {
+    border: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+h1 {
+    color: #000000;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 22px;
+    text-align: left;
+}
+
+h2 {
+    color: #000000;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 28px 0 12px;
+    text-align: left;
+}
+
+h3 {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 24px 0 10px;
+    text-align: left;
+}
+
+p {
+    color: #3d3f40;
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0 0 18px;
+    text-align: left;
+}
+
+strong {
+    color: #000000;
+    font-weight: 700;
+}
+
+ul,
+ol {
+    color: #3d3f40;
+    font-size: 15px;
+    margin: 0 0 20px;
+    padding-left: 24px;
+}
+
+li {
+    margin: 0 0 8px;
+}
+
+.wrapper {
+    -premailer-cellpadding: 0;
+    -premailer-cellspacing: 0;
+    -premailer-width: 100%;
+    background-color: #f6f7f9;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.content {
+    -premailer-cellpadding: 0;
+    -premailer-cellspacing: 0;
+    -premailer-width: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.header {
+    padding: 32px 16px 18px;
+    text-align: center;
+}
+
+.brand-link {
+    color: #000000;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.brand-symbol {
+    background-color: #5c46c2;
+    border-radius: 8px;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 800;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    width: 36px;
+}
+
+.brand-name {
+    color: #000000;
+    display: inline-block;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 36px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.brand-accent {
+    color: #5c46c2;
+}
+
+.brand-tagline {
+    color: #7a7d80;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.body {
+    -premailer-cellpadding: 0;
+    -premailer-cellspacing: 0;
+    -premailer-width: 100%;
+    background-color: #f6f7f9;
+    border: 0;
+    margin: 0;
+    padding: 0 16px;
+    width: 100%;
+}
+
+.inner-body {
+    -premailer-cellpadding: 0;
+    -premailer-cellspacing: 0;
+    -premailer-width: 600px;
+    background-color: #ffffff;
+    border: 1px solid #efefef;
+    border-collapse: separate;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(61, 63, 64, 0.06);
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0;
+    width: 600px;
+}
+
+.mail-accent {
+    background-color: #5c46c2;
+    font-size: 0;
+    line-height: 0;
+}
+
+.content-cell {
+    max-width: 100vw;
+    padding: 38px 42px 40px;
+}
+
+.content-cell > :last-child {
+    margin-bottom: 0;
+}
+
+.inner-body a {
+    word-break: break-word;
+}
+
+.panel {
+    border: 1px solid #e7e3fb;
+    border-radius: 8px;
+    margin: 24px 0;
+}
+
+.panel-content {
+    background-color: #f7f5ff;
+    border-radius: 8px;
+    color: #3d3f40;
+    padding: 18px 20px;
+}
+
+.panel-content p {
+    color: #3d3f40;
+}
+
+.panel-item {
+    padding: 0;
+}
+
+.panel-item p:last-of-type {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.security-code {
+    color: #4a38a8;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 8px;
+    line-height: 1.15;
+    text-align: center;
+}
+
+.subcopy {
+    border-top: 1px solid #efefef;
+    margin-top: 28px;
+    padding-top: 22px;
+}
+
+.subcopy p {
+    color: #7a7d80;
+    font-size: 13px;
+}
+
+.table table {
+    -premailer-cellpadding: 0;
+    -premailer-cellspacing: 0;
+    -premailer-width: 100%;
+    margin: 24px auto;
+    width: 100%;
+}
+
+.table th {
+    border-bottom: 1px solid #efefef;
+    color: #000000;
+    font-size: 13px;
+    margin: 0;
+    padding-bottom: 8px;
+}
+
+.table td {
+    border-bottom: 1px solid #f0f1f3;
+    color: #3d3f40;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    padding: 10px 0;
+}
+
+.action {
+    -premailer-cellpadding: 0;
+    -premailer-cellspacing: 0;
+    -premailer-width: 100%;
+    float: unset;
+    margin: 30px auto;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+}
+
+.button {
+    -webkit-text-size-adjust: none;
+    border-radius: 6px;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.button-blue,
+.button-primary {
+    background-color: #5c46c2;
+    border-bottom: 12px solid #5c46c2;
+    border-left: 22px solid #5c46c2;
+    border-right: 22px solid #5c46c2;
+    border-top: 12px solid #5c46c2;
+}
+
+.button-green,
+.button-success {
+    background-color: #16875b;
+    border-bottom: 12px solid #16875b;
+    border-left: 22px solid #16875b;
+    border-right: 22px solid #16875b;
+    border-top: 12px solid #16875b;
+}
+
+.button-red,
+.button-error {
+    background-color: #dc2626;
+    border-bottom: 12px solid #dc2626;
+    border-left: 22px solid #dc2626;
+    border-right: 22px solid #dc2626;
+    border-top: 12px solid #dc2626;
+}
+
+.footer {
+    -premailer-cellpadding: 0;
+    -premailer-cellspacing: 0;
+    -premailer-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    width: 600px;
+}
+
+.footer-cell {
+    padding: 20px 20px 34px;
+    text-align: center;
+}
+
+.footer p {
+    color: #8e9094;
+    font-size: 12px;
+    line-height: 1.55;
+    margin: 0 0 4px;
+    text-align: center;
+}
+
+.footer a {
+    color: #7a7d80;
+    text-decoration: underline;
+}
+
+.break-all {
+    word-break: break-all;
+}

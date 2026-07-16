@@ -1,0 +1,272 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system — inspiré Clenar (clenar.framer.website)
+ * Neutres doux, Inter, accent violet, cartes blanches, ombres minimales.
+ */
+:root {
+  --clenar-white: #ffffff;
+  --clenar-bg: #f6f7f9;
+  --clenar-text: #3d3f40;
+  --clenar-text-muted: #9e9f9f;
+  --clenar-heading: #000000;
+  --clenar-primary: #5c46c2;
+  --clenar-primary-hover: #4a38a8;
+  --clenar-border: #efefef;
+  --clenar-surface-alt: #f6f9f6;
+  --clenar-border-subtle: rgba(61, 63, 64, 0.12);
+  --clenar-star: #ffba33;
+
+  --background: var(--clenar-bg);
+  --foreground: var(--clenar-text);
+  --card: var(--clenar-white);
+  --card-foreground: var(--clenar-text);
+  --popover: var(--clenar-white);
+  --popover-foreground: var(--clenar-text);
+  --primary: var(--clenar-primary);
+  --primary-foreground: #ffffff;
+  --secondary: var(--clenar-surface-alt);
+  --secondary-foreground: var(--clenar-text);
+  --muted: var(--clenar-bg);
+  --muted-foreground: var(--clenar-text-muted);
+  --accent: var(--clenar-primary);
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --border: var(--clenar-border);
+  --input: var(--clenar-border);
+  --ring: var(--clenar-primary);
+  --radius: 0.375rem;
+  --cr-radius-sm: 0.25rem;
+  --cr-radius: 0.375rem;
+  --cr-radius-md: 0.5rem;
+  --cr-radius-lg: 0.625rem;
+
+  --sidebar: var(--clenar-bg);
+  --sidebar-foreground: var(--clenar-text);
+  --sidebar-primary: var(--clenar-primary);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--clenar-surface-alt);
+  --sidebar-accent-foreground: var(--clenar-text);
+  --sidebar-border: var(--clenar-border);
+  --sidebar-ring: var(--clenar-primary);
+}
+
+@theme inline {
+  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-headline: 'Inter', system-ui, sans-serif;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.625rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 0.875rem;
+  --radius-4xl: 1rem;
+
+  /* Alias lumina-* (compatibilité composants) */
+  --color-lumina-brand: var(--clenar-primary-hover);
+  --color-lumina-secondary: var(--clenar-primary);
+  --color-lumina-accent: var(--clenar-primary);
+  --color-lumina-accent-gold: var(--clenar-primary);
+  --color-lumina-heading: var(--clenar-heading);
+  --color-lumina-background: var(--clenar-bg);
+  --color-lumina-on-surface: var(--clenar-text);
+  --color-lumina-on-surface-variant: var(--clenar-text-muted);
+  --color-lumina-primary: var(--clenar-primary);
+  --color-lumina-on-primary: #ffffff;
+  --color-lumina-secondary-fixed-dim: var(--clenar-primary-hover);
+  --color-lumina-surface-tint: var(--clenar-primary);
+  --color-lumina-inverse-surface: var(--clenar-heading);
+  --color-lumina-primary-container: var(--clenar-primary-hover);
+  --color-lumina-surface-lowest: var(--clenar-white);
+  --color-lumina-surface: var(--clenar-bg);
+  --color-lumina-surface-container: var(--clenar-surface-alt);
+  --color-lumina-surface-container-low: var(--clenar-bg);
+  --color-lumina-surface-container-high: var(--clenar-border);
+  --color-lumina-surface-light: var(--clenar-bg);
+  --color-lumina-outline: var(--clenar-border);
+  --color-lumina-outline-variant: var(--clenar-border);
+  --color-lumina-status-success: var(--clenar-text);
+  --color-lumina-status-success-bg: var(--clenar-surface-alt);
+  --color-lumina-warning: var(--clenar-star);
+  --color-lumina-warning-bg: #fff8eb;
+  --color-lumina-warning-foreground: #7a5a12;
+  --color-lumina-error: #dc2626;
+
+  --spacing-container-max: 1200px;
+  --spacing-margin-desktop: 48px;
+  --spacing-margin-mobile: 16px;
+  --spacing-gutter: 24px;
+  --spacing-stack-md: 24px;
+  --spacing-stack-lg: 64px;
+
+  --shadow-lumina-glass: 0 1px 2px rgba(61, 63, 64, 0.04);
+  --shadow-lumina-card: 0 2px 12px rgba(61, 63, 64, 0.05);
+
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-wiggle: wiggle 2s ease-in-out infinite;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/40;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--clenar-heading);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+@utility max-w-container-max {
+  max-width: var(--spacing-container-max);
+}
+
+/* Boutons compacts — arrondis modérés */
+@utility btn-clenar {
+  @apply inline-flex h-9 items-center justify-center rounded-md bg-lumina-accent px-5 text-xs font-medium text-white transition-colors duration-200 hover:bg-lumina-brand;
+}
+
+@utility btn-clenar-outline {
+  @apply inline-flex h-9 items-center justify-center rounded-md border border-lumina-outline bg-white px-5 text-xs font-medium text-lumina-on-surface transition-colors duration-200 hover:bg-lumina-surface-container-low;
+}
+
+/* Surfaces & champs — taille réduite cohérente */
+@utility surface-card {
+  @apply rounded-lg border border-lumina-outline bg-lumina-surface-lowest shadow-[var(--shadow-lumina-card)];
+}
+
+@utility field-compact {
+  @apply h-9 rounded-md border border-lumina-outline-variant bg-lumina-surface-lowest px-3 text-sm text-lumina-on-surface;
+}
+
+.glass-panel {
+  background: var(--clenar-white);
+  border: 1px solid var(--clenar-border);
+  box-shadow: var(--shadow-lumina-card);
+}
+
+.lumina-range {
+  height: 6px;
+  appearance: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  background: var(--clenar-border);
+}
+
+.lumina-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: var(--clenar-primary);
+  box-shadow: 0 1px 4px rgba(61, 63, 64, 0.15);
+  cursor: pointer;
+}
+
+.hero-overlay-violet {
+  background: linear-gradient(
+    105deg,
+    rgba(92, 70, 194, 0.48) 0%,
+    rgba(92, 70, 194, 0.38) 50%,
+    rgba(74, 56, 168, 0.32) 100%
+  );
+}
+
+/* Calendrier — jour sélectionné violet */
+.rdp-selected .rdp-day_button,
+.rdp-selected button {
+  background-color: var(--clenar-primary) !important;
+  color: #fff !important;
+}
+
+.rdp-today:not(.rdp-selected) .rdp-day_button {
+  background-color: var(--clenar-surface-alt);
+  color: var(--clenar-heading);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slider-track {
+    transition: none !important;
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
