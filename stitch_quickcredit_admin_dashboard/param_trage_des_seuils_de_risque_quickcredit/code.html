@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Paramétrage des Seuils de Risque - RiskManager Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+        
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: #fcf8fa;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom toggle switch styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e4e2e4;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #006c49;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f6f3f5",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#4edea3",
+                        "surface-dim": "#dcd9db",
+                        "secondary-container": "#6cf8bb",
+                        "tertiary": "#000000",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface": "#fcf8fa",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-tertiary-container": "#b87500",
+                        "surface-bright": "#fcf8fa",
+                        "on-background": "#1b1b1d",
+                        "outline-variant": "#c6c6cd",
+                        "error-container": "#ffdad6",
+                        "secondary": "#006c49",
+                        "surface-container": "#f0edef",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#eae7e9",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "primary-container": "#131b2e",
+                        "primary": "#000000",
+                        "on-primary-fixed": "#131b2e",
+                        "tertiary-container": "#2a1700",
+                        "inverse-on-surface": "#f3f0f2",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "on-primary-container": "#7c839b",
+                        "on-surface": "#1b1b1d",
+                        "background": "#fcf8fa",
+                        "on-tertiary-fixed": "#2a1700",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-fixed": "#002113",
+                        "inverse-primary": "#bec6e0",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-secondary-container": "#00714d",
+                        "on-surface-variant": "#45464d",
+                        "secondary-fixed": "#6ffbbe",
+                        "outline": "#76777d",
+                        "inverse-surface": "#303032",
+                        "surface-tint": "#565e74",
+                        "surface-container-highest": "#e4e2e4",
+                        "surface-variant": "#e4e2e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "sidebar-width": "260px",
+                        "element-gap": "12px",
+                        "gutter": "24px",
+                        "container-padding": "32px",
+                        "section-gap": "40px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Geist"],
+                        "display-lg-mobile": ["Geist"],
+                        "headline-sm": ["Geist"],
+                        "label-md": ["Geist"],
+                        "body-md": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "body-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Side Navigation Bar -->
+<aside class="fixed h-full w-sidebar-width left-0 top-0 bg-primary-container text-on-primary flex flex-col py-container-padding shadow-sm z-50">
+<div class="px-gutter mb-section-gap">
+<h1 class="font-headline-md text-headline-md text-on-primary font-bold">RiskManager Pro</h1>
+<p class="font-label-md text-label-md text-on-primary/60">Institutional Credit</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-element-gap px-gutter py-3 text-on-primary/70 hover:bg-on-primary/5 hover:text-on-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-element-gap px-gutter py-3 text-on-primary/70 hover:bg-on-primary/5 hover:text-on-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">folder_shared</span>
+<span class="font-label-md text-label-md">Dossiers</span>
+</a>
+<a class="flex items-center gap-element-gap px-gutter py-3 text-on-primary/70 hover:bg-on-primary/5 hover:text-on-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Users</span>
+</a>
+<a class="flex items-center gap-element-gap px-gutter py-3 text-on-primary/70 hover:bg-on-primary/5 hover:text-on-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Credits</span>
+</a>
+<a class="flex items-center gap-element-gap px-gutter py-3 text-on-primary/70 hover:bg-on-primary/5 hover:text-on-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="font-label-md text-label-md">Stats</span>
+</a>
+<a class="flex items-center gap-element-gap px-gutter py-3 bg-on-primary/10 text-on-primary border-l-4 border-secondary-fixed transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-gutter pt-section-gap">
+<div class="flex items-center gap-3 p-3 bg-on-primary/5 rounded-lg">
+<img class="w-10 h-10 rounded-full border border-on-primary/20 object-cover" data-alt="A professional headshot of a senior financial administrator in a corporate office setting. The lighting is bright and clear, reflecting a high-trust institutional atmosphere. The subject is wearing a clean, modern suit. The background is a blurred office with soft blue and grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6AEVbeSy2mv16FJEsFjIPQ05eYS6RbPfWiDT0TZLqrZ3Ie_IKVyF7CRL8W8T73wNGWlCIC-VSAHy0Ekz-JvyEuLnbM7U52KuPfeKWprMU2SdvyCVasmSc-L94ZaVxSeOiKtLOObX2O5R19FhRSm1kOx4bEzfRpPwGUNj_O3wHt9asMXHvwlSj894HoBa_WSvMj_a5tWHhnZ6J7FaWbBZpXWd0aatpYaKe6fM3ICPkYK8OikalPOHubppdktHgPif8mVtF3Vkywg"/>
+<div>
+<p class="font-label-md text-label-md text-on-primary">Admin Principal</p>
+<p class="text-[10px] text-on-primary/50 uppercase tracking-wider">Superuser</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding z-40">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-secondary/20" placeholder="Rechercher une règle ou un dossier..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-gutter">
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-all">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:opacity-90 active:opacity-80 transition-all">
+                New Dossier
+            </button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[260px] pt-16 min-h-screen">
+<div class="p-container-padding max-w-6xl mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-start mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-1">Paramétrage des Seuils de Risque</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Configurez les règles de pré-décision automatique pour optimiser le flux de traitement des crédits.</p>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-high p-4 rounded-xl border border-outline-variant">
+<div class="text-right">
+<p class="font-label-md text-label-md text-primary">Automatisation Globale</p>
+<p class="text-[11px] text-secondary font-bold">ACTIF</p>
+</div>
+<label class="switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+</div>
+<!-- Configuration Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-section-gap">
+<!-- Score de Crédit Card -->
+<div class="md:col-span-7 bg-white border border-outline-variant rounded-xl p-gutter shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary">analytics</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Score de Crédit</h3>
+</div>
+<div class="space-y-6">
+<div class="flex items-center justify-between group">
+<div>
+<p class="font-label-md text-label-md text-primary">Acceptation Automatique</p>
+<p class="text-[12px] text-on-surface-variant">Seuil supérieur pour validation directe</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-secondary font-bold font-label-md">&gt;</span>
+<input class="w-20 bg-surface-container-low border-outline-variant rounded-lg p-2 text-center font-bold text-primary focus:ring-secondary focus:border-secondary" type="number" value="750"/>
+</div>
+</div>
+<div class="flex items-center justify-between group">
+<div>
+<p class="font-label-md text-label-md text-primary">Rejet Automatique</p>
+<p class="text-[12px] text-on-surface-variant">Seuil inférieur pour refus immédiat</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-error font-bold font-label-md">&lt;</span>
+<input class="w-20 bg-surface-container-low border-outline-variant rounded-lg p-2 text-center font-bold text-primary focus:ring-secondary focus:border-secondary" type="number" value="400"/>
+</div>
+</div>
+<div class="p-4 bg-surface-container rounded-lg border border-dashed border-outline">
+<div class="flex justify-between items-center mb-2">
+<p class="font-label-md text-label-md text-primary">Zone d'Analyse Manuelle</p>
+<span class="px-2 py-1 bg-white border border-outline-variant rounded text-[10px] font-bold text-on-surface-variant">CALCULÉ</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-2 bg-gradient-to-r from-error via-yellow-400 to-secondary rounded-full"></div>
+<p class="font-label-md text-label-md text-primary whitespace-nowrap">400 — 750</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Indicators Stack -->
+<div class="md:col-span-5 flex flex-col gap-gutter">
+<!-- Ratio d'Endettement -->
+<div class="bg-white border border-outline-variant rounded-xl p-gutter shadow-[0_4px_12px_rgba(0,0,0,0.02)] flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">account_balance_wallet</span>
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-wider">Ratio d'Endettement Max</h3>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<span class="text-[32px] font-bold text-primary leading-none">35</span>
+<span class="text-headline-sm text-on-surface-variant">%</span>
+</div>
+<div class="w-24">
+<input class="w-full accent-secondary" max="100" min="0" type="range" value="35"/>
+</div>
+</div>
+<p class="mt-2 text-[12px] text-on-surface-variant">Limite légale conseillée : 33%</p>
+</div>
+<!-- Capacité de Remboursement -->
+<div class="bg-white border border-outline-variant rounded-xl p-gutter shadow-[0_4px_12px_rgba(0,0,0,0.02)] flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">savings</span>
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-wider">Reste à Vivre Minimum</h3>
+</div>
+<div class="flex items-center justify-between">
+<div class="relative flex-1 mr-4">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">€</span>
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg py-2 pl-8 pr-4 font-bold text-primary" type="number" value="1200"/>
+</div>
+<p class="text-[11px] text-on-surface-variant leading-tight">Par ménage / mois</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Specific Logic Rules -->
+<div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.02)] mb-section-gap">
+<div class="px-gutter py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">rule</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Règles Logiques Spécifiques</h3>
+</div>
+<button class="flex items-center gap-2 px-3 py-1.5 border border-outline rounded-lg text-label-md font-label-md hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Ajouter une règle
+                    </button>
+</div>
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-gutter py-3 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Condition (SI)</th>
+<th class="px-gutter py-3 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Action (ALORS)</th>
+<th class="px-gutter py-3 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Statut</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-gutter py-4">
+<p class="font-body-md text-body-md text-primary">Stabilité résidentielle <span class="text-secondary font-bold">&lt; 1 an</span> ET Score <span class="text-secondary font-bold">&lt; 600</span></p>
+</td>
+<td class="px-gutter py-4">
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-[11px] font-bold">ANALYSE MANUELLE</span>
+</td>
+<td class="px-gutter py-4 text-right">
+<span class="material-symbols-outlined text-secondary cursor-pointer">toggle_on</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-gutter py-4">
+<p class="font-body-md text-body-md text-primary">Inscrit au FICP (Fichier National)</p>
+</td>
+<td class="px-gutter py-4">
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded-full text-[11px] font-bold">REJET AUTOMATIQUE</span>
+</td>
+<td class="px-gutter py-4 text-right">
+<span class="material-symbols-outlined text-secondary cursor-pointer">toggle_on</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-gutter py-4">
+<p class="font-body-md text-body-md text-primary">Ratio d'endettement <span class="text-secondary font-bold">&gt; 45%</span></p>
+</td>
+<td class="px-gutter py-4">
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded-full text-[11px] font-bold">REJET AUTOMATIQUE</span>
+</td>
+<td class="px-gutter py-4 text-right">
+<span class="material-symbols-outlined text-outline-variant cursor-pointer">toggle_off</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-gutter py-4">
+<p class="font-body-md text-body-md text-primary">Client existant &gt; 5 ans ET sans incident</p>
+</td>
+<td class="px-gutter py-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-[11px] font-bold">SCORE BONUS +50</span>
+</td>
+<td class="px-gutter py-4 text-right">
+<span class="material-symbols-outlined text-secondary cursor-pointer">toggle_on</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Action Footer -->
+<div class="flex items-center justify-between p-gutter bg-surface-container-high rounded-xl border border-outline-variant">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined">info</span>
+<p class="font-body-md text-body-md italic">Les modifications prendront effet immédiatement sur tous les nouveaux dossiers.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 border border-outline text-primary font-label-md text-label-md rounded-lg hover:bg-surface-container transition-all">
+                        Réinitialiser par défaut
+                    </button>
+<button class="px-8 py-2.5 bg-secondary text-on-secondary font-label-md text-label-md rounded-lg shadow-lg hover:opacity-90 active:scale-95 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                        Enregistrer les modifications
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interaction for feedback -->
+<script>
+        // Simple visual feedback for interaction
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', () => {
+                // Potential for adding visual "unsaved" indicators
+                console.log('Value changed');
+            });
+        });
+
+        // Hover animation for cards
+        const cards = document.querySelectorAll('.bg-white.border');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('border-secondary/40');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('border-secondary/40');
+            });
+        });
+    </script>
+</body></html>
