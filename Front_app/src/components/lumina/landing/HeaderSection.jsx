@@ -23,7 +23,7 @@ export function HeaderSection({ onStart, onOpenBlog }) {
             {t('landing.reviews', 'Avis')}
           </a>
           <button onClick={onOpenBlog} className="px-3 py-2 text-lumina-on-surface-variant hover:text-lumina-heading transition cursor-pointer">
-            Conseils
+            {t('landing.nav_blog', 'Conseils')}
           </button>
         </nav>
         

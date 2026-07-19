@@ -74,7 +74,8 @@
     "review_5_name": "Aïcha D.",
     "review_5_city": "Marseille",
     "review_5_text": "«Das Kundenportal ist super gemacht. Man weiß genau, wo die Akte steht, kein ständiges Nachfragen beim Makler nötig.»",
-    "review_5_project": "T4-Haus · 450.000 € · Erhaltener Zinssatz 3,25 %"
+    "review_5_project": "T4-Haus · 450.000 € · Erhaltener Zinssatz 3,25 %",
+    "nav_blog": "Tipps"
   },
   "simulator": {
     "title": "Ihre persönliche Simulation",
@@ -360,6 +361,7 @@
     "not_found_title": "Seite nicht gefunden",
     "not_found_body": "Dieser Pfad existiert nicht oder Ihre Sitzung ist abgelaufen.",
     "home_button": "Zurück zur Startseite",
-    "error_network": "Verbindung zum Server fehlgeschlagen. Überprüfen Sie Ihre Verbindung."
+    "error_network": "Verbindung zum Server fehlgeschlagen. Überprüfen Sie Ihre Verbindung.",
+    "loading": "Wird geladen..."
   }
 }

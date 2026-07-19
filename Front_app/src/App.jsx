@@ -503,7 +503,7 @@ export default function App() {
       <Suspense
         fallback={
           <div className="flex min-h-svh items-center justify-center bg-lumina-background p-6">
-            <span className="text-sm text-lumina-on-surface-variant">Chargement...</span>
+            <span className="text-sm text-lumina-on-surface-variant">{t('app.loading', 'Chargement...')}</span>
           </div>
         }
       >

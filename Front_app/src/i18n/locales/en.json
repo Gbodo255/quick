@@ -74,7 +74,8 @@
     "review_5_name": "Aïcha D.",
     "review_5_city": "Marseille",
     "review_5_text": "\"The client portal is super well done. You know exactly where your file is, no need to follow up with the broker every morning.\"",
-    "review_5_project": "T4 House · €450,000 · rate obtained 3.25%"
+    "review_5_project": "T4 House · €450,000 · rate obtained 3.25%",
+    "nav_blog": "Tips"
   },
   "simulator": {
     "title": "Your personalized simulation",
@@ -360,6 +361,7 @@
     "not_found_title": "Page not found",
     "not_found_body": "This path does not exist or your session expired.",
     "home_button": "Back to Home",
-    "error_network": "Unable to contact server. Check your connection."
+    "error_network": "Unable to contact server. Check your connection.",
+    "loading": "Loading..."
   }
 }
