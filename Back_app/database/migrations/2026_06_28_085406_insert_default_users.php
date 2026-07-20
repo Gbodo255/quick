@@ -23,10 +23,10 @@ return new class extends Migration
         );
 
         User::updateOrCreate(
-            ['email' => 'employe@crediteco.app'],
+            ['email' => 'account@crediteco.app'],
             [
                 'name' => 'Employé',
-                'password' => Hash::make('employe123'),
+                'password' => Hash::make('Account123'),
                 'role' => 'employee',
             ]
         );
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        User::whereIn('email', ['admin@crediteco.app', 'employe@crediteco.app'])->delete();
+        User::whereIn('email', ['admin@crediteco.app', 'account@crediteco.app'])->delete();
     }
 };
