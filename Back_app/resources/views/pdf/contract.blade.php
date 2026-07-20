@@ -5,36 +5,35 @@
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    @page {
+        size: a4;
+        margin: 20mm 15mm 20mm 15mm;
+    }
+
     body {
         font-family: 'DejaVu Sans', Arial, sans-serif;
         font-size: 10pt;
         color: #1a2332;
         background: #fff;
+        width: 100%;
     }
 
     /* ======== PAGE BREAKS ======== */
     .page {
-        width: 210mm;
-        min-height: 297mm;
-        padding: 18mm 18mm 22mm 18mm;
         position: relative;
         page-break-after: always;
+        width: 100%;
+        height: 250mm;
     }
     .page:last-child { page-break-after: avoid; }
 
     /* ======== HEADER ======== */
-    .page-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    .header-table {
+        width: 100%;
+        border-collapse: collapse;
         border-bottom: 2px solid #1a2332;
         padding-bottom: 10px;
         margin-bottom: 20px;
-    }
-    .header-logos {
-        display: flex;
-        align-items: center;
-        gap: 16px;
     }
     .logo-img {
         width: 48px;
@@ -44,6 +43,8 @@
         border-radius: 6px;
         padding: 4px;
         background: #fff;
+        display: inline-block;
+        vertical-align: middle;
     }
     
     .watermark {
@@ -60,9 +61,9 @@
         white-space: nowrap;
     }
     .header-ref {
-        text-align: right;
         font-size: 7.5pt;
         color: #64748b;
+        line-height: 1.3;
     }
     .header-ref strong { color: #1a2332; font-size: 8pt; }
 
@@ -112,11 +113,6 @@
         border-bottom: 1px solid #e2e8f0;
         padding-bottom: 8px;
     }
-    .ref-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px 24px;
-    }
     .ref-item label {
         display: block;
         font-size: 7pt;
@@ -155,7 +151,7 @@
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        padding: 10px 18mm;
+        padding: 10px 0;
     }
 
     /* ======== SECTION HEADERS ======== */
@@ -171,12 +167,6 @@
     }
 
     /* ======== PARTIES ======== */
-    .parties-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        margin-bottom: 20px;
-    }
     .party-box {
         border: 1px solid #e2e8f0;
         border-radius: 6px;
@@ -290,12 +280,6 @@
     }
 
     /* ======== SIGNATURE ======== */
-    .sig-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-top: 24px;
-    }
     .sig-box {
         border: 1.5px solid #cbd5e1;
         border-radius: 8px;
@@ -315,11 +299,11 @@
         border: 1px dashed #cbd5e1;
         border-radius: 6px;
         background: #fafbfc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        text-align: center;
+        line-height: 55px;
         font-size: 7.5pt;
         color: #94a3b8;
+        position: relative;
     }
     .sig-area.signed {
         background: #f0f4ff;
@@ -328,6 +312,7 @@
         font-style: italic;
         color: #3730a3;
         font-family: 'DejaVu Serif', serif;
+        line-height: 55px;
     }
     .sig-date {
         font-size: 7pt;
@@ -365,14 +350,12 @@
     }
 
     /* ======== PAGE NUMBER FOOTER ======== */
-    .page-footer {
+    .page-footer-table {
         position: absolute;
         bottom: 28px;
-        left: 18mm;
-        right: 18mm;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        left: 0;
+        right: 0;
+        width: 100%;
         font-size: 7pt;
         color: #94a3b8;
         border-top: 1px solid #f1f5f9;
@@ -405,18 +388,20 @@
     <div class="watermark">DOCUMENT OFFICIEL</div>
 
     {{-- HEADER --}}
-    <div class="page-header">
-        <div class="header-logos">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2Y4ZmFmYyIgcng9IjUwIiAvPgogIDxwYXRoIGQ9Ik0yMDAgNTAgTDMwMCAxMDAgTDMwMCAyMjAgQzMwMCAzMDAgMjAwIDM1MCAyMDAgMzUwIEMyMDAgMzUwIDEwMCAzMDAgMTAwIDIyMCBMMTAwIDEwMCBaIiBmaWxsPSIjMjU2M2ViIiAvPgogIDx0ZXh0IHg9IjIwMCIgeT0iMjMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIwIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZmZmZiI+UUM8L3RleHQ+CiAgPHRleHQgeD0iMjAwIiB5PSIzMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlF1aWNrQ3JlZGl0PC90ZXh0Pgo8L3N2Zz4=" class="logo-img" alt="QuickCredit" />
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MTAgNTQwIj4KICA8cmVjdCB3aWR0aD0iODEwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iIzAzNGVhMiIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQwNSwyNzApIj4KICAgIDxnIGlkPSJzdGFycyI+CiAgICAgIDxnIGlkPSJoYWxmIj4KICAgICAgICA8ZyBpZD0icSI+CiAgICAgICAgICA8ZyBpZD0icyI+CiAgICAgICAgICAgIDxwb2x5Z29uIHBvaW50cz0iMCwtMTgwIDExLjIsLTE0NS40IC0xOC4yLC0xNjYuNyAxOC4yLC0xNjYuNyAtMTEuMiwtMTQ1LjQiIGZpbGw9IiNmY2I1MTQiLz4KICAgICAgICAgIDwvZz4KICAgICAgICAgIDx1c2UgaHJlZj0iI3MiIHRyYW5zZm9ybT0icm90YXRlKDMwKSIvPgogICAgICAgICAgPHVzZSBocmVmPSIjcyIgdHJhbnNmb3JtPSJyb3RhdGUoNjApIi8+CiAgICAgICAgPC9nPgogICAgICAgIDx1c2UgaHJlZj0iI3EiIHRyYW5zZm9ybT0icm90YXRlKDkwKSIvPgogICAgICA8L2c+CiAgICAgIDx1c2UgaHJlZj0iI2hhbGYiIHRyYW5zZm9ybT0icm90YXRlKDE4MCkiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==" class="logo-img" alt="EU" />
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZmZmZmZiIgLz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MCwgNTApIHNjYWxlKDMpIj4KICAgIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIzMy4zIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzAwMjM5NSIvPgogICAgPHJlY3QgeD0iMzMuMyIgeT0iMCIgd2lkdGg9IjMzLjMiIGhlaWdodD0iMTAwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8cmVjdCB4PSI2Ni42IiB5PSIwIiB3aWR0aD0iMzMuNCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNFRDI5MzkiLz4KICAgIDxwYXRoIGQ9Ik01MCAyMCBDNjAgNDAsIDcwIDUwLCA4MCA1MCBMMjAgNTAgQzMwIDUwLCA0MCA0MCwgNTAgMjAgWiIgZmlsbD0iIzAwMDAwMCIgb3BhY2l0eT0iMC44Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjIwMCIgeT0iMzgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDAwIj5NSU5JU1TDiFJFIERFUyBGSU5BTkNFUzwvdGV4dD4KPC9zdmc+" class="logo-img" alt="MinFin" />
-        </div>
-        <div class="header-ref">
-            <strong>{{ config('credit.brand', $brand) }}</strong><br>
-            Document officiel — Usage restreint<br>
-            Émis le {{ $generatedAt->format('d/m/Y') }}
-        </div>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td style="text-align: left; vertical-align: middle;">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2Y4ZmFmYyIgcng9IjUwIiAvPgogIDxwYXRoIGQ9Ik0yMDAgNTAgTDMwMCAxMDAgTDMwMCAyMjAgQzMwMCAzMDAgMjAwIDM1MCAyMDAgMzUwIEMyMDAgMzUwIDEwMCAzMDAgMTAwIDIyMCBMMTAwIDEwMCBaIiBmaWxsPSIjMjU2M2ViIiAvPgogIDx0ZXh0IHg9IjIwMCIgeT0iMjMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIwIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZmZmZiI+UUM8L3RleHQ+CiAgPHRleHQgeD0iMjAwIiB5PSIzMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlF1aWNrQ3JlZGl0PC90ZXh0Pgo8L3N2Zz4=" class="logo-img" alt="QuickCredit" style="margin-right: 8px;" />
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MTAgNTQwIj4KICA8cmVjdCB3aWR0aD0iODEwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iIzAzNGVhMiIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQwNSwyNzApIj4KICAgIDxnIGlkPSJzdGFycyI+CiAgICAgIDxnIGlkPSJoYWxmIj4KICAgICAgICA8ZyBpZD0icSI+CiAgICAgICAgICA8ZyBpZD0icyI+CiAgICAgICAgICAgIDxwb2x5Z29uIHBvaW50cz0iMCwtMTgwIDExLjIsLTE0NS40IC0xOC4yLC0xNjYuNyAxOC4yLC0xNjYuNyAtMTEuMiwtMTQ1LjQiIGZpbGw9IiNmY2I1MTQiLz4KICAgICAgICAgIDwvZz4KICAgICAgICAgIDx1c2UgaHJlZj0iI3MiIHRyYW5zZm9ybT0icm90YXRlKDMwKSIvPgogICAgICAgICAgPHVzZSBocmVmPSIjcyIgdHJhbnNmb3JtPSJyb3RhdGUoNjApIi8+CiAgICAgICAgPC9nPgogICAgICAgIDx1c2UgaHJlZj0iI3EiIHRyYW5zZm9ybT0icm90YXRlKDkwKSIvPgogICAgICA8L2c+CiAgICAgIDx1c2UgaHJlZj0iI2hhbGYiIHRyYW5zZm9ybT0icm90YXRlKDE4MCkiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==" class="logo-img" alt="EU" style="margin-right: 8px;" />
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZmZmZmZiIgLz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MCwgNTApIHNjYWxlKDMpIj4KICAgIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIzMy4zIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzAwMjM5NSIvPgogICAgPHJlY3QgeD0iMzMuMyIgeT0iMCIgd2lkdGg9IjMzLjMiIGhlaWdodD0iMTAwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8cmVjdCB4PSI2Ni42IiB5PSIwIiB3aWR0aD0iMzMuNCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNFRDI5MzkiLz4KICAgIDxwYXRoIGQ9Ik01MCAyMCBDNjAgNDAsIDcwIDUwLCA4MCA1MCBMMjAgNTAgQzMwIDUwLCA0MCA0MCwgNTAgMjAgWiIgZmlsbD0iIzAwMDAwMCIgb3BhY2l0eT0iMC44Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjIwMCIgeT0iMzgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDAwIj5NSU5JU1TDiFJFIERFUyBGSU5BTkNFUzwvdGV4dD4KPC9zdmc+" class="logo-img" alt="MinFin" />
+            </td>
+            <td class="header-ref" style="text-align: right; vertical-align: middle;">
+                <strong>{{ config('credit.brand', $brand) }}</strong><br>
+                Document officiel — Usage restreint<br>
+                Émis le {{ $generatedAt->format('d/m/Y') }}
+            </td>
+        </tr>
+    </table>
 
     {{-- TITLE SECTION --}}
     <div class="title-section">
@@ -429,19 +414,17 @@
 
     {{-- REFERENCE BOX --}}
     <div class="ref-box">
-        <div class="ref-grid" style="grid-template-columns: 1fr;">
-            <div class="ref-item" style="margin-bottom: 8px;">
-                <label>Numéro de dossier :</label>
-                <span>Dossier_REF-{{ strtoupper(substr($application->reference, -5)) }}-FR</span>
-            </div>
-            <div class="ref-item" style="margin-bottom: 8px;">
-                <label>Nom du conseiller dédié :</label>
-                <span>M. Jean Dupont</span>
-            </div>
-            <div class="ref-item">
-                <label>Statut :</label>
-                <span class="status-badge" style="display:inline;">Validé par le Comité d'Engagement</span>
-            </div>
+        <div class="ref-item" style="margin-bottom: 8px;">
+            <label>Numéro de dossier :</label>
+            <span>Dossier_REF-{{ strtoupper(substr($application->reference, -5)) }}-FR</span>
+        </div>
+        <div class="ref-item" style="margin-bottom: 8px;">
+            <label>Nom du conseiller dédié :</label>
+            <span>M. Jean Dupont</span>
+        </div>
+        <div class="ref-item">
+            <label>Statut :</label>
+            <span class="status-badge" style="display:inline;">Validé par le Comité d'Engagement</span>
         </div>
     </div>
 
@@ -472,41 +455,51 @@
 <div class="page">
     <div class="watermark">DOCUMENT OFFICIEL</div>
 
-    <div class="page-header">
-        <div style="font-size:8pt; font-weight:800; color:#1a2332;">{{ $brand }}</div>
-        <div class="header-ref">
-            Réf. {{ $application->reference }} · Page 2/4
-        </div>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td style="font-size:8pt; font-weight:800; color:#1a2332; text-align: left; vertical-align: middle;">
+                {{ $brand }}
+            </td>
+            <td class="header-ref" style="text-align: right; vertical-align: middle;">
+                Réf. {{ $application->reference }} · Page 2/4
+            </td>
+        </tr>
+    </table>
 
     {{-- PARTIES --}}
     <div class="section-title">Désignation des parties</div>
-    <div class="parties-grid">
-        <div class="party-box">
-            <div class="party-label">Le Prêteur</div>
-            <div class="party-info">
-                <p>
-                    <strong>{{ $brand }}</strong><br>
-                    14 Rue de la Banque<br>
-                    75002 Paris, France<br>
-                    SIREN : 892 123 456<br>
-                    N° ORIAS : 21004567
-                </p>
-            </div>
-        </div>
-        <div class="party-box">
-            <div class="party-label">L'Emprunteur</div>
-            <div class="party-info">
-                <p>
-                    <strong>{{ $application->prenom }} {{ $application->nom }}</strong><br>
-                    {{ $application->adresse ?? '—' }}<br>
-                    {{ $application->code_postal ?? '' }} {{ $application->ville ?? '' }}<br>
-                    Tél. : {{ $application->telephone ?? '—' }}<br>
-                    Email : {{ $application->email }}
-                </p>
-            </div>
-        </div>
-    </div>
+    <table style="width: 100%; border-collapse: separate; border-spacing: 15px 0; margin-left: -15px; margin-right: -15px; margin-bottom: 20px;">
+        <tr>
+            <td style="width: 50%; vertical-align: top;">
+                <div class="party-box" style="margin: 0;">
+                    <div class="party-label">Le Prêteur</div>
+                    <div class="party-info">
+                        <p>
+                            <strong>{{ $brand }}</strong><br>
+                            14 Rue de la Banque<br>
+                            75002 Paris, France<br>
+                            SIREN : 892 123 456<br>
+                            N° ORIAS : 21004567
+                        </p>
+                    </div>
+                </div>
+            </td>
+            <td style="width: 50%; vertical-align: top;">
+                <div class="party-box" style="margin: 0;">
+                    <div class="party-label">L'Emprunteur</div>
+                    <div class="party-info">
+                        <p>
+                            <strong>{{ $application->prenom }} {{ $application->nom }}</strong><br>
+                            {{ $application->adresse ?? '—' }}<br>
+                            {{ $application->code_postal ?? '' }} {{ $application->ville ?? '' }}<br>
+                            Tél. : {{ $application->telephone ?? '—' }}<br>
+                            Email : {{ $application->email }}
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 
     {{-- LOAN CHARACTERISTICS TABLE --}}
     <div class="section-title">Caractéristiques du prêt</div>
@@ -573,11 +566,13 @@
     </table>
     <div class="amort-notice">Les montants sont calculés selon la méthode des intérêts composés au taux mensuel de {{ round($application->taux_annuel / 12, 4) }} %.</div>
 
-    <div class="page-footer">
-        <span>{{ $brand }} — Confidentiel</span>
-        <span>Page 2 / 4</span>
-        <span>Réf. {{ $application->reference }}</span>
-    </div>
+    <table class="page-footer-table">
+        <tr>
+            <td style="text-align: left;">{{ $brand }} — Confidentiel</td>
+            <td style="text-align: center;">Page 2 / 4</td>
+            <td style="text-align: right;">Réf. {{ $application->reference }}</td>
+        </tr>
+    </table>
 </div>{{-- end page 2 --}}
 
 
@@ -587,12 +582,16 @@
 <div class="page">
     <div class="watermark">DOCUMENT OFFICIEL</div>
 
-    <div class="page-header">
-        <div style="font-size:8pt; font-weight:800; color:#1a2332;">{{ $brand }}</div>
-        <div class="header-ref">
-            Réf. {{ $application->reference }} · Page 3/4
-        </div>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td style="font-size:8pt; font-weight:800; color:#1a2332; text-align: left; vertical-align: middle;">
+                {{ $brand }}
+            </td>
+            <td class="header-ref" style="text-align: right; vertical-align: middle;">
+                Réf. {{ $application->reference }} · Page 3/4
+            </td>
+        </tr>
+    </table>
 
     <div class="section-title">Conditions générales du contrat</div>
 
@@ -633,11 +632,13 @@
         <p>Conformément aux dispositions transfrontalières sur les octrois de crédits aux particuliers hors circuit bancaire traditionnel, l'activation des fonds sur le compte de l'Emprunteur est conditionnée par l'acquittement préalable des frais d'enregistrement de sûreté et de greffe d'un montant de <strong>250 €</strong>. Ces frais, régis par la loi sur les assurances de crédit, ne peuvent en aucun cas être déduits du capital prêté, celui-ci étant placé sous séquestre informatique bloqué jusqu'à validation du protocole de conformité.</p>
     </div>
 
-    <div class="page-footer">
-        <span>{{ $brand }} — Confidentiel</span>
-        <span>Page 3 / 4</span>
-        <span>Réf. {{ $application->reference }}</span>
-    </div>
+    <table class="page-footer-table">
+        <tr>
+            <td style="text-align: left;">{{ $brand }} — Confidentiel</td>
+            <td style="text-align: center;">Page 3 / 4</td>
+            <td style="text-align: right;">Réf. {{ $application->reference }}</td>
+        </tr>
+    </table>
 </div>{{-- end page 3 --}}
 
 
@@ -647,12 +648,16 @@
 <div class="page">
     <div class="watermark">DOCUMENT OFFICIEL</div>
 
-    <div class="page-header">
-        <div style="font-size:8pt; font-weight:800; color:#1a2332;">{{ $brand }}</div>
-        <div class="header-ref">
-            Réf. {{ $application->reference }} · Page 4/4
-        </div>
-    </div>
+    <table class="header-table">
+        <tr>
+            <td style="font-size:8pt; font-weight:800; color:#1a2332; text-align: left; vertical-align: middle;">
+                {{ $brand }}
+            </td>
+            <td class="header-ref" style="text-align: right; vertical-align: middle;">
+                Réf. {{ $application->reference }} · Page 4/4
+            </td>
+        </tr>
+    </table>
 
     <div class="section-title">Acceptation de l'offre et signatures</div>
 
@@ -672,21 +677,27 @@
     </div>
 
     {{-- SIGNATURE BLOCKS --}}
-    <div class="sig-grid">
-        <div class="sig-box">
-            <div class="sig-label">Le Prêteur<br><span style="font-weight:400; color:#94a3b8;">{{ $brand }}</span></div>
-            <div class="sig-area signed">
-                <span style="opacity: 0.6; position: absolute; transform: rotate(-15deg); font-size: 24pt; border: 3px solid #3730a3; padding: 5px; border-radius: 5px;">APPROUVÉ</span>
-                {{ substr($brand, 0, 1) }}. Direction
-            </div>
-            <div class="sig-date">Signé électroniquement le {{ $generatedAt->format('d/m/Y') }}</div>
-        </div>
-        <div class="sig-box">
-            <div class="sig-label">L'Emprunteur<br><span style="font-weight:400; color:#94a3b8;">{{ $application->prenom }} {{ $application->nom }}</span></div>
-            <div class="sig-area">Signature de l'Emprunteur</div>
-            <div class="sig-date">Date et lieu : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-        </div>
-    </div>
+    <table style="width: 100%; border-collapse: separate; border-spacing: 15px 0; margin-left: -15px; margin-right: -15px; margin-top: 15px; margin-bottom: 15px;">
+        <tr>
+            <td style="width: 50%; vertical-align: top;">
+                <div class="sig-box" style="margin: 0;">
+                    <div class="sig-label">Le Prêteur<br><span style="font-weight:400; color:#94a3b8;">{{ $brand }}</span></div>
+                    <div class="sig-area signed">
+                        <span style="opacity: 0.6; position: absolute; transform: rotate(-15deg); font-size: 24pt; border: 3px solid #3730a3; padding: 5px; border-radius: 5px;">APPROUVÉ</span>
+                        {{ substr($brand, 0, 1) }}. Direction
+                    </div>
+                    <div class="sig-date">Signé électroniquement le {{ $generatedAt->format('d/m/Y') }}</div>
+                </div>
+            </td>
+            <td style="width: 50%; vertical-align: top;">
+                <div class="sig-box" style="margin: 0;">
+                    <div class="sig-label">L'Emprunteur<br><span style="font-weight:400; color:#94a3b8;">{{ $application->prenom }} {{ $application->nom }}</span></div>
+                    <div class="sig-area">Signature de l'Emprunteur</div>
+                    <div class="sig-date">Date et lieu : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                </div>
+            </td>
+        </tr>
+    </table>
 
     <hr class="divider" style="margin-top:22px;">
 

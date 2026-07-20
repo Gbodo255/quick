@@ -205,7 +205,7 @@
 
         const pdfUrl = `${baseURL}/admin/dossiers/{{ $application->id }}/preview/pdf?${paramsPdf.toString()}`;
         document.getElementById('frame-pdf').src = `${pdfUrl}#toolbar=1&navpanes=0`;
-        document.getElementById('download-pdf-btn').href = pdfUrl;
+        document.getElementById('download-pdf-btn').href = `${pdfUrl}&download=1`;
         
         document.getElementById('frame-email').src = `${baseURL}/admin/dossiers/{{ $application->id }}/preview/email?${paramsEmail.toString()}`;
         

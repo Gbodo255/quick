@@ -295,17 +295,16 @@ class AdminController extends Controller
             'amortization' => $amortization,
             'generatedAt'  => now(),
         ])
-        ->setPaper('a4')
-        ->setOption('margin-top', 0)
-        ->setOption('margin-bottom', 0)
-        ->setOption('margin-left', 0)
-        ->setOption('margin-right', 0);
+        ->setPaper('a4');
+
+        $disposition = $request->query('download') ? 'attachment' : 'inline';
+        $filename = $request->query('download') ? "Contrat_Pret_Brouillon_{$application->reference}.pdf" : 'preview.pdf';
 
         return response()->stream(function () use ($pdf) {
             echo $pdf->output();
         }, 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="preview.pdf"'
+            'Content-Disposition' => "{$disposition}; filename=\"{$filename}\""
         ]);
     }
 

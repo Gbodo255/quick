@@ -24,11 +24,7 @@ class ContractPdfService
             'amortization' => $amortization,
             'generatedAt'  => now(),
         ])
-        ->setPaper('a4')
-        ->setOption('margin-top', 0)
-        ->setOption('margin-bottom', 0)
-        ->setOption('margin-left', 0)
-        ->setOption('margin-right', 0);
+        ->setPaper('a4');
 
         $relativePath = "dossiers/{$application->reference}/contrat.pdf";
         Storage::disk('local')->put($relativePath, $pdf->output());
