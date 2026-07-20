@@ -11,10 +11,10 @@ class DossierTestSeeder extends Seeder
     public function run()
     {
         $statuses = [
-            'submitted',
-            'processing',
-            'approved',
-            'completed',
+            'a_qualifier',
+            'dossier_conforme',
+            'offre_emise',
+            'cloture_succes',
             'draft'
         ];
 
@@ -26,7 +26,7 @@ class DossierTestSeeder extends Seeder
                 'reference' => 'TEST-' . strtoupper(Str::random(8)),
                 'access_token' => Str::uuid()->toString(),
                 'status' => $status,
-                'processing_step' => ($status === 'processing') ? 2 : (($status === 'completed') ? 4 : 0),
+                'processing_step' => ($status === 'dossier_conforme') ? 2 : (($status === 'cloture_succes') ? 4 : 0),
                 'montant' => rand(5000, 50000),
                 'duree_mois' => 60,
                 'taux_annuel' => 2.5,

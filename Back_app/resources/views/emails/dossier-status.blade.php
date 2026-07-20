@@ -3,11 +3,11 @@
 
 Le statut de votre demande de crédit (Réf: **{{ $application->reference }}**) a été mis à jour.
 
-Nouveau statut : **{{ match($application->status) { 'processing' => 'En cours de traitement', 'completed' => 'Approuvé', 'rejected' => 'Refusé', default => 'En attente' } }}**
+Nouveau statut : **{{ $application->status->label() }}**
 
-@if($application->status === 'completed')
+@if($application->status === \App\Enums\DossierStatus::ClotureSucces || $application->status === \App\Enums\DossierStatus::FondsDecaisses)
 Félicitations, votre demande a été approuvée ! Un conseiller prendra contact avec vous très prochainement.
-@elseif($application->status === 'processing')
+@else
 Votre dossier est actuellement en cours d'analyse par notre équipe.
 @endif
 
