@@ -596,9 +596,9 @@ class AdminController extends Controller
 
         if ($search = $request->get('search')) {
             $query->where(function($q) use ($search) {
-                $q->where('prenom', 'like', "%{$search}%")
-                  ->orWhere('nom', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                $q->where('clients.prenom', 'like', "%{$search}%")
+                  ->orWhere('clients.nom', 'like', "%{$search}%")
+                  ->orWhere('clients.email', 'like', "%{$search}%");
             });
         }
 
@@ -638,9 +638,9 @@ class AdminController extends Controller
 
         if ($search = $request->get('search')) {
             $query->where(function($q) use ($search) {
-                $q->where('prenom', 'like', "%{$search}%")
-                  ->orWhere('nom', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                $q->where('clients.prenom', 'like', "%{$search}%")
+                  ->orWhere('clients.nom', 'like', "%{$search}%")
+                  ->orWhere('clients.email', 'like', "%{$search}%");
             });
         }
 
