@@ -21,6 +21,7 @@ class ContractPdfService
         $pdf = Pdf::loadView('pdf.contract', [
             'application'  => $application,
             'brand'        => config('credit.brand'),
+            'fraisDossier' => config('credit.frais_dossier', 250),
             'amortization' => $amortization,
             'generatedAt'  => now(),
         ])

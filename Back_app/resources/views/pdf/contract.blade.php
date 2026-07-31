@@ -1,718 +1,872 @@
+@php
+    $logoPath = public_path('images/logo_brand.png');
+    $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : '';
+
+    $logoEuPath = public_path('images/logo_eu.png');
+    $logoEuBase64 = file_exists($logoEuPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoEuPath)) : '';
+
+    $logoFrPath = public_path('images/logo_fr.png');
+    $logoFrBase64 = file_exists($logoFrPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoFrPath)) : '';
+
+    $frais = $fraisDossier ?? config('credit.frais_dossier', 250);
+@endphp
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <title>Offre de Contrat de Prêt — {{ $application->reference }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    @page {
-        size: a4;
-        margin: 20mm 15mm 20mm 15mm;
-    }
+        /* ─── MARGES DE SÉCURITÉ NOTARIALES LARGES ───────────────────────── */
+        @page {
+            size: A4 portrait;
+            margin: 20mm 22mm 26mm 22mm;
+        }
 
-    body {
-        font-family: 'DejaVu Sans', Arial, sans-serif;
-        font-size: 10pt;
-        color: #1a2332;
-        background: #fff;
-        width: 100%;
-    }
+        body {
+            font-family: 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 9pt;
+            color: #1E293B;
+            background: #FFFFFF;
+            line-height: 1.65;
+        }
 
-    /* ======== PAGE BREAKS ======== */
-    .page {
-        position: relative;
-        page-break-after: always;
-        width: 100%;
-        height: 250mm;
-    }
-    .page:last-child { page-break-after: avoid; }
+        /* ─── BANDEAU CONFIDENTIEL FIXE SUR TOUTES LES PAGES ─────────────── */
+        .fixed-footer-banner {
+            position: fixed;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 1000;
+        }
 
-    /* ======== HEADER ======== */
-    .header-table {
-        width: 100%;
-        border-collapse: collapse;
-        border-bottom: 2px solid #1a2332;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
-    .logo-img {
-        width: 48px;
-        height: 48px;
-        object-fit: contain;
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        padding: 4px;
-        background: #fff;
-        display: inline-block;
-        vertical-align: middle;
-    }
-    
-    .watermark {
-        position: absolute;
-        top: 35%;
-        left: -5%;
-        transform: rotate(-30deg);
-        font-size: 70pt;
-        color: rgba(226, 232, 240, 0.4);
-        font-weight: 800;
-        z-index: -10;
-        letter-spacing: 0.05em;
-        pointer-events: none;
-        white-space: nowrap;
-    }
-    .header-ref {
-        font-size: 7.5pt;
-        color: #64748b;
-        line-height: 1.3;
-    }
-    .header-ref strong { color: #1a2332; font-size: 8pt; }
+        .confid-banner {
+            background: #0A2240;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 7.5pt;
+            font-weight: bold;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            border-radius: 5px;
+            width: 100%;
+        }
 
-    /* ======== TITLE PAGE ======== */
-    .title-section {
-        text-align: center;
-        margin: 32px 0 28px;
-    }
-    .doc-type {
-        font-size: 7.5pt;
-        font-weight: 700;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: #64748b;
-        margin-bottom: 10px;
-    }
-    .doc-title {
-        font-size: 14pt;
-        font-weight: 800;
-        color: #1a2332;
-        line-height: 1.35;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-    }
-    .doc-subtitle {
-        font-size: 8.5pt;
-        color: #64748b;
-        margin-top: 8px;
-        font-style: italic;
-    }
+        /* ─── SAUTS DE PAGE CLEAN ───────────────────────────────────────────── */
+        .page-section {
+            page-break-after: always;
+            width: 100%;
+        }
 
-    /* ======== REF BOX ======== */
-    .ref-box {
-        border: 1.5px solid #cbd5e1;
-        border-radius: 8px;
-        padding: 16px 20px;
-        margin: 20px 0;
-        background: #f8fafc;
-    }
-    .ref-box-title {
-        font-size: 7pt;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: #94a3b8;
-        margin-bottom: 12px;
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 8px;
-    }
-    .ref-item label {
-        display: block;
-        font-size: 7pt;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #94a3b8;
-        margin-bottom: 2px;
-    }
-    .ref-item span {
-        font-size: 9pt;
-        font-weight: 600;
-        color: #1a2332;
-    }
-    .status-badge {
-        display: inline-block;
-        background: #dcfce7;
-        color: #166534;
-        font-size: 7.5pt;
-        font-weight: 700;
-        padding: 3px 10px;
-        border-radius: 20px;
-        letter-spacing: 0.05em;
-    }
+        .page-section:last-child {
+            page-break-after: avoid;
+        }
 
-    /* ======== CONFIDENTIAL BANNER ======== */
-    .confid-banner {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: #8b0000;
-        color: #fff;
-        text-align: center;
-        font-size: 7.5pt;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 10px 0;
-    }
+        /* ─── ZONE DE LECTURE CENTRÉE AVEC ESPACE BLANC ───────────────────── */
+        .reading-zone {
+            width: 96%;
+            margin: 0 auto;
+            padding: 0 2px;
+        }
 
-    /* ======== SECTION HEADERS ======== */
-    .section-title {
-        font-size: 9pt;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #1a2332;
-        border-left: 3px solid #1a2332;
-        padding-left: 10px;
-        margin: 22px 0 12px;
-    }
+        /* ─── EN-TÊTE ÉLÉGANT HAUT DE GAMME ───────────────────────────────── */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-bottom: 2px solid #0A2240;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
 
-    /* ======== PARTIES ======== */
-    .party-box {
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        padding: 14px 16px;
-        background: #fafbfc;
-    }
-    .party-label {
-        font-size: 7pt;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #64748b;
-        border-bottom: 1px solid #e2e8f0;
-        padding-bottom: 8px;
-        margin-bottom: 10px;
-    }
-    .party-info p {
-        font-size: 8.5pt;
-        line-height: 1.7;
-        color: #334155;
-    }
-    .party-info strong { color: #1a2332; font-size: 9pt; }
+        .header-title-brand {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #0A2240;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
 
-    /* ======== LOAN TABLE ======== */
-    .loan-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 12px 0 20px;
-        font-size: 8.5pt;
-    }
-    .loan-table th {
-        background: #1a2332;
-        color: #fff;
-        padding: 8px 12px;
-        text-align: center;
-        font-size: 7.5pt;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-    }
-    .loan-table td {
-        padding: 9px 12px;
-        text-align: center;
-        border-bottom: 1px solid #f1f5f9;
-        font-weight: 600;
-        color: #1a2332;
-    }
-    .loan-table tr:nth-child(even) td { background: #f8fafc; }
+        .header-title-accent {
+            color: #2563EB;
+        }
 
-    /* ======== AMORTIZATION TABLE ======== */
-    .amort-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 7.5pt;
-        margin: 10px 0;
-    }
-    .amort-table th {
-        background: #334155;
-        color: #fff;
-        padding: 6px 10px;
-        text-align: right;
-        font-weight: 700;
-        font-size: 7pt;
-        letter-spacing: 0.04em;
-    }
-    .amort-table th:first-child { text-align: center; }
-    .amort-table td {
-        padding: 5px 10px;
-        text-align: right;
-        border-bottom: 1px solid #f1f5f9;
-        color: #334155;
-    }
-    .amort-table td:first-child {
-        text-align: center;
-        font-weight: 700;
-        color: #1a2332;
-    }
-    .amort-table tr:nth-child(even) td { background: #f8fafc; }
-    .amort-notice {
-        font-size: 7pt;
-        color: #94a3b8;
-        font-style: italic;
-        margin-top: 6px;
-        text-align: right;
-    }
+        .header-subtitle {
+            font-size: 7.5pt;
+            color: #64748B;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 3px;
+        }
 
-    /* ======== CLAUSES ======== */
-    .clause {
-        margin-bottom: 16px;
-    }
-    .clause-title {
-        font-size: 8.5pt;
-        font-weight: 800;
-        color: #1a2332;
-        margin-bottom: 5px;
-    }
-    .clause p {
-        font-size: 8pt;
-        color: #475569;
-        line-height: 1.65;
-    }
-    .clause-highlight {
-        border-left: 3px solid #cbd5e1;
-        padding: 10px 14px;
-        background: #f8fafc;
-        border-radius: 0 6px 6px 0;
-        margin-top: 6px;
-        font-size: 8pt;
-        color: #334155;
-        line-height: 1.7;
-    }
+        .header-ref {
+            font-size: 8pt;
+            color: #475569;
+            text-align: right;
+            line-height: 1.5;
+        }
 
-    /* ======== SIGNATURE ======== */
-    .sig-box {
-        border: 1.5px solid #cbd5e1;
-        border-radius: 8px;
-        padding: 16px;
-    }
-    .sig-label {
-        font-size: 7.5pt;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #64748b;
-        margin-bottom: 12px;
-        text-align: center;
-    }
-    .sig-area {
-        height: 55px;
-        border: 1px dashed #cbd5e1;
-        border-radius: 6px;
-        background: #fafbfc;
-        text-align: center;
-        line-height: 55px;
-        font-size: 7.5pt;
-        color: #94a3b8;
-        position: relative;
-    }
-    .sig-area.signed {
-        background: #f0f4ff;
-        border-color: #a5b4fc;
-        font-size: 16pt;
-        font-style: italic;
-        color: #3730a3;
-        font-family: 'DejaVu Serif', serif;
-        line-height: 55px;
-    }
-    .sig-date {
-        font-size: 7pt;
-        color: #94a3b8;
-        margin-top: 8px;
-        text-align: right;
-    }
-    .mentions-box {
-        border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        padding: 14px 16px;
-        background: #fafbfc;
-        margin-top: 20px;
-        font-size: 8pt;
-        color: #334155;
-        line-height: 1.7;
-    }
-    .mentions-title {
-        font-size: 7.5pt;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #94a3b8;
-        margin-bottom: 10px;
-    }
-    .mention-line {
-        border: 1px solid #cbd5e1;
-        border-radius: 4px;
-        padding: 8px 12px;
-        margin-bottom: 8px;
-        background: #fff;
-        font-size: 7.5pt;
-        color: #475569;
-        font-style: italic;
-    }
+        .ref-badge {
+            font-family: monospace;
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #0A2240;
+            background: #F1F5F9;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #CBD5E1;
+            display: inline-block;
+        }
 
-    /* ======== PAGE NUMBER FOOTER ======== */
-    .page-footer-table {
-        position: absolute;
-        bottom: 28px;
-        left: 0;
-        right: 0;
-        width: 100%;
-        font-size: 7pt;
-        color: #94a3b8;
-        border-top: 1px solid #f1f5f9;
-        padding-top: 6px;
-    }
-    .divider {
-        border: none;
-        border-top: 1px solid #e2e8f0;
-        margin: 16px 0;
-    }
-    .info-note {
-        font-size: 7.5pt;
-        color: #64748b;
-        font-style: italic;
-        line-height: 1.6;
-        background: #fffbeb;
-        border: 1px solid #fde68a;
-        border-radius: 6px;
-        padding: 10px 14px;
-        margin: 12px 0;
-    }
-</style>
+        /* ─── BANDEAU ET TITRE DE L'OFFRE ────────────────────────────────── */
+        .title-section {
+            text-align: center;
+            margin: 18px 0 20px;
+            padding: 16px 20px;
+            border: 1.5px solid #0A2240;
+            border-radius: 8px;
+            background: #F8FAFC;
+        }
+
+        .doc-type {
+            font-size: 8pt;
+            font-weight: bold;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #2563EB;
+            margin-bottom: 6px;
+        }
+
+        .doc-title {
+            font-size: 12.5pt;
+            font-weight: bold;
+            color: #0A2240;
+            line-height: 1.4;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* ─── TITRES DE SECTIONS ───────────────────────────────────────────── */
+        .section-title {
+            font-size: 10pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #0A2240;
+            border-left: 4px solid #2563EB;
+            padding-left: 12px;
+            margin: 20px 0 14px;
+        }
+
+        /* ─── ENCADRÉS & DÉSIGNATION ───────────────────────────────────────── */
+        .ref-box {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            background: #F8FAFC;
+        }
+
+        .ref-item label {
+            font-size: 8pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #64748B;
+            margin-right: 8px;
+        }
+
+        .ref-item span {
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #0F172A;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #DCFCE7;
+            color: #15803D;
+            font-size: 8pt;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 12px;
+            border: 1px solid #BBF7D0;
+        }
+
+        .party-box {
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 14px 16px;
+            background: #FAFAFA;
+            min-height: 120px;
+        }
+
+        .party-label {
+            font-size: 8pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #2563EB;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        .party-info p {
+            font-size: 9pt;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .party-info strong {
+            color: #0A2240;
+            font-size: 9.5pt;
+        }
+
+        /* ─── TABLEAUX SPACIEUX DÉGAGÉS DES BORDURES ─────────────────────── */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #E2E8F0;
+        }
+
+        .data-table th {
+            background: #0A2240;
+            color: #FFFFFF;
+            font-size: 8.5pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 10px 12px;
+            text-align: left;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            font-size: 9pt;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #F8FAFC;
+        }
+
+        .amort-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 14px;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .amort-table th {
+            background: #1E293B;
+            color: #FFFFFF;
+            font-size: 8pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 8px 10px;
+            text-align: center;
+            letter-spacing: 0.04em;
+        }
+
+        .amort-table td {
+            padding: 7px 10px;
+            font-size: 8.5pt;
+            border-bottom: 1px solid #E2E8F0;
+            text-align: right;
+        }
+
+        .amort-table td:first-child {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* ─── PARAGRAPHES & CLAUSES JURIDIQUES CONFORTABLES ───────────────── */
+        .clause {
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+
+        .clause-title {
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #0A2240;
+            margin-bottom: 4px;
+        }
+
+        .clause p {
+            font-size: 8.5pt;
+            color: #475569;
+            line-height: 1.65;
+        }
+
+        .clause-highlight {
+            border-left: 4px solid #2563EB;
+            padding: 10px 14px;
+            background: #EFF6FF;
+            border-radius: 0 6px 6px 0;
+            margin-top: 6px;
+            font-size: 8.5pt;
+            color: #1E40AF;
+            line-height: 1.65;
+        }
+
+        .info-note {
+            font-size: 8.5pt;
+            color: #92400E;
+            line-height: 1.6;
+            background: #FEF3C7;
+            border: 1px solid #FCD34D;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 14px 0;
+        }
+
+        /* ─── CARTOUCHES DE SIGNATURE NOTARIALE SPACIEUX ──────────────────── */
+        .sig-box {
+            border: 1.5px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 14px 16px;
+            background: #FFFFFF;
+            page-break-inside: avoid;
+        }
+
+        .sig-label {
+            font-size: 8.5pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #0A2240;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 6px;
+        }
+
+        .sig-area {
+            height: 65px;
+            border: 1px dashed #CBD5E1;
+            border-radius: 6px;
+            background: #FAFAFA;
+            text-align: center;
+            line-height: 65px;
+            font-size: 8.5pt;
+            color: #94A3B8;
+            position: relative;
+        }
+
+        .sig-area.signed {
+            background: #EFF6FF;
+            border-color: #93C5FD;
+            font-size: 13pt;
+            font-style: italic;
+            color: #1E40AF;
+            line-height: 65px;
+        }
+
+        .sig-date {
+            font-size: 8pt;
+            color: #64748B;
+            margin-top: 8px;
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        .mentions-box {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 14px 16px;
+            background: #F8FAFC;
+            margin: 16px 0;
+            font-size: 8.5pt;
+            color: #334155;
+            page-break-inside: avoid;
+        }
+
+        .mentions-title {
+            font-size: 8pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #64748B;
+            margin-bottom: 8px;
+        }
+
+        .mention-line {
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: #FFFFFF;
+            font-size: 8.5pt;
+            color: #1E293B;
+            font-style: italic;
+            line-height: 1.5;
+        }
+    </style>
 </head>
 <body>
 
-{{-- ============================================================ --}}
-{{-- PAGE 1 : PAGE DE GARDE                                        --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="watermark">DOCUMENT OFFICIEL</div>
-
-    {{-- HEADER --}}
-    <table class="header-table">
-        <tr>
-            <td style="text-align: left; vertical-align: middle;">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2Y4ZmFmYyIgcng9IjUwIiAvPgogIDxwYXRoIGQ9Ik0yMDAgNTAgTDMwMCAxMDAgTDMwMCAyMjAgQzMwMCAzMDAgMjAwIDM1MCAyMDAgMzUwIEMyMDAgMzUwIDEwMCAzMDAgMTAwIDIyMCBMMTAwIDEwMCBaIiBmaWxsPSIjMjU2M2ViIiAvPgogIDx0ZXh0IHg9IjIwMCIgeT0iMjMwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIwIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZmZmZiI+UUM8L3RleHQ+CiAgPHRleHQgeD0iMjAwIiB5PSIzMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmZmZmYiPlF1aWNrQ3JlZGl0PC90ZXh0Pgo8L3N2Zz4=" class="logo-img" alt="QuickCredit" style="margin-right: 8px;" />
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MTAgNTQwIj4KICA8cmVjdCB3aWR0aD0iODEwIiBoZWlnaHQ9IjU0MCIgZmlsbD0iIzAzNGVhMiIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQwNSwyNzApIj4KICAgIDxnIGlkPSJzdGFycyI+CiAgICAgIDxnIGlkPSJoYWxmIj4KICAgICAgICA8ZyBpZD0icSI+CiAgICAgICAgICA8ZyBpZD0icyI+CiAgICAgICAgICAgIDxwb2x5Z29uIHBvaW50cz0iMCwtMTgwIDExLjIsLTE0NS40IC0xOC4yLC0xNjYuNyAxOC4yLC0xNjYuNyAtMTEuMiwtMTQ1LjQiIGZpbGw9IiNmY2I1MTQiLz4KICAgICAgICAgIDwvZz4KICAgICAgICAgIDx1c2UgaHJlZj0iI3MiIHRyYW5zZm9ybT0icm90YXRlKDMwKSIvPgogICAgICAgICAgPHVzZSBocmVmPSIjcyIgdHJhbnNmb3JtPSJyb3RhdGUoNjApIi8+CiAgICAgICAgPC9nPgogICAgICAgIDx1c2UgaHJlZj0iI3EiIHRyYW5zZm9ybT0icm90YXRlKDkwKSIvPgogICAgICA8L2c+CiAgICAgIDx1c2UgaHJlZj0iI2hhbGYiIHRyYW5zZm9ybT0icm90YXRlKDE4MCkiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==" class="logo-img" alt="EU" style="margin-right: 8px;" />
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgNDAwIj4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZmZmZmZiIgLz4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MCwgNTApIHNjYWxlKDMpIj4KICAgIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIzMy4zIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzAwMjM5NSIvPgogICAgPHJlY3QgeD0iMzMuMyIgeT0iMCIgd2lkdGg9IjMzLjMiIGhlaWdodD0iMTAwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8cmVjdCB4PSI2Ni42IiB5PSIwIiB3aWR0aD0iMzMuNCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNFRDI5MzkiLz4KICAgIDxwYXRoIGQ9Ik01MCAyMCBDNjAgNDAsIDcwIDUwLCA4MCA1MCBMMjAgNTAgQzMwIDUwLCA0MCA0MCwgNTAgMjAgWiIgZmlsbD0iIzAwMDAwMCIgb3BhY2l0eT0iMC44Ii8+CiAgPC9nPgogIDx0ZXh0IHg9IjIwMCIgeT0iMzgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDAwIj5NSU5JU1TDiFJFIERFUyBGSU5BTkNFUzwvdGV4dD4KPC9zdmc+" class="logo-img" alt="MinFin" />
-            </td>
-            <td class="header-ref" style="text-align: right; vertical-align: middle;">
-                <strong>{{ config('credit.brand', $brand) }}</strong><br>
-                Document officiel — Usage restreint<br>
-                Émis le {{ $generatedAt->format('d/m/Y') }}
-            </td>
-        </tr>
-    </table>
-
-    {{-- TITLE SECTION --}}
-    <div class="title-section">
-        <div class="doc-title" style="font-size: 13pt;">
-            OFFRE DE CONTRAT DE PRÊT SOUS SEING PRIVÉ - RÉGULATION EUROPÉENNE N°2024/762
+    {{-- ═══════════════════════════════════════════
+         BANDEAU CONFIDENTIEL FIXE VISIBLE EN BAS DE TOUTES LES PAGES
+    ═══════════════════════════════════════════ --}}
+    <div class="fixed-footer-banner">
+        <div class="reading-zone">
+            <div class="confid-banner">
+                DOCUMENT STRICTEMENT CONFIDENTIEL SOUMIS AU SECRET BANCAIRE ET AUX RÈGLES RGPD.
+            </div>
         </div>
     </div>
 
-    <hr class="divider">
+    {{-- ═══════════════════════════════════════════
+         PAGINATION AUTOMATIQUE RESPECTANT LES MARGES
+    ═══════════════════════════════════════════ --}}
+    <script type="text/php">
+        if (isset($pdf)) {
+            $text = "Quickcredit · Offre de Contrat de Prêt " . "{{ $application->reference }}" . " · Page {PAGE_NUM} sur {PAGE_COUNT}";
+            $font = $fontMetrics->get_font("DejaVu Sans, sans-serif", "normal");
+            $size = 7.5;
+            $color = array(0.4, 0.45, 0.55);
+            $pdf->page_text(62, 792, $text, $font, $size, $color);
+        }
+    </script>
 
-    {{-- REFERENCE BOX --}}
-    <div class="ref-box">
-        <div class="ref-item" style="margin-bottom: 8px;">
-            <label>Numéro de dossier :</label>
-            <span>Dossier_REF-{{ strtoupper(substr($application->reference, -5)) }}-FR</span>
-        </div>
-        <div class="ref-item" style="margin-bottom: 8px;">
-            <label>Nom du conseiller dédié :</label>
-            <span>M. Jean Dupont</span>
-        </div>
-        <div class="ref-item">
-            <label>Statut :</label>
-            <span class="status-badge" style="display:inline;">Validé par le Comité d'Engagement</span>
-        </div>
-    </div>
+    <div class="reading-zone">
 
-    <div class="info-note">
-        ⚠️ Cette offre est soumise à un délai légal de réflexion de <strong>14 jours calendaires</strong> conformément à l'article L.313-34 du Code de la consommation. L'emprunteur ne peut accepter l'offre avant l'expiration de ce délai.
-    </div>
+        {{-- ============================================================ --}}
+        {{-- PAGE 1 : PRÉSENTATION DE L'OFFRE & VUE D'ENSEMBLE            --}}
+        {{-- ============================================================ --}}
+        <div class="page-section">
 
-    {{-- OBJECT --}}
-    <div class="section-title">Objet du contrat</div>
-    <p style="font-size:8.5pt; color:#475569; line-height:1.75;">
-        La présente offre a pour objet de formaliser les conditions générales et particulières du prêt personnel
-        accordé par <strong>{{ $brand }}</strong> (ci-après « le Prêteur ») à l'Emprunteur désigné en page 2 du présent document.
-        Ce contrat est régi par les dispositions du Code de la consommation et la Directive européenne 2014/17/UE
-        relative aux contrats de crédit aux consommateurs.
-    </p>
+            {{-- EN-TÊTE SPACIEUX DE MARQUE --}}
+            <table class="header-table">
+                <tr>
+                    <td style="vertical-align: middle; width: 62%;">
+                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                            <tr>
+                                @if($logoBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                </td>
+                                @endif
+                                @if($logoEuBase64)
+                                <td style="vertical-align: middle; padding-right: 8px;">
+                                    <img src="{{ $logoEuBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="EU">
+                                </td>
+                                @endif
+                                @if($logoFrBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoFrBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="MinFin">
+                                </td>
+                                @endif
+                                <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
+                                    <div class="header-title-brand">
+                                        Quick<span class="header-title-accent">credit</span>
+                                    </div>
+                                    <div class="header-subtitle">
+                                        Établissement Agréé EU · Régulation 2024/762
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="vertical-align: middle;" class="header-ref">
+                        <div>Document Contractuel Officiel</div>
+                        <div style="margin: 4px 0;">
+                            Réf : <span class="ref-badge">{{ $application->reference }}</span>
+                        </div>
+                        <div style="font-size: 7.5pt; color: #64748B;">
+                            Émis le {{ $generatedAt->format('d/m/Y') }}
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-    {{-- CONFIDENTIAL FOOTER --}}
-    <div class="confid-banner">
-        Document strictement confidentiel soumis au secret bancaire et à la loi RGPD.
-    </div>
-
-</div>{{-- end page 1 --}}
-
-
-{{-- ============================================================ --}}
-{{-- PAGE 2 : PARTIES & TABLEAU D'AMORTISSEMENT                    --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="watermark">DOCUMENT OFFICIEL</div>
-
-    <table class="header-table">
-        <tr>
-            <td style="font-size:8pt; font-weight:800; color:#1a2332; text-align: left; vertical-align: middle;">
-                {{ $brand }}
-            </td>
-            <td class="header-ref" style="text-align: right; vertical-align: middle;">
-                Réf. {{ $application->reference }} · Page 2/4
-            </td>
-        </tr>
-    </table>
-
-    {{-- PARTIES --}}
-    <div class="section-title">Désignation des parties</div>
-    <table style="width: 100%; border-collapse: separate; border-spacing: 15px 0; margin-left: -15px; margin-right: -15px; margin-bottom: 20px;">
-        <tr>
-            <td style="width: 50%; vertical-align: top;">
-                <div class="party-box" style="margin: 0;">
-                    <div class="party-label">Le Prêteur</div>
-                    <div class="party-info">
-                        <p>
-                            <strong>{{ $brand }}</strong><br>
-                            14 Rue de la Banque<br>
-                            75002 Paris, France<br>
-                            SIREN : 892 123 456<br>
-                            N° ORIAS : 21004567
-                        </p>
-                    </div>
+            {{-- TITRE PRINCIPAL DE L'OFFRE --}}
+            <div class="title-section">
+                <div class="doc-type">Offre Préalable de Crédit à la Consommation</div>
+                <div class="doc-title">
+                    CONTRAT DE PRÊT SOUS SEING PRIVÉ — RÉGULATION EUROPÉENNE N°2024/762
                 </div>
-            </td>
-            <td style="width: 50%; vertical-align: top;">
-                <div class="party-box" style="margin: 0;">
-                    <div class="party-label">L'Emprunteur</div>
-                    <div class="party-info">
-                        <p>
-                            <strong>{{ $application->prenom }} {{ $application->nom }}</strong><br>
-                            {{ $application->adresse ?? '—' }}<br>
-                            {{ $application->code_postal ?? '' }} {{ $application->ville ?? '' }}<br>
-                            Tél. : {{ $application->telephone ?? '—' }}<br>
-                            Email : {{ $application->email }}
-                        </p>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
+            </div>
 
-    {{-- LOAN CHARACTERISTICS TABLE --}}
-    <div class="section-title">Caractéristiques du prêt</div>
-    <table class="loan-table">
-        <thead>
-            <tr>
-                <th>Capital Emprunté</th>
-                <th>Taux d'intérêt (TAEG)</th>
-                <th>Durée du crédit</th>
-                <th>Mensualité fixe</th>
-                <th>Date de premier prélèvement</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ number_format($application->montant, 2, ',', ' ') }} €</td>
-                <td>{{ $application->taux_annuel }} %</td>
-                <td>{{ $application->duree_mois }} mois</td>
-                <td>{{ number_format($application->mensualite, 2, ',', ' ') }} €</td>
-                <td>05 / {{ str_pad((date('n') % 12) + 1, 2, '0', STR_PAD_LEFT) }} / {{ date('n') == 12 ? date('Y') + 1 : date('Y') }}</td>
-            </tr>
-        </tbody>
-    </table>
+            {{-- ENCADRÉ RÉFÉRENCE ET STATUT --}}
+            <div class="ref-box">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 50%;" class="ref-item">
+                            <label>Dossier N° :</label>
+                            <span>{{ $application->reference }}</span>
+                        </td>
+                        <td style="width: 50%;" class="ref-item">
+                            <label>Courtier Référent :</label>
+                            <span>Julien Verran</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 10px;" class="ref-item">
+                            <label>Date de l'offre :</label>
+                            <span>{{ $generatedAt->format('d/m/Y') }}</span>
+                        </td>
+                        <td style="padding-top: 10px;" class="ref-item">
+                            <label>Statut du contrat :</label>
+                            <span class="status-badge">Validé par le Comité d'Engagement</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-    {{-- AMORTIZATION --}}
-    <div class="section-title">Extrait du tableau d'amortissement</div>
-    <table class="amort-table">
-        <thead>
-            <tr>
-                <th>N° Échéance</th>
-                <th>Mensualité (€)</th>
-                <th>Intérêts (€)</th>
-                <th>Capital remboursé (€)</th>
-                <th>Capital restant dû (€)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(array_slice($amortization, 0, 5) as $row)
-            <tr>
-                <td>{{ $row['mois'] }}</td>
-                <td>{{ number_format($row['mensualite'], 2, ',', ' ') }}</td>
-                <td>{{ number_format($row['interets'], 2, ',', ' ') }}</td>
-                <td>{{ number_format($row['part_capital'], 2, ',', ' ') }}</td>
-                <td>{{ number_format($row['capital_restant'], 2, ',', ' ') }}</td>
-            </tr>
-            @endforeach
-            @if(count($amortization) > 5)
-            <tr>
-                <td colspan="5" style="text-align:center; font-style:italic; color:#94a3b8; font-size:7pt; padding:8px;">
-                    · · · {{ count($amortization) - 5 }} échéances supplémentaires — tableau complet disponible sur demande · · ·
-                </td>
-            </tr>
-            @endif
-            {{-- Dernière ligne --}}
-            @php $last = end($amortization); @endphp
-            <tr style="background:#f0fdf4 !important;">
-                <td style="color:#166534; font-weight:800;">{{ $last['mois'] }}</td>
-                <td style="color:#166534;">{{ number_format($last['mensualite'], 2, ',', ' ') }}</td>
-                <td style="color:#166534;">{{ number_format($last['interets'], 2, ',', ' ') }}</td>
-                <td style="color:#166534;">{{ number_format($last['part_capital'], 2, ',', ' ') }}</td>
-                <td style="color:#166534; font-weight:800;">0,00</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="amort-notice">Les montants sont calculés selon la méthode des intérêts composés au taux mensuel de {{ round($application->taux_annuel / 12, 4) }} %.</div>
+            <div class="info-note">
+                ⚠️ <strong>Délai légal de réflexion :</strong> Conformément à l'article L.312-19 du Code de la consommation, l'emprunteur dispose d'un délai légal de <strong>14 jours calendaires</strong> révolus pour se rétracter à compter de l'acceptation de la présente offre.
+            </div>
 
-    <table class="page-footer-table">
-        <tr>
-            <td style="text-align: left;">{{ $brand }} — Confidentiel</td>
-            <td style="text-align: center;">Page 2 / 4</td>
-            <td style="text-align: right;">Réf. {{ $application->reference }}</td>
-        </tr>
-    </table>
-</div>{{-- end page 2 --}}
+            {{-- OBJET DU CONTRAT --}}
+            <div class="section-title">1. Objet du Contrat &amp; Cadre Réglémentaire</div>
+            <p style="font-size: 9pt; color: #475569; line-height: 1.7; margin-bottom: 16px;">
+                La présente offre a pour objet de formaliser les conditions financières et juridiques du prêt accordé par l'établissement <strong>Quickcredit</strong> (ci-après désigné « le Prêteur ») à l'Emprunteur désigné au présent contrat.
+                Le présent contrat est régissant par le Code de la consommation français et par la Directive Européenne 2014/17/UE relative aux contrats de crédit aux consommateurs.
+            </p>
 
+            {{-- PARTIES PRENANTES --}}
+            <div class="section-title">2. Désignation des Parties</div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
+                <tr>
+                    <td style="width: 48%; vertical-align: top;">
+                        <div class="party-box">
+                            <div class="party-label">Le Prêteur &amp; Organisme de Crédit</div>
+                            <div class="party-info">
+                                <p>
+                                    <strong>Quickcredit</strong><br>
+                                    Service Client &amp; Engagement<br>
+                                    📞 +33 7 80 96 12 16<br>
+                                    ✉️ support@crediteco.app<br>
+                                    🌐 crediteco.app
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 4%;"></td>
+                    <td style="width: 48%; vertical-align: top;">
+                        <div class="party-box">
+                            <div class="party-label">L'Emprunteur</div>
+                            <div class="party-info">
+                                <p>
+                                    <strong>{{ $application->civilite }} {{ $application->prenom }} {{ $application->nom }}</strong><br>
+                                    {{ $application->adresse ?? 'Adresse non communiquée' }}<br>
+                                    {{ $application->code_postal }} {{ $application->ville }}<br>
+                                    📞 {{ $application->telephone }}<br>
+                                    ✉️ {{ $application->email }}
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-{{-- ============================================================ --}}
-{{-- PAGE 3 : CLAUSES CONTRACTUELLES                               --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="watermark">DOCUMENT OFFICIEL</div>
-
-    <table class="header-table">
-        <tr>
-            <td style="font-size:8pt; font-weight:800; color:#1a2332; text-align: left; vertical-align: middle;">
-                {{ $brand }}
-            </td>
-            <td class="header-ref" style="text-align: right; vertical-align: middle;">
-                Réf. {{ $application->reference }} · Page 3/4
-            </td>
-        </tr>
-    </table>
-
-    <div class="section-title">Conditions générales du contrat</div>
-
-    <div class="clause">
-        <div class="clause-title">Article 1 – Objet et mise à disposition des fonds</div>
-        <p>Le Prêteur s'engage à mettre à disposition de l'Emprunteur la somme mentionnée à l'article 2 du présent contrat, après réception du contrat signé par l'Emprunteur. Les fonds seront virés sur le compte bancaire dont l'IBAN a été communiqué dans le dossier, dans un délai de 5 à 10 jours ouvrés.</p>
-    </div>
-
-    <div class="clause">
-        <div class="clause-title">Article 2 – Montant et conditions du prêt</div>
-        <p>Le prêt est accordé pour un montant de <strong>{{ number_format($application->montant, 2, ',', ' ') }} €</strong>, remboursable sur <strong>{{ $application->duree_mois }} mois</strong> au taux annuel effectif global (TAEG) de <strong>{{ $application->taux_annuel }} %</strong>. Les mensualités sont fixes à <strong>{{ number_format($application->mensualite, 2, ',', ' ') }} €</strong>.</p>
-    </div>
-
-    <div class="clause">
-        <div class="clause-title">Article 3 – Droit de rétractation</div>
-        <div class="clause-highlight">
-            Conformément aux directives internes de traitement accéléré, l'Emprunteur dispose d'un délai de <strong>72 heures</strong> à compter de la date d'acceptation du présent contrat pour exercer son droit de rétractation.
         </div>
-    </div>
 
-    <div class="clause">
-        <div class="clause-title">Article 4 – Modalités de remboursement</div>
-        <p>Les échéances sont prélevées automatiquement le 5 de chaque mois sur le compte bancaire de l'Emprunteur. En cas d'insuffisance de provision, des frais de rejet de prélèvement pourront être appliqués conformément aux conditions tarifaires en vigueur.</p>
-    </div>
+        <div class="page-break"></div>
 
-    <div class="clause">
-        <div class="clause-title">Article 5 – Remboursement anticipé</div>
-        <p>L'Emprunteur peut procéder au remboursement anticipé partiel ou total du prêt à tout moment, sous réserve d'un préavis d'un mois. Les intérêts restants dus seront recalculés au prorata du capital remboursé.</p>
-    </div>
+        {{-- ============================================================ --}}
+        {{-- PAGE 2 : CARACTÉRISTIQUES DU PRÊT & TABLEAU D'AMORTISSEMENT  --}}
+        {{-- ============================================================ --}}
+        <div class="page-section">
 
-    <div class="clause">
-        <div class="clause-title">Article 6 – Défaut de paiement</div>
-        <p>En cas de défaillance de l'Emprunteur dans le remboursement des échéances, le Prêteur se réserve le droit de résilier le présent contrat et d'exiger le remboursement immédiat du capital restant dû, majoré des intérêts de retard au taux légal en vigueur.</p>
-    </div>
+            {{-- EN-TÊTE SPACIEUX DE MARQUE --}}
+            <table class="header-table">
+                <tr>
+                    <td style="vertical-align: middle; width: 62%;">
+                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                            <tr>
+                                @if($logoBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                </td>
+                                @endif
+                                @if($logoEuBase64)
+                                <td style="vertical-align: middle; padding-right: 8px;">
+                                    <img src="{{ $logoEuBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="EU">
+                                </td>
+                                @endif
+                                @if($logoFrBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoFrBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="MinFin">
+                                </td>
+                                @endif
+                                <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
+                                    <div class="header-title-brand">
+                                        Quick<span class="header-title-accent">credit</span>
+                                    </div>
+                                    <div class="header-subtitle">
+                                        Établissement Agréé EU · Régulation 2024/762
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="vertical-align: middle;" class="header-ref">
+                        <div>Modalités Financières &amp; Échéancier</div>
+                        <div style="margin: 4px 0;">
+                            Réf : <span class="ref-badge">{{ $application->reference }}</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-    <div class="clause">
-        <div class="clause-title">Article 7 – Garantie de Solvabilité et Frais de Validation d'Enveloppe Indivisibles</div>
-        <p>Conformément aux dispositions transfrontalières sur les octrois de crédits aux particuliers hors circuit bancaire traditionnel, l'activation des fonds sur le compte de l'Emprunteur est conditionnée par l'acquittement préalable des frais d'enregistrement de sûreté et de greffe d'un montant de <strong>250 €</strong>. Ces frais, régis par la loi sur les assurances de crédit, ne peuvent en aucun cas être déduits du capital prêté, celui-ci étant placé sous séquestre informatique bloqué jusqu'à validation du protocole de conformité.</p>
-    </div>
+            {{-- CARACTÉRISTIQUES DU PRÊT --}}
+            <div class="section-title">3. Caractéristiques Financières du Prêt</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Capital Prêté</th>
+                        <th>TAEG Fixe</th>
+                        <th>Durée</th>
+                        <th>Mensualité Nette</th>
+                        <th>Date 1er Prélèvement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; color: #0A2240; font-size: 10pt;">{{ number_format($application->montant, 2, ',', ' ') }} €</td>
+                        <td style="font-weight: bold;">{{ $application->taux_annuel }} %</td>
+                        <td>{{ $application->duree_mois }} mois</td>
+                        <td style="font-weight: bold; color: #2563EB; font-size: 10pt;">{{ number_format($application->mensualite, 2, ',', ' ') }} €</td>
+                        <td>05 / {{ str_pad((date('n') % 12) + 1, 2, '0', STR_PAD_LEFT) }} / {{ date('n') == 12 ? date('Y') + 1 : date('Y') }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-    <table class="page-footer-table">
-        <tr>
-            <td style="text-align: left;">{{ $brand }} — Confidentiel</td>
-            <td style="text-align: center;">Page 3 / 4</td>
-            <td style="text-align: right;">Réf. {{ $application->reference }}</td>
-        </tr>
-    </table>
-</div>{{-- end page 3 --}}
+            {{-- AMORTISSEMENT --}}
+            <div class="section-title">4. Tableau d'Amortissement Déclaratif (Extrait des premières échéances)</div>
+            <table class="amort-table">
+                <thead>
+                    <tr>
+                        <th>N° Échéance</th>
+                        <th>Mensualité (€)</th>
+                        <th>Intérêts (€)</th>
+                        <th>Capital Amorti (€)</th>
+                        <th>Capital Restant Dû (€)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(array_slice($amortization, 0, 8) as $row)
+                    <tr>
+                        <td>{{ $row['mois'] }}</td>
+                        <td>{{ number_format($row['mensualite'], 2, ',', ' ') }}</td>
+                        <td>{{ number_format($row['interets'], 2, ',', ' ') }}</td>
+                        <td>{{ number_format($row['part_capital'], 2, ',', ' ') }}</td>
+                        <td>{{ number_format($row['capital_restant'], 2, ',', ' ') }}</td>
+                    </tr>
+                    @endforeach
+                    @if(count($amortization) > 8)
+                    <tr>
+                        <td colspan="5" style="text-align: center; font-style: italic; color: #64748B; font-size: 8pt; padding: 8px; background: #F8FAFC;">
+                            · · · {{ count($amortization) - 8 }} échéances intermédiaires régulières — tableau d'amortissement complet joint · · ·
+                        </td>
+                    </tr>
+                    @endif
+                    @php $last = end($amortization); @endphp
+                    <tr style="background: #F0FDF4 !important;">
+                        <td style="color: #166534; font-weight: bold;">{{ $last['mois'] }} (Dernière)</td>
+                        <td style="color: #166534;">{{ number_format($last['mensualite'], 2, ',', ' ') }}</td>
+                        <td style="color: #166534;">{{ number_format($last['interets'], 2, ',', ' ') }}</td>
+                        <td style="color: #166534;">{{ number_format($last['part_capital'], 2, ',', ' ') }}</td>
+                        <td style="color: #166534; font-weight: bold;">0,00 €</td>
+                    </tr>
+                </tbody>
+            </table>
 
+            <div style="font-size: 8pt; color: #64748B; font-style: italic; margin-bottom: 18px;">
+                Les mensualités sont calculées selon la méthode à amortissement constant au taux mensuel de {{ round($application->taux_annuel / 12, 4) }} %.
+            </div>
 
-{{-- ============================================================ --}}
-{{-- PAGE 4 : SIGNATURES & MENTIONS MANUSCRITES                    --}}
-{{-- ============================================================ --}}
-<div class="page">
-    <div class="watermark">DOCUMENT OFFICIEL</div>
-
-    <table class="header-table">
-        <tr>
-            <td style="font-size:8pt; font-weight:800; color:#1a2332; text-align: left; vertical-align: middle;">
-                {{ $brand }}
-            </td>
-            <td class="header-ref" style="text-align: right; vertical-align: middle;">
-                Réf. {{ $application->reference }} · Page 4/4
-            </td>
-        </tr>
-    </table>
-
-    <div class="section-title">Acceptation de l'offre et signatures</div>
-
-    <p style="font-size:8pt; color:#475569; line-height:1.7; margin-bottom:16px;">
-        En signant le présent document, les parties reconnaissent avoir pris connaissance et accepter l'intégralité des conditions générales exposées aux pages précédentes. L'Emprunteur certifie l'exactitude des informations fournies dans son dossier.
-    </p>
-
-    {{-- MENTIONS MANUSCRITES --}}
-    <div class="mentions-box">
-        <div class="mentions-title">Mentions à reporter manuscritement par l'Emprunteur</div>
-        <div class="mention-line">
-            « Lu et approuvé, bon pour accord pour un prêt de {{ number_format($application->montant, 2, ',', ' ') }} € au taux de {{ $application->taux_annuel }}%. »
         </div>
-        <div class="mention-line">
-            « Je m'engage à régler les frais de mise en conformité d'un montant de 250 € pour déclencher le virement des fonds. »
+
+        <div class="page-break"></div>
+
+        {{-- ============================================================ --}}
+        {{-- PAGE 3 : CLAUSES CONTRACTUELLES & CONDITIONS GÉNÉRALES        --}}
+        {{-- ============================================================ --}}
+        <div class="page-section">
+
+            {{-- EN-TÊTE SPACIEUX DE MARQUE --}}
+            <table class="header-table">
+                <tr>
+                    <td style="vertical-align: middle; width: 62%;">
+                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                            <tr>
+                                @if($logoBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                </td>
+                                @endif
+                                @if($logoEuBase64)
+                                <td style="vertical-align: middle; padding-right: 8px;">
+                                    <img src="{{ $logoEuBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="EU">
+                                </td>
+                                @endif
+                                @if($logoFrBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoFrBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="MinFin">
+                                </td>
+                                @endif
+                                <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
+                                    <div class="header-title-brand">
+                                        Quick<span class="header-title-accent">credit</span>
+                                    </div>
+                                    <div class="header-subtitle">
+                                        Établissement Agréé EU · Régulation 2024/762
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="vertical-align: middle;" class="header-ref">
+                        <div>Conditions Générales du Contrat</div>
+                        <div style="margin: 4px 0;">
+                            Réf : <span class="ref-badge">{{ $application->reference }}</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="section-title">5. Conditions Générales &amp; Engagements Juridiques</div>
+
+            <div class="clause">
+                <div class="clause-title">Article 1 – Mise à disposition des fonds</div>
+                <p>Le Prêteur s'engage à virer la somme de <strong>{{ number_format($application->montant, 2, ',', ' ') }} €</strong> sur le compte bancaire désigné par l'Emprunteur après vérification finale de conformité du dossier et réception de la présente offre dument signée.</p>
+            </div>
+
+            <div class="clause">
+                <div class="clause-title">Article 2 – Modalités de remboursement &amp; Prélèvements</div>
+                <p>Le remboursement s'effectue par prélèvements mensuels automatiques d'un montant de <strong>{{ number_format($application->mensualite, 2, ',', ' ') }} €</strong> le 5 de chaque mois, sur une durée de <strong>{{ $application->duree_mois }} mois</strong>.</p>
+            </div>
+
+            <div class="clause">
+                <div class="clause-title">Article 3 – Droit de rétractation</div>
+                <div class="clause-highlight">
+                    Conformément aux articles L.312-19 et suivants du Code de la consommation, l'Emprunteur peut se rétracter sans motif dans un délai de <strong>14 jours calendaires</strong> à compter du jour de la signature du contrat.
+                </div>
+            </div>
+
+            <div class="clause">
+                <div class="clause-title">Article 4 – Remboursement anticipé</div>
+                <p>L'Emprunteur peut à tout moment rembourser par anticipation tout ou partie du prêt sans pénalité sur les crédits d'un montant inférieur à 10 000 €, conformément à la législation en vigueur.</p>
+            </div>
+
+            <div class="clause">
+                <div class="clause-title">Article 5 – Défaut de paiement</div>
+                <p>En cas de retard de paiement, des intérêts de retard au taux légal pourront être appliqués après mise en demeure restée sans effet.</p>
+            </div>
+
+            <div class="clause">
+                <div class="clause-title">Article 6 – Validation de dossier &amp; Sécurisation des opérations</div>
+                <p>Afin d'assurer la conformité bancaire de l'enveloppe de prêt accordée, des frais de constitution et de traitement de dossier fixés à <strong>{{ number_format($frais, 0, ',', ' ') }} €</strong> sont rattachés à la validation finale du dossier d'emprunt.</p>
+            </div>
+
         </div>
-    </div>
 
-    {{-- SIGNATURE BLOCKS --}}
-    <table style="width: 100%; border-collapse: separate; border-spacing: 15px 0; margin-left: -15px; margin-right: -15px; margin-top: 15px; margin-bottom: 15px;">
-        <tr>
-            <td style="width: 50%; vertical-align: top;">
-                <div class="sig-box" style="margin: 0;">
-                    <div class="sig-label">Le Prêteur<br><span style="font-weight:400; color:#94a3b8;">{{ $brand }}</span></div>
-                    <div class="sig-area signed">
-                        <span style="opacity: 0.6; position: absolute; transform: rotate(-15deg); font-size: 24pt; border: 3px solid #3730a3; padding: 5px; border-radius: 5px;">APPROUVÉ</span>
-                        {{ substr($brand, 0, 1) }}. Direction
-                    </div>
-                    <div class="sig-date">Signé électroniquement le {{ $generatedAt->format('d/m/Y') }}</div>
+        <div class="page-break"></div>
+
+        {{-- ============================================================ --}}
+        {{-- PAGE 4 : BLOC DES SIGNATURES & CORRESPONDANCE MANUSCRITE      --}}
+        {{-- ============================================================ --}}
+        <div class="page-section">
+
+            {{-- EN-TÊTE SPACIEUX DE MARQUE --}}
+            <table class="header-table">
+                <tr>
+                    <td style="vertical-align: middle; width: 62%;">
+                        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                            <tr>
+                                @if($logoBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                </td>
+                                @endif
+                                @if($logoEuBase64)
+                                <td style="vertical-align: middle; padding-right: 8px;">
+                                    <img src="{{ $logoEuBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="EU">
+                                </td>
+                                @endif
+                                @if($logoFrBase64)
+                                <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $logoFrBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="MinFin">
+                                </td>
+                                @endif
+                                <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
+                                    <div class="header-title-brand">
+                                        Quick<span class="header-title-accent">credit</span>
+                                    </div>
+                                    <div class="header-subtitle">
+                                        Établissement Agréé EU · Régulation 2024/762
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="vertical-align: middle;" class="header-ref">
+                        <div>Validation &amp; Signatures</div>
+                        <div style="margin: 4px 0;">
+                            Réf : <span class="ref-badge">{{ $application->reference }}</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="section-title">6. Acceptation des Conditions &amp; Signatures des Parties</div>
+
+            <p style="font-size: 9pt; color: #475569; line-height: 1.7; margin-bottom: 16px;">
+                En signant la présente offre, l'Emprunteur déclare accepter sans réserve l'ensemble des conditions générales et particulières du contrat.
+            </p>
+
+            {{-- MENTIONS MANUSCRITES --}}
+            <div class="mentions-box">
+                <div class="mentions-title">Mention manuscrite obligatoire à recopier par l'Emprunteur :</div>
+                <div class="mention-line">
+                    « Lu et approuvé, bon pour accord pour un prêt de {{ number_format($application->montant, 2, ',', ' ') }} € remboursable en {{ $application->duree_mois }} mensualités de {{ number_format($application->mensualite, 2, ',', ' ') }} €. »
                 </div>
-            </td>
-            <td style="width: 50%; vertical-align: top;">
-                <div class="sig-box" style="margin: 0;">
-                    <div class="sig-label">L'Emprunteur<br><span style="font-weight:400; color:#94a3b8;">{{ $application->prenom }} {{ $application->nom }}</span></div>
-                    <div class="sig-area">Signature de l'Emprunteur</div>
-                    <div class="sig-date">Date et lieu : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                </div>
-            </td>
-        </tr>
-    </table>
+            </div>
 
-    <hr class="divider" style="margin-top:22px;">
+            {{-- SIGNATURES --}}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 18px;">
+                <tr>
+                    <td style="width: 48%; vertical-align: top;">
+                        <div class="sig-box">
+                            <div class="sig-label">Pour le Prêteur — Quickcredit</div>
+                            <div class="sig-area signed">
+                                <span style="font-weight: bold; font-family: sans-serif; font-size: 11pt;">VALIDE &amp; APPROUVÉ</span>
+                            </div>
+                            <div class="sig-date">
+                                Julien Verran · Courtier Référent<br>
+                                Signé le {{ $generatedAt->format('d/m/Y') }}
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 4%;"></td>
+                    <td style="width: 48%; vertical-align: top;">
+                        <div class="sig-box">
+                            <div class="sig-label">L'Emprunteur</div>
+                            <div class="sig-area">
+                                Signature de {{ $application->prenom }} {{ $application->nom }}
+                            </div>
+                            <div class="sig-date">
+                                Fait à : ............................................<br>
+                                Le : .......... / .......... / 2026
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-    {{-- FINAL LEGAL MENTIONS --}}
-    <p style="font-size: 7pt; color: #94a3b8; line-height: 1.7; margin-top: 14px;">
-        Établissement de crédit agréé et contrôlé par l'Autorité de Contrôle Prudentiel et de Résolution (ACPR) — 4 Place de Budapest, 75009 Paris.
-        Inscription à l'ORIAS : www.orias.fr · Médiateur de la consommation : www.mediateur-consommation.fr.
-        Pour exercer votre droit de rétractation, adressez le formulaire prévu à l'article L.312-19 du Code de la consommation à notre service client dans le délai imparti.
-    </p>
+        </div>
 
-    <div class="confid-banner">
-        Document strictement confidentiel soumis au secret bancaire et à la loi RGPD.
     </div>
-
-</div>{{-- end page 4 --}}
 
 </body>
 </html>

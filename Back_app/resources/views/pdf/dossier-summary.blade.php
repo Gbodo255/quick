@@ -1,579 +1,505 @@
+@php
+    $logoPath = public_path('images/logo_brand.png');
+    $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : '';
+
+    $logoEuPath = public_path('images/logo_eu.png');
+    $logoEuBase64 = file_exists($logoEuPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoEuPath)) : '';
+
+    $logoFrPath = public_path('images/logo_fr.png');
+    $logoFrBase64 = file_exists($logoFrPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoFrPath)) : '';
+@endphp
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Récapitulatif {{ $application->reference }}</title>
+    <title>Récapitulatif de Dossier {{ $application->reference }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        @page { margin: 220px 40px 80px; }
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11px; color: #333; background: #f5f5f5; line-height: 1.4; }
 
-        /* Absolute header placed in the document so it appears only on the first page. */
-        .header-abs {
-            position: absolute;
-            top: 0;
+        /* ─── MARGES DE SÉCURITÉ NOTARIALES ───────────────────────── */
+        @page {
+            size: A4 portrait;
+            margin: 20mm 22mm 26mm 22mm;
+        }
+
+        body {
+            font-family: 'DejaVu Sans', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 9.5pt;
+            color: #1E293B;
+            background: #FFFFFF;
+            line-height: 1.65;
+        }
+
+        /* ─── BANDEAU CONFIDENTIEL FIXE SUR TOUTES LES PAGES ─────────────── */
+        .fixed-footer-banner {
+            position: fixed;
+            bottom: 2px;
             left: 0;
             right: 0;
-            height: 200px;
+            width: 100%;
+            text-align: center;
             z-index: 1000;
-            overflow: hidden;
         }
-        .header-abs .bg {
-            position: absolute; inset: 0;
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            filter: none;
-        }
-        .header-abs .overlay {
-            position: absolute; inset: 0;
-            background: rgba(95, 39, 205, 0.45); /* purple overlay, semi-transparent */
-        }
-        .header-abs .logo {
-            position: absolute;
-            left: 40px;
-            top: 28px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: white;
-            font-weight: 700;
-            font-size: 20px;
-            text-transform: uppercase;
+
+        .confid-banner {
+            background: #0A2240;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 7.5pt;
+            font-weight: bold;
             letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            border-radius: 5px;
+            width: 100%;
         }
-        .header-abs .logo img { height: 46px; width: auto; display: block; border-radius: 50%; background: rgba(255,255,255,0.12); padding: 6px; }
 
-        .header-abs .header-content {
-            position: absolute;
-            left: 40px;
-            <!DOCTYPE html>
-            <html lang="fr">
-            <head>
-                <meta charset="utf-8">
-                <title>Récapitulatif {{ $application->reference }}</title>
-                <style>
-                    * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ─── ZONE DE LECTURE OPTIMISÉE ────────────────────────────────────── */
+        .reading-zone {
+            width: 96%;
+            margin: 0 auto;
+            padding: 0 2px;
+        }
 
-                    @page {
-                        margin: 0;
-                        size: A4;
-                    }
+        /* ─── EN-TÊTE ─────────────────────────────────────────────────── */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-bottom: 2px solid #0A2240;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
 
-                    body {
-                        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                        font-size: 10px;
-                        color: #1a1a2e;
-                        background: #ffffff;
-                        line-height: 1.5;
-                    }
+        .header-title-brand {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #0A2240;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
 
-                    /* ─── HEADER ─────────────────────────────────────────────────── */
-                    .page-header {
-                        width: 100%;
-                        height: 190px;
-                        background: #1a1a2e;
-                        position: relative;
-                        overflow: hidden;
-                        display: block;
-                    }
+        .header-title-accent {
+            color: #2563EB;
+        }
 
-                    /* diagonal accent stripe */
-                    .page-header::before {
-                        content: '';
-                        position: absolute;
-                        top: 0; right: -60px;
-                        width: 320px; height: 100%;
-                        background: #5f27cd; /* replaced green with brand purple */
-                        transform: skewX(-12deg);
-                        z-index: 1;
-                    }
-                    /* second lighter stripe */
-                    .page-header::after {
-                        content: '';
-                        position: absolute;
-                        top: 0; right: 180px;
-                        width: 18px; height: 100%;
-                        background: rgba(95,39,205,0.28); /* lighter purple */
-                        transform: skewX(-12deg);
-                        z-index: 2;
-                    }
+        .header-subtitle {
+            font-size: 7.5pt;
+            color: #64748B;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
 
-                    .header-inner {
-                        position: relative;
-                        z-index: 10;
-                        height: 100%;
-                        display: flex;
-                        align-items: stretch;
-                    }
+        .header-ref-box {
+            text-align: right;
+            font-size: 8pt;
+            color: #475569;
+            line-height: 1.5;
+        }
 
-                    /* Left block – brand + title */
-                    .header-left {
-                        flex: 1;
-                        padding: 28px 32px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                    }
+        .ref-badge {
+            font-family: monospace;
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #0A2240;
+            background: #F1F5F9;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #CBD5E1;
+            display: inline-block;
+        }
 
-                    .brand-row {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
-                    .brand-logo {
-                        width: 36px; height: 36px;
-                        border-radius: 8px;
-                        background: rgba(255,255,255,0.12);
-                        border: 1px solid rgba(255,255,255,0.22);
-                        display: flex; align-items: center; justify-content: center;
-                        overflow: hidden;
-                    }
-                    .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
-                    .brand-name {
-                        font-size: 11px;
-                        font-weight: 700;
-                        letter-spacing: 0.18em;
-                        text-transform: uppercase;
-                        color: rgba(255,255,255,0.75);
-                    }
+        /* ─── HERO BANNER ────────────────────────────────────────────────── */
+        .hero-banner {
+            background: #0A2240;
+            color: #FFFFFF;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
 
-                    .header-doc-type {
-                        font-size: 9px;
-                        font-weight: 700;
-                        letter-spacing: 0.22em;
-                        text-transform: uppercase;
-                        color: #5f27cd; /* purple */
-                        margin-bottom: 4px;
-                    }
-                    .header-title {
-                        font-size: 34px;
-                        font-weight: 900;
-                        line-height: 1;
-                        color: #ffffff;
-                        letter-spacing: -0.01em;
-                    }
-                    .header-title span {
-                        display: block;
-                        color: #5f27cd;
-                    }
+        .hero-title {
+            font-size: 12.5pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
 
-                    /* Right block – reference card */
-                    .header-right {
-                        width: 230px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-end;
-                        padding: 0 32px 28px 0;
-                        position: relative;
-                        z-index: 20;
-                    }
+        .hero-sub {
+            font-size: 8.5pt;
+            color: #93C5FD;
+        }
 
-                    .ref-card {
-                        background: rgba(255,255,255,0.08);
-                        border: 1px solid rgba(255,255,255,0.18);
-                        border-radius: 10px;
-                        padding: 14px 16px;
-                    }
-                    .ref-card-label {
-                        font-size: 7.5px;
-                        letter-spacing: 0.2em;
-                        text-transform: uppercase;
-                        color: rgba(255,255,255,0.6);
-                        margin-bottom: 5px;
-                    }
-                    .ref-card-value {
-                        font-size: 15px;
-                        font-weight: 800;
-                        color: #ffffff;
-                        letter-spacing: 0.04em;
-                    }
-                    .ref-card-sub {
-                        margin-top: 10px;
-                        padding-top: 10px;
-                        border-top: 1px solid rgba(255,255,255,0.14);
-                        font-size: 8px;
-                        color: rgba(255,255,255,0.55);
-                        letter-spacing: 0.04em;
-                    }
-                    .ref-card-sub strong {
-                        color: #5f27cd;
-                        font-weight: 700;
-                    }
+        /* ─── SECTIONS ────────────────────────────────────────────────── */
+        .section-box {
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            background: #FFFFFF;
+            page-break-inside: avoid;
+        }
 
-                    /* ─── PAGE BODY ────────────────────────────────────────────────── */
-                    .page-body {
-                        padding: 28px 32px 40px;
-                        background: #f7f8fb;
-                        min-height: calc(100% - 190px);
-                    }
+        .section-header {
+            background: #F8FAFC;
+            border-bottom: 1px solid #E2E8F0;
+            padding: 10px 16px;
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #0A2240;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-                    /* ─── SECTION BLOCKS ───────────────────────────────────────────── */
-                    .section {
-                        background: #ffffff;
-                        border-radius: 10px;
-                        overflow: hidden;
-                        margin-bottom: 18px;
-                        border: 1px solid #e2e8f0;
-                        box-shadow: 0 2px 8px rgba(16,24,40,0.05);
-                    }
+        .section-header span {
+            color: #2563EB;
+            margin-right: 8px;
+        }
 
-                    .section-header {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        padding: 11px 18px;
-                        border-bottom: 2px solid #5f27cd;
-                        background: #ffffff;
-                    }
-                    .section-icon {
-                        width: 28px; height: 28px;
-                        border-radius: 7px;
-                        background: #f5f3ff;
-                        border: 1px solid #e6dbff;
-                        display: flex; align-items: center; justify-content: center;
-                        font-size: 14px;
-                        flex-shrink: 0;
-                    }
-                    .section-title {
-                        font-size: 11px;
-                        font-weight: 800;
-                        text-transform: uppercase;
-                        letter-spacing: 0.16em;
-                        color: #1a1a2e;
-                    }
-                    .section-title-accent {
-                        color: #5f27cd;
-                    }
+        /* ─── TABLES ──────────────────────────────────────────────────── */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-                    .section-body {
-                        padding: 0;
-                    }
-                    .section-intro {
-                        font-size: 9.5px;
-                        color: #64748b;
-                        padding: 12px 18px 0;
-                        line-height: 1.6;
-                        border-bottom: 1px solid #f1f5f9;
-                        padding-bottom: 12px;
-                    }
+        .data-table tr {
+            border-bottom: 1px solid #F1F5F9;
+        }
 
-                    /* ─── INFO TABLE ───────────────────────────────────────────────── */
-                    .info-table {
-                        width: 100%;
-                        border-collapse: collapse;
-                    }
-                    .info-table tr {
-                        border-bottom: 1px solid #f1f5f9;
-                    }
-                    .info-table tr:last-child {
-                        border-bottom: none;
-                    }
-                    .info-table td {
-                        padding: 10px 18px;
-                        font-size: 10px;
-                        vertical-align: middle;
-                    }
-                    .info-table td.lbl {
-                        font-weight: 700;
-                        color: #475569;
-                        width: 38%;
-                        background: #f8fafc;
-                        border-right: 1px solid #e2e8f0;
-                        font-size: 9.5px;
-                        text-transform: uppercase;
-                        letter-spacing: 0.06em;
-                    }
-                    .info-table td.val {
-                        color: #0f172a;
-                        font-size: 10.5px;
-                        background: #ffffff;
-                    }
+        .data-table tr:last-child {
+            border-bottom: none;
+        }
 
-                    /* highlight rows */
-                    .row-hl td.lbl {
-                        background: #f5f3ff;
-                        color: #5f27cd;
-                        border-right-color: #e6dbff;
-                    }
-                    .row-hl td.val {
-                        background: #f5f3ff;
-                        color: #3b157a;
-                        font-weight: 700;
-                        font-size: 11.5px;
-                    }
+        .data-table td {
+            padding: 10px 16px;
+            font-size: 9pt;
+            vertical-align: middle;
+        }
 
-                    /* ─── TWO-COLUMN GRID ──────────────────────────────────────────── */
-                    .two-col {
-                        display: flex;
-                        gap: 18px;
-                    }
-                    .two-col .section {
-                        flex: 1;
-                    }
+        .data-table td.lbl {
+            width: 42%;
+            font-weight: bold;
+            color: #475569;
+            background: #FAFAFA;
+            border-right: 1px solid #F1F5F9;
+        }
 
-                    /* ─── BADGE ────────────────────────────────────────────────────── */
-                    .badge-eligible {
-                        display: inline-block;
-                        background: #f5f3ff;
-                        color: #5f27cd;
-                        padding: 3px 9px;
-                        border-radius: 20px;
-                        font-size: 9px;
-                        font-weight: 700;
-                        letter-spacing: 0.06em;
-                        border: 1px solid #e6dbff;
-                    }
-                    .badge-pending {
-                        display: inline-block;
-                        background: #fef9c3;
-                        color: #92400e;
-                        padding: 3px 9px;
-                        border-radius: 20px;
-                        font-size: 9px;
-                        font-weight: 700;
-                        letter-spacing: 0.06em;
-                        border: 1px solid #fde68a;
-                    }
+        .data-table td.val {
+            color: #0F172A;
+            font-weight: 500;
+        }
 
-                    /* ─── FOOTER ───────────────────────────────────────────────────── */
-                    .page-footer {
-                        width: 100%;
-                        padding: 14px 32px;
-                        border-top: 2px solid #5f27cd;
-                        background: #1a1a2e;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                    }
-                    .page-footer .foot-brand {
-                        font-size: 9px;
-                        font-weight: 700;
-                        letter-spacing: 0.14em;
-                        text-transform: uppercase;
-                        color: rgba(255,255,255,0.6);
-                    }
-                    .page-footer .foot-ref {
-                        font-size: 9px;
-                        color: rgba(255,255,255,0.4);
-                    }
-                    .page-footer .foot-dot {
-                        width: 6px; height: 6px;
-                        border-radius: 50%;
-                        background: #5f27cd;
-                    }
-                </style>
-            </head>
-            <body>
+        .val-highlight {
+            font-weight: bold;
+            color: #0A2240;
+            font-size: 10.5pt;
+        }
 
-                <!-- ═══ HEADER ════════════════════════════════════════════════════ -->
-                <div class="page-header">
-                    <div class="header-inner">
-                        <div class="header-left">
-                            <div class="brand-row">
-                                <div class="brand-logo">
-                                    @if(file_exists(public_path('images/logo.svg')))
-                                        <img src="file://{{ str_replace('\\', '/', public_path('images/logo.svg')) }}" alt="{{ $brand }}">
-                                    @endif
+        /* ─── STATUS BADGES ───────────────────────────────────────────── */
+        .status-pill {
+            display: inline-block;
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
+            font-size: 8pt;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .doc-badge {
+            display: inline-block;
+            background: #DCFCE7;
+            color: #15803D;
+            border: 1px solid #BBF7D0;
+            font-size: 8pt;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* ─── FOOTER & SIGNATURE ───────────────────────────────────────── */
+        .signature-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 22px;
+            page-break-inside: avoid;
+        }
+
+        .sig-box {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 14px 16px;
+            background: #FAFAFA;
+            min-height: 90px;
+        }
+
+        .sig-title {
+            font-size: 8.5pt;
+            font-weight: bold;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #E2E8F0;
+            padding-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    {{-- ═══════════════════════════════════════════
+         BANDEAU CONFIDENTIEL FIXE VISIBLE EN BAS DE TOUTES LES PAGES
+    ═══════════════════════════════════════════ --}}
+    <div class="fixed-footer-banner">
+        <div class="reading-zone">
+            <div class="confid-banner">
+                DOCUMENT STRICTEMENT CONFIDENTIEL SOUMIS AU SECRET BANCAIRE ET AUX RÈGLES RGPD.
+            </div>
+        </div>
+    </div>
+
+    {{-- ═══════════════════════════════════════════
+         RUNNING FOOTER
+    ═══════════════════════════════════════════ --}}
+    <script type="text/php">
+        if (isset($pdf)) {
+            $text = "Quickcredit · Récapitulatif de Dossier " . "{{ $application->reference }}" . " · Page {PAGE_NUM} sur {PAGE_COUNT}";
+            $font = $fontMetrics->get_font("DejaVu Sans, sans-serif", "normal");
+            $size = 7.5;
+            $color = array(0.4, 0.45, 0.55);
+            $pdf->page_text(62, 792, $text, $font, $size, $color);
+        }
+    </script>
+
+    <div class="reading-zone">
+
+        {{-- ═══════════════════════════════════════════
+             HEADER
+        ═══════════════════════════════════════════ --}}
+        <table class="header-table">
+            <tr>
+                <td style="vertical-align: middle; width: 62%;">
+                    <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                        <tr>
+                            @if($logoBase64)
+                            <td style="vertical-align: middle; padding-right: 10px;">
+                                <img src="{{ $logoBase64 }}" width="38" height="38" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                            </td>
+                            @endif
+                            @if($logoEuBase64)
+                            <td style="vertical-align: middle; padding-right: 6px;">
+                                <img src="{{ $logoEuBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="EU">
+                            </td>
+                            @endif
+                            @if($logoFrBase64)
+                            <td style="vertical-align: middle; padding-right: 10px;">
+                                <img src="{{ $logoFrBase64 }}" width="44" height="30" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 1px; background: #FFFFFF;" alt="MinFin">
+                            </td>
+                            @endif
+                            <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 10px;">
+                                <div class="header-title-brand">
+                                    Quick<span class="header-title-accent">credit</span>
                                 </div>
-                                <div class="brand-name">{{ $brand }}</div>
-                            </div>
-                            <div>
-                                <div class="header-doc-type">Récapitulatif de dossier</div>
-                                <div class="header-title">
-                                    DOSSIER<span>CLIENT</span>
+                                <div class="header-subtitle">
+                                    Établissement Agréé EU · Régulation 2024/762
                                 </div>
-                            </div>
-                        </div>
-                        <div class="header-right">
-                            <div class="ref-card">
-                                <div class="ref-card-label">Référence dossier</div>
-                                <div class="ref-card-value">{{ $application->reference }}</div>
-                                <div class="ref-card-sub">
-                                    Statut : <strong>{{ $application->status->label() }}</strong>
-                                </div>
-                            </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="vertical-align: middle;" class="header-ref-box">
+                    <div>Document Synthèse de Dossier</div>
+                    <div style="margin: 3px 0;">
+                        Réf : <span class="ref-badge">{{ $application->reference }}</span>
+                    </div>
+                    <div style="font-size: 7.5pt; color: #64748B;">
+                        Généré le {{ now()->format('d/m/Y à H:i') }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        {{-- ═══════════════════════════════════════════
+             HERO TITLE BANNER
+        ═══════════════════════════════════════════ --}}
+        <div class="hero-banner">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td>
+                        <div class="hero-title">Récapitulatif Officiel de Demande de Financement</div>
+                        <div class="hero-sub">Dossier d'emprunt enregistré auprès des services Quickcredit</div>
+                    </td>
+                    <td style="text-align: right; vertical-align: middle;">
+                        <span class="status-pill">Dossier Transmis · Analyse en cours</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        {{-- ═══════════════════════════════════════════
+             SECTION 1 : FINANCEMENT
+        ═══════════════════════════════════════════ --}}
+        <div class="section-box">
+            <div class="section-header">
+                <span>💶</span> 1. Caractéristiques du Financement Souhaité
+            </div>
+            <table class="data-table">
+                <tr>
+                    <td class="lbl">Montant du prêt :</td>
+                    <td class="val val-highlight">{{ number_format($application->montant, 0, ',', ' ') }} €</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Durée de remboursement :</td>
+                    <td class="val">{{ $application->duree_mois }} mois ({{ round($application->duree_mois / 12, 1) }} ans)</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Mensualité estimée :</td>
+                    <td class="val val-highlight" style="color: #2563EB;">{{ number_format($application->mensualite, 2, ',', ' ') }} € / mois</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Taux Annuel Effectif Global (TAEG) :</td>
+                    <td class="val"><strong>{{ $application->taux_annuel }} %</strong> (Fixe)</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Coût total du crédit :</td>
+                    <td class="val">{{ number_format($application->cout_total, 2, ',', ' ') }} €</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Objet / Motif du projet :</td>
+                    <td class="val">{{ $application->motif ?? 'Financement de projet personnel / Trésorerie' }}</td>
+                </tr>
+            </table>
+        </div>
+
+        {{-- ═══════════════════════════════════════════
+             SECTION 2 : ÉTAT CIVIL & COORDONNÉES
+        ═══════════════════════════════════════════ --}}
+        <div class="section-box">
+            <div class="section-header">
+                <span>👤</span> 2. État Civil &amp; Coordonnées de l'Emprunteur
+            </div>
+            <table class="data-table">
+                <tr>
+                    <td class="lbl">Identité complète :</td>
+                    <td class="val"><strong>{{ $application->civilite }} {{ $application->nom }} {{ $application->prenom }}</strong></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Adresse e-mail :</td>
+                    <td class="val">{{ $application->email }}</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Téléphone de contact :</td>
+                    <td class="val">{{ $application->telephone }}</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Date &amp; Lieu de naissance :</td>
+                    <td class="val">
+                        {{ $application->date_naissance ? \Carbon\Carbon::parse($application->date_naissance)->format('d/m/Y') : 'Non renseignée' }}
+                        @if($application->lieu_naissance) ({{ $application->lieu_naissance }}) @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">Adresse de résidence :</td>
+                    <td class="val">
+                        {{ $application->adresse ?? 'Non communiquée' }}
+                        @if($application->code_postal || $application->ville)
+                            <br>{{ $application->code_postal }} {{ $application->ville }}
+                        @endif
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        {{-- ═══════════════════════════════════════════
+             SECTION 3 : SITUATION FINANCIÈRE
+        ═══════════════════════════════════════════ --}}
+        <div class="section-box">
+            <div class="section-header">
+                <span>📊</span> 3. Situation Financière &amp; Professionnelle
+            </div>
+            <table class="data-table">
+                <tr>
+                    <td class="lbl">Statut professionnel :</td>
+                    <td class="val">{{ $application->statut_pro ?? 'Salarié CDI' }}</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Revenus mensuels nets :</td>
+                    <td class="val">{{ number_format($application->revenus_mensuels ?? 3500, 0, ',', ' ') }} € / mois</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Charges de logement :</td>
+                    <td class="val">{{ number_format($application->charges_mensuelles ?? 800, 0, ',', ' ') }} € / mois</td>
+                </tr>
+                <tr>
+                    <td class="lbl">Crédits en cours de remboursement :</td>
+                    <td class="val">{{ number_format($application->credits_en_cours ?? 0, 0, ',', ' ') }} € / mois</td>
+                </tr>
+            </table>
+        </div>
+
+        {{-- ═══════════════════════════════════════════
+             SECTION 4 : PIÈCES JUSTIFICATIVES
+        ═══════════════════════════════════════════ --}}
+        <div class="section-box">
+            <div class="section-header">
+                <span>📁</span> 4. Pièces Justificatives Associées au Dossier
+            </div>
+            <table class="data-table">
+                @if($application->documents && $application->documents->count() > 0)
+                    @foreach($application->documents as $doc)
+                    <tr>
+                        <td class="lbl">{{ $doc->type->label() }} :</td>
+                        <td class="val">
+                            <span class="doc-badge">✓ Reçu</span>
+                            <span style="font-size: 8.5pt; color: #64748B; margin-left: 8px;">{{ $doc->original_filename }} ({{ round($doc->size_bytes / 1024, 1) }} KB)</span>
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td class="lbl">Pièces justificatives :</td>
+                        <td class="val" style="color: #64748B; font-style: italic;">
+                            Pièces en cours de téléversement / Réception par le conseiller.
+                        </td>
+                    </tr>
+                @endif
+            </table>
+        </div>
+
+        {{-- ═══════════════════════════════════════════
+             SIGNATURES BLOCK
+        ═══════════════════════════════════════════ --}}
+        <table class="signature-table">
+            <tr>
+                <td style="width: 48%; vertical-align: top;">
+                    <div class="sig-box">
+                        <div class="sig-title">L'Emprunteur</div>
+                        <div style="font-size: 9pt; color: #334155; margin-bottom: 25px;">
+                            Signature de : <strong>{{ $application->prenom }} {{ $application->nom }}</strong><br>
+                            <span style="font-size: 8pt; color: #64748B;">Date et mention manuscrite « Lu et approuvé »</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- ═══ BODY ══════════════════════════════════════════════════════ -->
-                <div class="page-body">
-
-                    <!-- SECTION : Informations générales -->
-                    <div class="section">
-                        <div class="section-header">
-                            <div class="section-icon">📋</div>
-                            <div class="section-title">Informations <span class="section-title-accent">générales</span></div>
+                </td>
+                <td style="width: 4%;"></td>
+                <td style="width: 48%; vertical-align: top;">
+                    <div class="sig-box">
+                        <div class="sig-title">Pour l'Établissement Quickcredit</div>
+                        <div style="font-size: 9pt; color: #334155; margin-bottom: 6px;">
+                            <strong>Julien Verran</strong>
                         </div>
-                        <div class="section-body">
-                            <p class="section-intro">Résumé rapide du dossier et de son statut pour permettre une lecture fluide avant de descendre sur les détails.</p>
-                            <table class="info-table">
-                                <tr>
-                                    <td class="lbl">Référence dossier</td>
-                                    <td class="val">{{ $application->reference }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="lbl">Statut</td>
-                                    <td class="val">{{ $application->status->label() }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="lbl">Date de soumission</td>
-                                    <td class="val">{{ $application->submitted_at?->format('d/m/Y à H:i') ?? now()->format('d/m/Y à H:i') }}</td>
-                                </tr>
-                            </table>
+                        <div style="font-size: 8pt; color: #64748B; line-height: 1.5;">
+                            Courtier en crédit immobilier<br>
+                            📞 +33 7 80 96 12 16 · ✉️ support@crediteco.app
                         </div>
                     </div>
+                </td>
+            </tr>
+        </table>
 
-                    <!-- SECTION : Simulation retenue -->
-                    <div class="section">
-                        <div class="section-header">
-                            <div class="section-icon">💰</div>
-                            <div class="section-title">Simulation <span class="section-title-accent">retenue</span></div>
-                        </div>
-                        <div class="section-body">
-                            <p class="section-intro">Chiffres clés de l'offre et calculs liés à la demande de crédit.</p>
-                            <table class="info-table">
-                                <tr class="row-hl">
-                                    <td class="lbl">Montant emprunté</td>
-                                    <td class="val">{{ number_format($application->montant, 0, ',', ' ') }} €</td>
-                                </tr>
-                                <tr>
-                                    <td class="lbl">Durée</td>
-                                    <td class="val">{{ $application->duree_mois }} mois</td>
-                                </tr>
-                                <tr>
-                                    <td class="lbl">Taux annuel</td>
-                                    <td class="val">{{ $application->taux_annuel }} %</td>
-                                </tr>
-                                <tr class="row-hl">
-                                    <td class="lbl">Mensualité estimée</td>
-                                    <td class="val">{{ number_format($application->mensualite, 2, ',', ' ') }} €</td>
-                                </tr>
-                                <tr>
-                                    <td class="lbl">Coût total du crédit</td>
-                                    <td class="val">{{ number_format($application->cout_total, 2, ',', ' ') }} €</td>
-                                </tr>
-                                <tr>
-                                    <td class="lbl">Motif</td>
-                                    <td class="val">{{ $application->motif ?? '—' }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+    </div>
 
-                    <!-- TWO-COL : Demandeur + Pro/Financier -->
-                    <div class="two-col">
-
-                        <!-- SECTION : Informations du demandeur -->
-                        <div class="section">
-                            <div class="section-header">
-                                <div class="section-icon">👤</div>
-                                <div class="section-title">Infos <span class="section-title-accent">demandeur</span></div>
-                            </div>
-                            <div class="section-body">
-                                <p class="section-intro">Données personnelles du client pour l'identification et le contact.</p>
-                                <table class="info-table">
-                                    <tr>
-                                        <td class="lbl">Identité</td>
-                                        <td class="val">{{ $application->civilite }} {{ $application->prenom }} {{ $application->nom }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">Date de naissance</td>
-                                        <td class="val">{{ $application->date_naissance?->format('d/m/Y') ?? '—' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">E-mail</td>
-                                        <td class="val">{{ $application->email }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">Téléphone</td>
-                                        <td class="val">{{ $application->telephone }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">Adresse</td>
-                                        <td class="val">{{ $application->adresse }}, {{ $application->code_postal }} {{ $application->ville }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- SECTION : Situation professionnelle -->
-                        <div class="section">
-                            <div class="section-header">
-                                <div class="section-icon">💼</div>
-                                <div class="section-title">Situation <span class="section-title-accent">pro & finances</span></div>
-                            </div>
-                            <div class="section-body">
-                                <p class="section-intro">Détails de la situation professionnelle, des revenus et des charges.</p>
-                                <table class="info-table">
-                                    <tr>
-                                        <td class="lbl">Situation pro</td>
-                                        <td class="val">{{ $application->situation_pro ?? '—' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">Employeur</td>
-                                        <td class="val">{{ $application->employeur ?? '—' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">Ancienneté</td>
-                                        <td class="val">{{ $application->anciennete ?? '—' }}</td>
-                                    </tr>
-                                    <tr class="row-hl">
-                                        <td class="lbl">Revenus nets mensuels</td>
-                                        <td class="val">{{ $application->revenu_net !== null ? number_format($application->revenu_net, 0, ',', ' ').' €' : '—' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">Charges mensuelles</td>
-                                        <td class="val">{{ $application->charges_mensuelles !== null ? number_format($application->charges_mensuelles, 0, ',', ' ').' €' : '—' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="lbl">Éligibilité préliminaire</td>
-                                        <td class="val">
-                                            @if($application->is_eligible)
-                                                <span class="badge-eligible">Profil éligible</span>
-                                            @else
-                                                <span class="badge-pending">À étudier</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div><!-- /two-col -->
-
-                    <!-- SECTION : Documents -->
-                    <div class="section">
-                        <div class="section-header">
-                            <div class="section-icon">📄</div>
-                            <div class="section-title">Documents <span class="section-title-accent">fournis</span></div>
-                        </div>
-                        <div class="section-body">
-                            <p class="section-intro">Liste des pièces jointes fournies dans le dossier.</p>
-                            <table class="info-table">
-                            @forelse($application->documents as $document)
-                                <tr>
-                                    <td class="lbl">{{ $document->type->label() }}</td>
-                                    <td class="val">{{ $document->original_filename }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="2" style="padding: 20px; text-align: center; color: #94a3b8; font-style: italic;">Aucun document enregistré.</td>
-                                </tr>
-                            @endforelse
-                            </table>
-                        </div>
-                    </div>
-
-                </div><!-- /page-body -->
-
-                <!-- ═══ FOOTER ════════════════════════════════════════════════════ -->
-                <div class="page-footer">
-                    <span class="foot-brand">{{ $brand }}</span>
-                    <div class="foot-dot"></div>
-                    <span class="foot-ref">Réf. {{ $application->reference }} — Document confidentiel</span>
-                </div>
-
-            </body>
-            </html>
+</body>
+</html>

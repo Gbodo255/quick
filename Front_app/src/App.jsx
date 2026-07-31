@@ -151,6 +151,27 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    const handlePopState = () => {
+      const hash = window.location.hash
+      if (hash === '#confidentialite') setScreen('privacy')
+      else if (hash === '#a-propos') setScreen('about')
+      else if (hash === '#mentions-legales') setScreen('legal')
+      else if (hash === '#faq') setScreen('faq')
+      else if (hash === '#contact') setScreen('contact')
+      else if (hash === '#conseils') setScreen('blog')
+      else if (hash.startsWith('#article-')) {
+        setActiveArticleId(hash.replace('#article-', ''))
+        setScreen('article')
+      } else if (!hash) {
+        setScreen('landing')
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  useEffect(() => {
     if (startsOnStaticPage) return
     if (!initialSession) return
 
@@ -279,6 +300,12 @@ export default function App() {
       return
     }
 
+    if (step === 4) {
+      setStep(5)
+      window.scrollTo(0, 0)
+      return
+    }
+
     setIsSubmitting(true)
     setGlobalError('')
     try {
@@ -314,6 +341,11 @@ export default function App() {
         next.add(type)
         return next
       })
+      if (type === 'piece_identite') {
+        setData((d) => ({ ...d, pieceIdentite: { name: file.name, isUploaded: true } }))
+      } else if (type === 'rib') {
+        setData((d) => ({ ...d, rib: { name: file.name, isUploaded: true } }))
+      }
     } catch (err) {
       handleApiError(err)
       throw err

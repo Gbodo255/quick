@@ -95,7 +95,7 @@ export async function fetchDossier(reference) {
   return request('GET', `/dossiers/${reference}`)
 }
 
-const STEP_MAP = ['prequal', 'identite', 'situation', 'projet', 'recap']
+const STEP_MAP = ['prequal', 'identite', 'situation', 'projet', 'recap', 'recap']
 
 export function formDataToStepPayload(stepIndex, data, { montant, duree } = {}) {
   switch (stepIndex) {
@@ -135,6 +135,8 @@ export function formDataToStepPayload(stepIndex, data, { montant, duree } = {}) 
         duree_mois: duree,
       }
     case 4:
+      return {}
+    case 5:
       return {
         consent_1: Boolean(data.consent1),
         consent_2: Boolean(data.consent2),

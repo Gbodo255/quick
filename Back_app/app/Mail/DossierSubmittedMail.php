@@ -16,7 +16,7 @@ class DossierSubmittedMail extends Mailable
 
     public function __construct(
         public CreditApplication $application,
-        public string $pdfPath,
+        public ?string $pdfPath = null,
     ) {}
 
     public function envelope(): Envelope
@@ -35,10 +35,13 @@ class DossierSubmittedMail extends Mailable
 
     public function attachments(): array
     {
-        return [
-            Attachment::fromPath($this->pdfPath)
-                ->as("recapitulatif-{$this->application->reference}.pdf")
-                ->withMime('application/pdf'),
-        ];
+        if ($this->pdfPath && file_exists($this->pdfPath)) {
+            return [
+                Attachment::fromPath($this->pdfPath)
+                    ->as("recapitulatif-{$this->application->reference}.pdf")
+                    ->withMime('application/pdf'),
+            ];
+        }
+        return [];
     }
 }

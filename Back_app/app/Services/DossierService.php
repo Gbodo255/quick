@@ -80,8 +80,20 @@ class DossierService
             $application->processing_step = 0;
             $application->save();
 
-            $pdfPath = $this->pdfService->generate($application);
-            Mail::to($application->email)->send(new DossierSubmittedMail($application, $pdfPath));
+            // Génération PDF et envoi de mail en tâche de fond (après envoi de la réponse HTTP) pour une soumission instantanée
+            app()->terminating(function () use ($application) {
+                try {
+                    /** @var DossierSummaryPdfService $pdfService */
+                    $pdfService = app(DossierSummaryPdfService::class);
+                    $pdfPath = $pdfService->generate($application);
+
+                    if ($application->email) {
+                        Mail::to($application->email)->send(new DossierSubmittedMail($application, $pdfPath));
+                    }
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::error('Dossier submission background process failed: ' . $e->getMessage());
+                }
+            });
 
             return $application->fresh(['documents']);
         });

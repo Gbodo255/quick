@@ -82,8 +82,19 @@ export function StepRecap({
   totalRembourse,
   coutTotal,
   onPrivacy,
+  onUploadDocument,
+  uploadedDocs,
 }) {
   const { t } = useTranslation()
+
+  const handleFileUpload = async (type, file) => {
+    if (!file || !onUploadDocument) return
+    try {
+      await onUploadDocument(type, file)
+    } catch (err) {
+      console.error("Upload error", err)
+    }
+  }
 
   const getMotifLabel = (motif) => {
     switch (motif) {
@@ -144,26 +155,53 @@ export function StepRecap({
       </SummaryCard>
 
       <SummaryCard icon="folder_open" title={t('recap.documents')}>
-        <div className="col-span-2 flex flex-col gap-2">
+        <div className="col-span-2 flex flex-col gap-2.5">
           {[
-            [t('recap.id_doc'), data.pieceIdentite],
-            [t('recap.rib_doc'), data.rib],
-          ].map(([label, file]) => (
-            <div
-              key={label}
-              className="flex items-center justify-between rounded-md border border-lumina-outline-variant bg-lumina-surface-light px-3 py-2"
-            >
-              <div className="flex items-center gap-3">
-                <Icon name="description" size={20} className="text-lumina-on-surface-variant" />
-                <span className="text-sm text-lumina-on-surface">{label}</span>
+            ['piece_identite', t('recap.id_doc', 'Pièce d\'identité'), data.pieceIdentite, uploadedDocs?.has('piece_identite')],
+            ['rib', t('recap.rib_doc', 'RIB'), data.rib, uploadedDocs?.has('rib')],
+          ].map(([type, label, file, isUploaded]) => {
+            const hasDoc = Boolean(file || isUploaded)
+            return (
+              <div
+                key={type}
+                className="flex items-center justify-between rounded-lg border border-lumina-outline-variant bg-lumina-surface-light p-3"
+              >
+                <div className="flex items-center gap-3 overflow-hidden pr-2">
+                  <div className={cn(
+                    "flex size-8 shrink-0 items-center justify-center rounded-md",
+                    hasDoc ? "bg-lumina-status-success/15 text-lumina-status-success" : "bg-lumina-surface-container text-lumina-on-surface-variant"
+                  )}>
+                    <Icon name={hasDoc ? "check_circle" : "description"} filled={hasDoc} size={18} />
+                  </div>
+                  <div className="truncate">
+                    <p className="truncate text-sm font-semibold text-lumina-on-surface">{label}</p>
+                    <p className="text-xs text-lumina-on-surface-variant">
+                      {hasDoc
+                        ? (file?.name || file?.original_filename || t('documents.verified', 'Document téléversé'))
+                        : t('recap.not_provided', 'Non fourni')}
+                    </p>
+                  </div>
+                </div>
+
+                <label className={cn(
+                  "cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-md transition-colors shrink-0",
+                  hasDoc ? "bg-lumina-surface-container hover:bg-lumina-outline-variant/30 text-lumina-on-surface" : "bg-lumina-secondary hover:bg-lumina-brand text-white"
+                )}>
+                  {hasDoc ? t('documents.replace', 'Remplacer') : t('documents.add', '+ Ajouter')}
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleFileUpload(type, e.target.files[0])
+                      }
+                    }}
+                  />
+                </label>
               </div>
-              {file ? (
-                <Icon name="check_circle" filled size={20} className="text-lumina-status-success" />
-              ) : (
-                <span className="text-xs text-lumina-on-surface-variant">{t('recap.not_provided')}</span>
-              )}
-            </div>
-          ))}
+            )
+          })}
         </div>
       </SummaryCard>
 

@@ -36,7 +36,11 @@ class OtpService
             'sent_at' => now(),
         ]);
 
-        Mail::to($application->email)->send(new OtpCodeMail($application, $code));
+        try {
+            Mail::to($application->email)->send(new OtpCodeMail($application, $code));
+        } catch (\Throwable $e) {
+            Log::error('OTP Mail send failed: ' . $e->getMessage());
+        }
 
         Log::info('OTP envoyé pour le dossier '.$application->reference, [
             'email' => $application->email,

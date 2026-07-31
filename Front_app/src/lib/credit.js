@@ -1,4 +1,4 @@
-export const TAUX_ANNUEL = 2.2
+export const TAUX_ANNUEL = 3.9
 export const BRAND = 'Quickcredit'
 export const BRAND_WORDMARK = {
   prefix: 'Quick',
@@ -13,7 +13,8 @@ export const FORM_STEPS = [
   { id: 'identite', label: 'Informations personnelles', stepNum: 2 },
   { id: 'situation', label: 'Situation financière', stepNum: 3 },
   { id: 'projet', label: 'Votre projet', stepNum: 4 },
-  { id: 'recap', label: 'Récapitulatif', stepNum: 5 },
+  { id: 'documents', label: 'Pièces justificatives', stepNum: 5 },
+  { id: 'recap', label: 'Récapitulatif & Validation', stepNum: 6 },
 ]
 
 export const INITIAL_FORM_DATA = {
@@ -89,7 +90,8 @@ export function validateStep(step, data) {
     if (!data.prenom.trim()) errs.prenom = 'Prénom requis'
     if (!data.nom.trim()) errs.nom = 'Nom requis'
     if (!data.email.includes('@')) errs.email = 'Email invalide'
-    if (data.telephone.replace(/\s/g, '').length < 10)
+    const digitsOnly = (data.telephone || '').replace(/\D/g, '')
+    if (digitsOnly.length < 8 || digitsOnly.length > 15)
       errs.telephone = 'Téléphone invalide'
     if (!data.dateNaissance) errs.dateNaissance = 'Date de naissance requise'
     if (!data.adresse.trim()) errs.adresse = 'Adresse requise'
@@ -108,6 +110,10 @@ export function validateStep(step, data) {
   }
 
   if (step === 4) {
+    // Document step - documents are uploaded asynchronously
+  }
+
+  if (step === 5) {
     if (!data.consent1) errs.consent1 = 'Consentement requis'
     if (!data.consent2) errs.consent2 = 'Consentement requis'
     if (!data.consent3) errs.consent3 = 'Consentement requis'

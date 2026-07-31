@@ -39,17 +39,23 @@ function SiteFooter({ onPrivacy, onOpenAbout, onOpenLegal, onOpenFaq, onOpenCont
           {/* Brand bloc */}
           <div className="flex flex-col gap-4">
             <BrandLogo variant="footer" />
-            <p className="max-w-[220px] text-sm leading-relaxed text-lumina-on-surface-variant">
-              {t('landing.footer_tagline', 'Courtier en crédit en ligne. On compare, tu signes.')}
+            <p className="max-w-[260px] text-sm leading-relaxed text-lumina-on-surface-variant">
+              {t('landing.footer_tagline', 'Courtier en crédit immobilier & prêt à la consommation.')}
             </p>
+            <div className="rounded-lg bg-lumina-surface-container/60 p-3 border border-lumina-outline-variant/40 text-xs space-y-1">
+              <p className="font-bold text-lumina-heading">Julien Verran</p>
+              <p className="text-lumina-secondary font-medium">Courtier en crédit immobilier &amp; prêt à la consommation</p>
+              <p className="font-semibold text-lumina-on-surface pt-1">
+                📞 <a href="tel:+33780961216" className="hover:underline text-lumina-heading">+33 7 80 96 12 16</a>
+              </p>
+              <p className="text-lumina-on-surface-variant">
+                ✉️ <a href="mailto:support@crediteco.app" className="hover:underline">support@crediteco.app</a>
+              </p>
+            </div>
             <p className="text-xs leading-relaxed text-lumina-on-surface-variant">
               <span className="font-semibold text-lumina-on-surface">{BRAND_WORDMARK.prefix}{BRAND_WORDMARK.accent}</span>{' '}
               {t('landing.footer_legal_entity', 'est une marque de')}{' '}
               <span className="font-bold text-lumina-on-surface uppercase">PRIVILEGE FINANCE</span>
-              <br />
-              {t('landing.footer_sas', 'SAS au capital de 10 000 €')}
-              <br />
-              {t('landing.footer_siege', 'Siège social : 12 rue de la Paix, 75001 Paris')}
             </p>
           </div>
 

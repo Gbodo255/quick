@@ -406,7 +406,7 @@ class AdminController extends Controller
 
     public function downloadDocument(CreditApplication $application, CreditApplicationDocument $document)
     {
-        if (!Auth::user()->isAdmin()) {
+        if (!Auth::check() || (!Auth::user()->isAdmin() && !Auth::user()->isEmployee())) {
             abort(403, 'Accès non autorisé aux documents.');
         }
 
@@ -659,13 +659,14 @@ class AdminController extends Controller
         $dossiers = \App\Models\CreditApplication::with('documents')->where('email', $email)->orderByDesc('created_at')->get();
         if ($dossiers->isEmpty()) abort(404);
         
+        $calculator = app(\App\Services\CreditCalculatorService::class);
         $clientInfo = (object) [
             'prenom' => $dossiers->first()->prenom,
             'nom' => $dossiers->first()->nom,
             'email' => $email,
             'first_seen' => $dossiers->last()->created_at,
             'total_credits' => $dossiers->sum('montant'),
-            'score' => rand(650, 850),
+            'score' => $calculator->scoreClient($dossiers->first()),
             'status' => \App\Models\ClientStatus::firstOrCreate(['email' => $email])
         ];
 

@@ -6,6 +6,8 @@ return [
 
     'taux_annuel' => (float) env('CREDIT_TAUX_ANNUEL', 3.9),
 
+    'frais_dossier' => (float) env('CREDIT_FRAIS_DOSSIER', 250),
+
     'montant_min' => (int) env('CREDIT_MONTANT_MIN', 1000),
 
     'montant_max' => (int) env('CREDIT_MONTANT_MAX', 75000),

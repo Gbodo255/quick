@@ -28,6 +28,12 @@ export function HeaderSection({ onStart, onOpenBlog }) {
         </nav>
         
         <div className="justify-self-end flex items-center gap-2 sm:gap-4 text-sm">
+          <a
+            href="tel:+33780961216"
+            className="hidden lg:inline-flex items-center gap-1.5 font-bold text-xs text-lumina-heading hover:text-lumina-secondary transition bg-lumina-surface-container px-3 py-1.5 rounded-full border border-lumina-outline-variant"
+          >
+            <span>📞</span> +33 7 80 96 12 16
+          </a>
           <LanguageSwitcher />
           <a href="#simulateur" className="btn-clenar py-2 px-4 text-sm inline-flex items-center justify-center">
             {t('landing.get_loan', 'Obtenir mon prêt')}

@@ -108,17 +108,39 @@ export function StepIdentite({ data, setField, errors }) {
             error={errors.email}
             required
           />
-          <LuminaInput
-            id="telephone"
-            label={t('identite.phone')}
-            inputKind="phone"
-            value={data.telephone}
-            onChange={(v) => setField('telephone', v)}
-            placeholder="6 12 34 56 78"
-            prefix="+33"
-            error={errors.telephone}
-            required
-          />
+          <div className="flex gap-2">
+            <div className="w-28">
+              <LuminaSelect
+                id="indicatifPays"
+                label={t('identite.country_code', 'Indicatif')}
+                value={data.indicatifPays || '+33'}
+                onChange={(v) => setField('indicatifPays', v)}
+                options={[
+                  ['+33', '🇫🇷 +33'],
+                  ['+32', '🇧🇪 +32'],
+                  ['+41', '🇨🇭 +41'],
+                  ['+352', '🇱🇺 +352'],
+                  ['+49', '🇩🇪 +49'],
+                  ['+34', '🇪🇸 +34'],
+                  ['+39', '🇮🇹 +39'],
+                  ['+44', '🇬🇧 +44'],
+                  ['+1', '🇺🇸 +1'],
+                ]}
+              />
+            </div>
+            <div className="flex-1">
+              <LuminaInput
+                id="telephone"
+                label={t('identite.phone')}
+                inputKind="phone"
+                value={data.telephone}
+                onChange={(v) => setField('telephone', v)}
+                placeholder="6 12 34 56 78"
+                error={errors.telephone}
+                required
+              />
+            </div>
+          </div>
         </div>
       </FormCard>
 

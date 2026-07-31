@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { ApiErrorBanner } from '@/components/lumina/ApiErrorBanner'
 import { FormActions, FormShell } from '@/components/lumina/FormShell'
 import { CreditRecapBar } from '@/components/lumina/CreditRecapBar'
+import { StepDocuments } from '@/components/lumina/steps/StepDocuments'
 import { StepIdentite } from '@/components/lumina/steps/StepIdentite'
 import { StepPrequal } from '@/components/lumina/steps/StepPrequal'
 import { StepProjet } from '@/components/lumina/steps/StepProjet'
@@ -64,6 +65,14 @@ export function FormScreen({
         />
       )}
       {step === 4 && (
+        <StepDocuments
+          data={data}
+          setField={setField}
+          onUploadDocument={onUploadDocument}
+          uploadedDocs={uploadedDocs}
+        />
+      )}
+      {step === 5 && (
         <StepRecap
           data={data}
           setField={setField}
@@ -74,6 +83,8 @@ export function FormScreen({
           totalRembourse={totalRembourse}
           coutTotal={coutTotal}
           onPrivacy={onPrivacy}
+          onUploadDocument={onUploadDocument}
+          uploadedDocs={uploadedDocs}
         />
       )}
 
