@@ -64,8 +64,8 @@ export function ReviewsSection() {
           >
             {REVIEW_INDICES.map((i) => (
               <div key={i} className="w-full shrink-0 px-1">
-                <div className="flex flex-col overflow-hidden rounded-lg border border-lumina-outline bg-white shadow-[var(--shadow-lumina-card)] sm:flex-row">
-                  <div className="h-56 sm:h-auto sm:w-2/5">
+                <div className="flex h-[480px] flex-col overflow-hidden rounded-lg border border-lumina-outline bg-white shadow-[var(--shadow-lumina-card)] sm:h-[320px] sm:flex-row md:h-[380px]">
+                  <div className="h-56 shrink-0 sm:h-full sm:w-2/5">
                     <img
                       src={REVIEW_IMAGES[i]}
                       alt={t(`landing.review_${i}_name`)}
@@ -74,7 +74,7 @@ export function ReviewsSection() {
                     />
                   </div>
 
-                  <div className="relative flex flex-1 flex-col justify-center p-6 md:p-10">
+                  <div className="relative flex flex-1 flex-col justify-center overflow-hidden p-6 md:p-10">
                     <div className="absolute top-6 right-6 flex gap-0.5 text-lumina-warning">
                       <Star className="h-5 w-5 fill-current" />
                       <Star className="h-5 w-5 fill-current" />
@@ -85,7 +85,7 @@ export function ReviewsSection() {
                     <p className="font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-heading">
                       {t(`landing.review_${i}_name`)}
                     </p>
-                    <p className="mt-4 text-xl leading-relaxed text-lumina-on-surface-variant md:text-2xl">
+                    <p className="mt-4 line-clamp-4 text-xl leading-relaxed text-lumina-on-surface-variant md:text-2xl">
                       {t(`landing.review_${i}_text`)}
                     </p>
                   </div>
