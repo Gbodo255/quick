@@ -1,15 +1,21 @@
 import { useState } from 'react'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import reviewCamille from '@/assets/reviews/review-0-camille.jpg'
+import reviewThomas from '@/assets/reviews/review-1-thomas.jpg'
+import reviewHakim from '@/assets/reviews/review-2-hakim.jpg'
+import reviewSophie from '@/assets/reviews/review-3-sophie.jpg'
+import reviewJules from '@/assets/reviews/review-4-jules.jpg'
+import reviewAicha from '@/assets/reviews/review-5-aicha.jpg'
 
 const REVIEW_INDICES = [0, 1, 2, 3, 4, 5]
 const REVIEW_IMAGES = [
-  'https://i.pravatar.cc/600?img=47',
-  'https://i.pravatar.cc/600?img=13',
-  'https://i.pravatar.cc/600?img=59',
-  'https://i.pravatar.cc/600?img=45',
-  'https://i.pravatar.cc/600?img=14',
-  'https://i.pravatar.cc/600?img=48',
+  reviewCamille,
+  reviewThomas,
+  reviewHakim,
+  reviewSophie,
+  reviewJules,
+  reviewAicha,
 ]
 
 export function ReviewsSection() {
