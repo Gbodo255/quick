@@ -83,7 +83,7 @@ export function FaqSection({ onOpenFaq }) {
         <button
           type="button"
           onClick={onOpenFaq}
-          className="inline-flex h-11 items-center justify-center gap-1.5 rounded-none bg-lumina-primary px-8 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand"
+          className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-lumina-primary px-8 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand"
         >
           Foire aux questions
           <ArrowRight className="h-4 w-4" />

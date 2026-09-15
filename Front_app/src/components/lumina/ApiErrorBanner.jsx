@@ -6,7 +6,7 @@ export function ApiErrorBanner({ error, onDismiss }) {
   return (
     <div
       role="alert"
-      className="mb-4 flex items-start gap-3 rounded-none border border-lumina-error/30 bg-lumina-error/5 px-4 py-3 text-sm text-lumina-error"
+      className="mb-4 flex items-start gap-3 rounded-md border border-lumina-error/30 bg-lumina-error/5 px-4 py-3 text-sm text-lumina-error"
     >
       <Icon name="error" size={20} className="mt-0.5 shrink-0" />
       <div className="flex-1">

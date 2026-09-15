@@ -70,7 +70,7 @@ export function FormActions({ onBack, onNext, nextLabel, isLast = false, isSubmi
       <button
         type="button"
         onClick={onBack}
-        className="h-9 rounded-none border border-lumina-outline px-4 text-xs font-medium text-lumina-on-surface transition-colors hover:bg-lumina-surface-container-low"
+        className="h-9 rounded-md border border-lumina-outline px-4 text-xs font-medium text-lumina-on-surface transition-colors hover:bg-lumina-surface-container-low"
       >
         {t('form.back')}
       </button>

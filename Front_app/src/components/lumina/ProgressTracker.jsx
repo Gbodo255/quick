@@ -15,7 +15,7 @@ export function ProgressTracker({ step }) {
         {VISUAL_STEPS.map((s, i) => (
           <div
             key={i}
-            className={`h-1.5 flex-1 rounded-none transition-colors duration-500 ${
+            className={`h-1.5 flex-1 rounded-full transition-colors duration-500 ${
               i <= visualStepIndex
                 ? 'bg-lumina-accent'
                 : 'bg-lumina-outline'

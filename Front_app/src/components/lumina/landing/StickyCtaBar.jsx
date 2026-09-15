@@ -40,7 +40,7 @@ export function StickyCtaBar({ onOpenObjectifModal }) {
       <button
         type="button"
         onClick={onOpenObjectifModal}
-        className="inline-flex h-12 shrink-0 items-center justify-center rounded-none bg-lumina-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand sm:px-12"
+        className="inline-flex h-12 shrink-0 items-center justify-center rounded-md bg-lumina-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand sm:px-12"
       >
         {t('landing.sticky_cta', 'Faire mon prêt')}
       </button>

@@ -13,7 +13,7 @@ import {
 import { cn } from '@/lib/utils'
 
 const LUMINA_SELECT_TRIGGER =
-  'h-9 w-full rounded-none border-lumina-outline-variant bg-lumina-surface-lowest px-3 text-sm font-normal shadow-none focus-visible:border-lumina-secondary focus-visible:ring-2 focus-visible:ring-lumina-secondary/25 data-placeholder:text-lumina-on-surface-variant'
+  'h-9 w-full rounded-md border-lumina-outline-variant bg-lumina-surface-lowest px-3 text-sm font-normal shadow-none focus-visible:border-lumina-secondary focus-visible:ring-2 focus-visible:ring-lumina-secondary/25 data-placeholder:text-lumina-on-surface-variant'
 
 export function LuminaLabel({ children, required, htmlFor }) {
   return (
@@ -153,7 +153,7 @@ export function GlassBanner({ icon, title, children, variant = 'info' }) {
   return (
     <div
       className={cn(
-        'flex items-start gap-3 rounded-none border p-3',
+        'flex items-start gap-3 rounded-md border p-3',
         variants[variant],
       )}
     >

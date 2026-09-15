@@ -23,7 +23,7 @@ export function StepProjet({ data, setField, errors, montant, duree, mensualite,
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-none border border-lumina-outline bg-lumina-surface-container-low p-4">
+      <div className="rounded-lg border border-lumina-outline bg-lumina-surface-container-low p-4">
         <p className="mb-4 text-xs font-medium tracking-widest text-lumina-on-surface-variant uppercase">
           {t('projet.simulation_title')}
         </p>
@@ -62,7 +62,7 @@ export function StepProjet({ data, setField, errors, montant, duree, mensualite,
             return (
               <label
                 key={value}
-                className="group relative block aspect-square w-28 shrink-0 snap-start cursor-pointer overflow-hidden rounded-none sm:w-32"
+                className="group relative block aspect-square w-28 shrink-0 snap-start cursor-pointer overflow-hidden rounded-lg sm:w-32"
               >
                 <input
                   type="radio"
@@ -121,7 +121,7 @@ export function StepProjet({ data, setField, errors, montant, duree, mensualite,
           </label>
         </div>
         {data.assurance && (
-          <div className="inline-flex items-center gap-2 rounded-none border border-lumina-primary/30 bg-lumina-primary/10 px-3 py-1.5 text-xs font-medium text-lumina-primary shadow-sm self-start mt-2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-lumina-primary/30 bg-lumina-primary/10 px-3 py-1.5 text-xs font-medium text-lumina-primary shadow-sm self-start mt-2">
             <span className="h-1.5 w-1.5 rounded-full bg-lumina-primary" />
             Assurance emprunteur incluse (100% sur une tête)
           </div>

@@ -12,7 +12,7 @@ export function DossierSuccessModal({ open, onClose }) {
       role="dialog"
       aria-modal="true"
     >
-      <div className="relative w-full max-w-md animate-[pop_0.5s_ease] bg-white p-8 text-center shadow-2xl md:p-10">
+      <div className="relative w-full max-w-md animate-[pop_0.5s_ease] rounded-lg bg-white p-8 text-center shadow-2xl md:p-10">
         <div className="mb-5 flex justify-center">
           <div className="flex size-16 items-center justify-center rounded-full bg-lumina-status-success/10">
             <CheckCircle2 className="h-9 w-9 text-lumina-status-success" strokeWidth={1.75} />

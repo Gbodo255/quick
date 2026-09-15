@@ -15,7 +15,7 @@ export function HeroSection({
   isLoading,
 }) {
   return (
-    <section id="simulateur" className="relative h-[95svh] w-full scroll-mt-0 overflow-hidden">
+    <section id="simulateur" className="relative w-full scroll-mt-0 overflow-hidden">
       <img
         src={heroBackground}
         alt="Étudiante souriante en ville, sac à dos et plan à la main"
@@ -26,8 +26,8 @@ export function HeroSection({
         className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/10 to-black/40"
       />
 
-      <div className="relative z-10 mx-auto flex h-full max-w-6xl items-center justify-end px-6">
-        <div className="w-full max-w-sm">
+      <div className="relative z-10 mx-auto flex min-h-[95svh] max-w-6xl flex-col gap-6 px-6 py-10 md:h-[95svh] md:justify-center md:py-0">
+        <div className="w-full md:ml-auto md:max-w-sm">
           <SimulatorPanel
             montant={montant}
             setMontant={setMontant}
@@ -41,10 +41,10 @@ export function HeroSection({
             isLoading={isLoading}
           />
         </div>
-      </div>
 
-      <div className="absolute bottom-6 left-6 z-10 md:bottom-10 md:left-10">
-        <MinPaymentBadge />
+        <div className="md:absolute md:bottom-10 md:left-10">
+          <MinPaymentBadge />
+        </div>
       </div>
     </section>
   )

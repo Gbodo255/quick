@@ -7,7 +7,7 @@
 /*
  * Design system — refonte inspirée Younited (younited.com)
  * Violet électrique de marque, fonds lavande doux, typo grotesque bold,
- * cartes et boutons largement arrondis.
+ * cartes et boutons légèrement arrondis (sobre).
  */
 html {
   overflow-x: hidden;
@@ -56,11 +56,11 @@ body {
   --border: var(--clenar-border);
   --input: var(--clenar-border);
   --ring: var(--clenar-primary);
-  --radius: 0.75rem;
-  --cr-radius-sm: 0.5rem;
-  --cr-radius: 0.75rem;
-  --cr-radius-md: 1rem;
-  --cr-radius-lg: 1.25rem;
+  --radius: 0.5rem;
+  --cr-radius-sm: 0.375rem;
+  --cr-radius: 0.5rem;
+  --cr-radius-md: 0.625rem;
+  --cr-radius-lg: 0.75rem;
 
   --sidebar: var(--clenar-bg);
   --sidebar-foreground: var(--clenar-text);
@@ -110,13 +110,13 @@ body {
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.25rem;
-  --radius-2xl: 1.5rem;
-  --radius-3xl: 1.75rem;
-  --radius-4xl: 2rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 0.875rem;
+  --radius-3xl: 1rem;
+  --radius-4xl: 1.125rem;
 
   /* Alias lumina-* (compatibilité composants) */
   --color-lumina-brand: var(--clenar-primary-hover);
@@ -195,13 +195,13 @@ body {
   max-width: var(--spacing-container-max);
 }
 
-/* Boutons — sans bords arrondis */
+/* Boutons — bords légèrement arrondis */
 @utility btn-clenar {
-  @apply inline-flex h-10 items-center justify-center rounded-none bg-lumina-accent px-6 text-xs font-bold text-white transition-colors duration-200 hover:bg-lumina-brand;
+  @apply inline-flex h-10 items-center justify-center rounded-md bg-lumina-accent px-6 text-xs font-bold text-white transition-colors duration-200 hover:bg-lumina-brand;
 }
 
 @utility btn-clenar-outline {
-  @apply inline-flex h-10 items-center justify-center rounded-none border border-lumina-outline bg-white px-6 text-xs font-bold text-lumina-on-surface transition-colors duration-200 hover:bg-lumina-surface-container-low;
+  @apply inline-flex h-10 items-center justify-center rounded-md border border-lumina-outline bg-white px-6 text-xs font-bold text-lumina-on-surface transition-colors duration-200 hover:bg-lumina-surface-container-low;
 }
 
 @utility scrollbar-hide {
@@ -214,11 +214,11 @@ body {
 
 /* Surfaces & champs — taille réduite cohérente */
 @utility surface-card {
-  @apply rounded-none border border-lumina-outline bg-lumina-surface-lowest shadow-[var(--shadow-lumina-card)];
+  @apply rounded-lg border border-lumina-outline bg-lumina-surface-lowest shadow-[var(--shadow-lumina-card)];
 }
 
 @utility field-compact {
-  @apply h-9 rounded-none border border-lumina-outline-variant bg-lumina-surface-lowest px-3 text-sm text-lumina-on-surface;
+  @apply h-9 rounded-md border border-lumina-outline-variant bg-lumina-surface-lowest px-3 text-sm text-lumina-on-surface;
 }
 
 .glass-panel {

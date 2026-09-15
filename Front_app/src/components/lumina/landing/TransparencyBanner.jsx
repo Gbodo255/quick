@@ -6,7 +6,7 @@ export function TransparencyBanner() {
 
   return (
     <section className="mx-auto flex min-h-[70svh] max-w-6xl items-center px-6 pb-24">
-      <div className="flex w-full flex-col overflow-hidden bg-lumina-primary/70 md:flex-row">
+      <div className="flex w-full flex-col overflow-hidden rounded-lg bg-lumina-primary/70 md:flex-row">
         <div className="order-2 flex flex-col justify-center p-8 text-white md:order-1 md:w-1/2 md:p-14">
           <p className="font-[family-name:var(--font-headline)] font-semibold text-2xl md:text-3xl leading-tight">
             {t('landing.how_bottom_title', 'Un crédit reste un engagement financier.')}

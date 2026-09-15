@@ -66,8 +66,8 @@
             width: 100%;
             border-collapse: collapse;
             border-bottom: 2px solid #0A2240;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
         }
 
         .header-title-brand {
@@ -115,8 +115,8 @@
             background: #0A2240;
             color: #FFFFFF;
             border-radius: 8px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
+            padding: 12px 18px;
+            margin-bottom: 14px;
         }
 
         .hero-title {
@@ -137,7 +137,7 @@
         .section-box {
             border: 1px solid #E2E8F0;
             border-radius: 8px;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             background: #FFFFFF;
             page-break-inside: avoid;
         }
@@ -145,7 +145,7 @@
         .section-header {
             background: #F8FAFC;
             border-bottom: 1px solid #E2E8F0;
-            padding: 10px 16px;
+            padding: 8px 16px;
             font-size: 9.5pt;
             font-weight: bold;
             color: #0A2240;
@@ -153,8 +153,17 @@
             letter-spacing: 0.5px;
         }
 
-        .section-header span {
-            color: #2563EB;
+        .section-header .section-num {
+            display: inline-block;
+            background: #2563EB;
+            color: #FFFFFF;
+            font-size: 8pt;
+            font-weight: bold;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 8px;
             margin-right: 8px;
         }
 
@@ -173,7 +182,7 @@
         }
 
         .data-table td {
-            padding: 10px 16px;
+            padding: 7px 16px;
             font-size: 9pt;
             vertical-align: middle;
         }
@@ -224,16 +233,16 @@
         .signature-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 22px;
+            margin-top: 14px;
             page-break-inside: avoid;
         }
 
         .sig-box {
             border: 1px solid #CBD5E1;
             border-radius: 8px;
-            padding: 14px 16px;
+            padding: 12px 14px;
             background: #FAFAFA;
-            min-height: 90px;
+            min-height: 72px;
         }
 
         .sig-title {
@@ -344,7 +353,7 @@
         ═══════════════════════════════════════════ --}}
         <div class="section-box">
             <div class="section-header">
-                <span>💶</span> 1. Caractéristiques du Financement Souhaité
+                <span class="section-num">1</span> Caractéristiques du Financement Souhaité
             </div>
             <table class="data-table">
                 <tr>
@@ -386,7 +395,7 @@
         ═══════════════════════════════════════════ --}}
         <div class="section-box">
             <div class="section-header">
-                <span>👤</span> 2. État Civil &amp; Coordonnées de l'Emprunteur
+                <span class="section-num">2</span> État Civil &amp; Coordonnées de l'Emprunteur
             </div>
             <table class="data-table">
                 <tr>
@@ -425,7 +434,7 @@
         ═══════════════════════════════════════════ --}}
         <div class="section-box">
             <div class="section-header">
-                <span>📊</span> 3. Situation Financière &amp; Professionnelle
+                <span class="section-num">3</span> Situation Financière &amp; Professionnelle
             </div>
             <table class="data-table">
                 <tr>
@@ -455,7 +464,7 @@
         ═══════════════════════════════════════════ --}}
         <div class="section-box">
             <div class="section-header">
-                <span>📁</span> 4. Pièces Justificatives Associées au Dossier
+                <span class="section-num">4</span> Pièces Justificatives Associées au Dossier
             </div>
             <table class="data-table">
                 @if($application->documents && $application->documents->count() > 0)
@@ -502,7 +511,7 @@
                         </div>
                         <div style="font-size: 8pt; color: #64748B; line-height: 1.5;">
                             Service Client &amp; Engagement<br>
-                            📞 +33 7 80 96 12 16 · ✉️ support@crediteco.app
+                            Tél. +33 7 80 96 12 16 &nbsp;·&nbsp; Email contacts@studcredit.com
                         </div>
                     </div>
                 </td>

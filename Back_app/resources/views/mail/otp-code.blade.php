@@ -133,7 +133,7 @@
                     </tr>
                     <tr>
                         <td style="padding: 4px 0; color: #7C2D12; font-size: 13px; line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-                            — Vérifiez que vous êtes bien sur le site officiel crediteco.app
+                            — Vérifiez que vous êtes bien sur le site officiel studcredit.com
                         </td>
                     </tr>
                 </table>
@@ -155,7 +155,7 @@
 
     {{-- Note de contact --}}
     <p style="margin: 0; color: #94A3B8; font-size: 13px; text-align: center; padding-top: 24px; border-top: 1px solid #F1F5F9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-        Un problème ? Contactez-nous à <a href="mailto:support@crediteco.app" style="color: #7C3AED; text-decoration: none; font-weight: 600;">support@crediteco.app</a>
+        Un problème ? Contactez-nous à <a href="mailto:contacts@studcredit.com" style="color: #7C3AED; text-decoration: none; font-weight: 600;">contacts@studcredit.com</a>
     </p>
 
     {{-- ═══════════════════════════════════════════
@@ -174,8 +174,8 @@
                                     <td style="vertical-align: top; width: 50%;">
                                         <p style="margin: 0; color: #A78BFA; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">Contact</p>
                                         <p style="margin: 0; color: #C4B5FD; font-size: 12px; line-height: 1.8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-                                            📧 <a href="mailto:support@crediteco.app" style="color: #C4B5FD; text-decoration: none;">support@crediteco.app</a><br>
-                                            🌐 <a href="https://crediteco.app" style="color: #C4B5FD; text-decoration: none;">crediteco.app</a>
+                                            📧 <a href="mailto:contacts@studcredit.com" style="color: #C4B5FD; text-decoration: none;">contacts@studcredit.com</a><br>
+                                            🌐 <a href="https://studcredit.com" style="color: #C4B5FD; text-decoration: none;">studcredit.com</a>
                                         </p>
                                     </td>
                                     <td style="vertical-align: top; width: 50%; padding-left: 24px;">

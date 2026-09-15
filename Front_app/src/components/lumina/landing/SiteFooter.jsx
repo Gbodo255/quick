@@ -36,7 +36,7 @@ export function SiteFooter({ onPrivacy, onOpenAbout, onOpenLegal, onOpenFaq, onO
             <button
               type="button"
               onClick={onOpenObjectifModal}
-              className="inline-flex h-10 items-center justify-center rounded-none bg-lumina-accent px-6 text-xs font-medium text-white transition-colors hover:bg-lumina-brand"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-lumina-accent px-6 text-xs font-medium text-white transition-colors hover:bg-lumina-brand"
             >
               {t('landing.sticky_cta', 'Faire mon prêt')}
             </button>
@@ -63,12 +63,12 @@ export function SiteFooter({ onPrivacy, onOpenAbout, onOpenLegal, onOpenFaq, onO
             <p className="text-sm font-semibold text-white">{t('landing.footer_col_contact', 'Contact')}</p>
             <div className="space-y-1 text-sm text-white/70">
               <a href="tel:+33780961216" className="block transition-colors hover:text-white">+33 7 80 96 12 16</a>
-              <a href="mailto:support@crediteco.app" className="block transition-colors hover:text-white">support@crediteco.app</a>
+              <a href="mailto:contacts@studcredit.com" className="block transition-colors hover:text-white">contacts@studcredit.com</a>
             </div>
             <button
               type="button"
               onClick={onOpenContact}
-              className="mt-1 inline-flex h-12 items-center justify-center rounded-none bg-lumina-primary px-10 text-sm font-medium text-white transition-colors hover:bg-lumina-brand"
+              className="mt-1 inline-flex h-12 items-center justify-center rounded-md bg-lumina-primary px-10 text-sm font-medium text-white transition-colors hover:bg-lumina-brand"
             >
               {t('landing.footer_contact_cta', 'Nous contacter')}
             </button>

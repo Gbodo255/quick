@@ -522,7 +522,7 @@
             </div>
 
             <div class="info-note">
-                ⚠️ <strong>Délai légal de réflexion :</strong> Conformément à l'article L.312-19 du Code de la consommation, l'emprunteur dispose d'un délai légal de <strong>14 jours calendaires</strong> révolus pour se rétracter à compter de l'acceptation de la présente offre.
+                <strong>Délai légal de réflexion :</strong> Conformément à l'article L.312-19 du Code de la consommation, l'emprunteur dispose d'un délai légal de <strong>14 jours calendaires</strong> révolus pour se rétracter à compter de l'acceptation de la présente offre.
             </div>
 
             {{-- OBJET DU CONTRAT --}}
@@ -543,9 +543,9 @@
                                 <p>
                                     <strong>{{ config('credit.brand') }}</strong><br>
                                     Service Client &amp; Engagement<br>
-                                    📞 +33 7 80 96 12 16<br>
-                                    ✉️ support@crediteco.app<br>
-                                    🌐 crediteco.app
+                                    Tél. +33 7 80 96 12 16<br>
+                                    Email contacts@studcredit.com<br>
+                                    studcredit.com
                                 </p>
                             </div>
                         </div>
@@ -559,8 +559,8 @@
                                     <strong>{{ $application->civilite }} {{ $application->prenom }} {{ $application->nom }}</strong><br>
                                     {{ $application->adresse ?? 'Adresse non communiquée' }}<br>
                                     {{ $application->code_postal }} {{ $application->ville }}<br>
-                                    📞 {{ $application->telephone }}<br>
-                                    ✉️ {{ $application->email }}
+                                    Tél. {{ $application->telephone }}<br>
+                                    Email {{ $application->email }}
                                 </p>
                             </div>
                         </div>

@@ -13,7 +13,7 @@ function InfoTooltip({ text }) {
       <Info className="h-4 w-4 shrink-0 cursor-help text-lumina-on-surface-variant" />
       <span
         role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-64 -translate-x-1/2 rounded-none border border-lumina-outline-variant bg-lumina-surface-lowest p-2.5 text-xs leading-relaxed font-normal normal-case text-lumina-on-surface opacity-0 shadow-[var(--shadow-lumina-card)] transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-64 -translate-x-1/2 rounded-md border border-lumina-outline-variant bg-lumina-surface-lowest p-2.5 text-xs leading-relaxed font-normal normal-case text-lumina-on-surface opacity-0 shadow-[var(--shadow-lumina-card)] transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
       >
         {text}
       </span>
@@ -65,7 +65,7 @@ function DocumentCard({
     <div className="surface-card flex flex-col gap-4 p-4 md:p-5">
       <div className="flex items-center justify-between border-b border-lumina-outline-variant/30 pb-3">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-none bg-lumina-surface-container text-lumina-primary">
+          <div className="flex size-10 items-center justify-center rounded-md bg-lumina-surface-container text-lumina-primary">
             <Icon name={icon} size={22} />
           </div>
           <div>
@@ -79,7 +79,7 @@ function DocumentCard({
           </div>
         </div>
         {isUploaded && (
-          <span className="inline-flex items-center gap-1.5 rounded-none bg-lumina-status-success/15 px-3 py-1 text-xs font-semibold text-lumina-status-success">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-lumina-status-success/15 px-3 py-1 text-xs font-semibold text-lumina-status-success">
             <Icon name="check_circle" filled size={16} />
             {t('documents.verified', 'Vérifié')}
           </span>
@@ -99,16 +99,16 @@ function DocumentCard({
       )}
 
       {isUploading ? (
-        <div className="flex flex-col items-center justify-center rounded-none border border-dashed border-lumina-secondary bg-lumina-surface-container-low p-6 text-center">
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-lumina-secondary bg-lumina-surface-container-low p-6 text-center">
           <DotSpinner size={32} dots={8} className="mb-2 text-lumina-secondary" />
           <p className="text-sm font-semibold text-lumina-on-surface">
             {t('documents.uploading', 'Téléversement en cours…')}
           </p>
         </div>
       ) : file || isUploaded ? (
-        <div className="flex items-center justify-between rounded-none border border-lumina-status-success/30 bg-lumina-status-success/5 p-3.5">
+        <div className="flex items-center justify-between rounded-lg border border-lumina-status-success/30 bg-lumina-status-success/5 p-3.5">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-none bg-lumina-status-success/20 text-lumina-status-success">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-md bg-lumina-status-success/20 text-lumina-status-success">
               <Icon name="description" size={20} />
             </div>
             <div className="truncate">
@@ -139,13 +139,13 @@ function DocumentCard({
           onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
           className={cn(
-            'flex flex-col items-center justify-center rounded-none border-2 border-dashed p-6 text-center transition-all',
+            'flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-all',
             isDragOver
               ? 'border-lumina-secondary bg-lumina-surface-container'
               : 'border-lumina-outline-variant bg-lumina-surface-lowest hover:border-lumina-secondary/50',
           )}
         >
-          <div className="mb-2 flex size-12 items-center justify-center rounded-none bg-lumina-surface-container text-lumina-on-surface-variant">
+          <div className="mb-2 flex size-12 items-center justify-center rounded-md bg-lumina-surface-container text-lumina-on-surface-variant">
             <Icon name="cloud_upload" size={28} />
           </div>
           <p className="text-sm font-medium text-lumina-on-surface">
@@ -179,7 +179,7 @@ function ConsentItem({ checked, onChange, children }) {
           type="checkbox"
           checked={checked}
           onChange={onChange}
-          className="peer size-5 appearance-none rounded-none border-2 border-lumina-on-surface-variant shadow-sm focus:ring-2 focus:ring-lumina-accent focus:ring-offset-2 checked:border-lumina-accent checked:bg-lumina-accent transition-all"
+          className="peer size-5 appearance-none rounded-sm border-2 border-lumina-on-surface-variant shadow-sm focus:ring-2 focus:ring-lumina-accent focus:ring-offset-2 checked:border-lumina-accent checked:bg-lumina-accent transition-all"
         />
         <Icon
           name="check"
@@ -248,7 +248,7 @@ export function StepDocuments({ data, setField, errors = {}, onUploadDocument, u
         {t('documents.security_body', 'Vos documents sont chiffrés de bout en bout et conservés dans un coffre-fort numérique conforme aux normes bancaires européennes.')}
       </GlassBanner>
 
-      <div className="rounded-none border border-lumina-outline bg-lumina-surface-container-low p-4">
+      <div className="rounded-lg border border-lumina-outline bg-lumina-surface-container-low p-4">
         <div className="mb-4 flex items-center gap-2">
           <Icon name="lock" filled className="text-lumina-secondary" />
           <h3 className="font-[family-name:var(--font-headline)] font-semibold text-lumina-on-surface">

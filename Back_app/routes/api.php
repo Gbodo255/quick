@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\DossierController;
 use App\Http\Controllers\Api\DossierDocumentController;
 use App\Http\Controllers\Api\DossierOtpController;
@@ -14,6 +15,8 @@ Route::middleware('api')->group(function () {
     Route::prefix('v1')->group(function (): void {
         Route::get('health', HealthController::class);
         Route::post('simulate', [SimulationController::class, 'simulate']);
+        Route::post('contact', [ContactController::class, 'send'])
+            ->middleware('throttle:5,1');
 
         Route::post('dossiers', [DossierController::class, 'store'])
             ->middleware('throttle:5,1');

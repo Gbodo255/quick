@@ -58,7 +58,7 @@ export function ReviewsSection() {
           >
             {REVIEW_INDICES.map((i) => (
               <div key={i} className="w-full shrink-0 px-1">
-                <div className="flex flex-col overflow-hidden rounded-none border border-lumina-outline bg-white shadow-[var(--shadow-lumina-card)] sm:flex-row">
+                <div className="flex flex-col overflow-hidden rounded-lg border border-lumina-outline bg-white shadow-[var(--shadow-lumina-card)] sm:flex-row">
                   <div className="h-56 sm:h-auto sm:w-2/5">
                     <img
                       src={REVIEW_IMAGES[i]}

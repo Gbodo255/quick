@@ -135,10 +135,10 @@
                         📞 <a href="tel:+33780961216" style="color: #0F172A; text-decoration: none; font-weight: 600;">+33 7 80 96 12 16</a>
                     </p>
                     <p style="margin: 0 0 3px 0; color: #64748B; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        ✉️ <a href="mailto:support@crediteco.app" style="color: #2563EB; text-decoration: none; font-weight: 500;">support@crediteco.app</a>
+                        ✉️ <a href="mailto:contacts@studcredit.com" style="color: #2563EB; text-decoration: none; font-weight: 500;">contacts@studcredit.com</a>
                     </p>
                     <p style="margin: 0; color: #64748B; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        🌐 <a href="https://crediteco.app" style="color: #2563EB; text-decoration: none; font-weight: 500;">crediteco.app</a>
+                        🌐 <a href="https://studcredit.com" style="color: #2563EB; text-decoration: none; font-weight: 500;">studcredit.com</a>
                     </p>
                 </td>
             </tr>
@@ -156,7 +156,7 @@
                     <tr>
                         <td style="padding: 24px 32px; text-align: center;">
                             <p style="margin: 0 0 8px 0; color: #94A3B8; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                📞 +33 7 80 96 12 16 · 📧 support@crediteco.app · 🌐 crediteco.app
+                                📞 +33 7 80 96 12 16 · 📧 contacts@studcredit.com · 🌐 studcredit.com
                             </p>
                             <p style="margin: 0; color: #64748B; font-size: 11px; line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                                 © {{ date('Y') }} {{ config('credit.brand') }} · Données sécurisées conformément au RGPD

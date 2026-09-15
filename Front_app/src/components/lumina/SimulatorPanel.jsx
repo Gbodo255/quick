@@ -23,8 +23,8 @@ import { fmt } from '@/lib/credit'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 
-const SOBER = 'rounded-none'
-const SLIDER_SQUARE = '[&_[data-slot=slider-range]]:bg-lumina-secondary [&_[data-slot=slider-thumb]]:rounded-none [&_[data-slot=slider-thumb]]:size-3.5 [&_[data-slot=slider-thumb]]:border-lumina-secondary [&_[data-slot=slider-track]]:rounded-none [&_[data-slot=slider-track]]:h-1.5 [&_[data-slot=slider-track]]:bg-lumina-surface-container'
+const SOBER = 'rounded-lg'
+const SLIDER_SQUARE = '[&_[data-slot=slider-range]]:bg-lumina-secondary [&_[data-slot=slider-thumb]]:rounded-sm [&_[data-slot=slider-thumb]]:size-3.5 [&_[data-slot=slider-thumb]]:border-lumina-secondary [&_[data-slot=slider-track]]:rounded-full [&_[data-slot=slider-track]]:h-1.5 [&_[data-slot=slider-track]]:bg-lumina-surface-container'
 
 const AMOUNT_OPTIONS = [15000, 25000, 35000, 50000, 10000]
 
@@ -153,7 +153,7 @@ export function SimulatorPanel({
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') setIsEditingDuree(false)
                   }}
-                  className="h-7 w-16 rounded-none border border-lumina-secondary bg-white px-1.5 text-right text-sm font-semibold text-lumina-heading outline-none"
+                  className="h-7 w-16 rounded-sm border border-lumina-secondary bg-white px-1.5 text-right text-sm font-semibold text-lumina-heading outline-none"
                 />
                 <span className="text-xs text-lumina-on-surface">mois</span>
               </div>

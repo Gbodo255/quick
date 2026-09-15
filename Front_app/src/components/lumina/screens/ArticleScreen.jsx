@@ -68,7 +68,7 @@ export function ArticleScreen({ articleId, onBack, onStartSimulator, footer }) {
           </p>
           <button
             onClick={onStartSimulator}
-            className="inline-flex h-11 items-center justify-center rounded-none bg-lumina-primary px-8 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand w-full sm:w-auto"
+            className="inline-flex h-11 items-center justify-center rounded-md bg-lumina-primary px-8 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand w-full sm:w-auto"
           >
             Faire ma simulation maintenant
           </button>

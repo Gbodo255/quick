@@ -1,20 +1,42 @@
 import { useState } from 'react';
 import { SEO } from '@/components/SEO';
 
-const CONTACT_EMAIL = 'support@crediteco.app';
+const CONTACT_EMAIL = 'contacts@studcredit.com';
+
+const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const normalizedApiUrl = rawApiUrl.replace(/\/+$|\/api\/?$/, '');
+const API_BASE = normalizedApiUrl.endsWith('/api/v1')
+  ? normalizedApiUrl
+  : `${normalizedApiUrl}/api/v1`;
 
 export function ContactScreen({ footer }) {
   const [form, setForm] = useState({ nom: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const setField = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const subject = `Message de ${form.nom || 'un visiteur'} — StudCredit`;
-    const body = `${form.message}\n\n—\n${form.nom}\n${form.email}`;
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    setError('');
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${API_BASE}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.message || 'Une erreur est survenue.');
+      }
+      setSent(true);
+    } catch {
+      setError("Une erreur est survenue lors de l'envoi. Réessayez ou contactez-nous directement par e-mail.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -60,10 +82,15 @@ export function ContactScreen({ footer }) {
           <div className="border-b border-lumina-outline pt-4 pb-8 md:border-b-0 md:pl-10">
             {sent ? (
               <p className="text-sm font-medium text-lumina-secondary">
-                Votre messagerie va s'ouvrir pour envoyer votre message. Merci !
+                Votre message a bien été envoyé. Notre équipe vous répondra rapidement. Merci !
               </p>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                {error && (
+                  <p className="rounded-md border border-lumina-error/30 bg-lumina-error/5 px-3 py-2 text-sm text-lumina-error">
+                    {error}
+                  </p>
+                )}
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="contact-nom" className="text-xs font-semibold tracking-wide text-lumina-on-surface-variant uppercase">
                     Nom
@@ -74,7 +101,7 @@ export function ContactScreen({ footer }) {
                     required
                     value={form.nom}
                     onChange={setField('nom')}
-                    className="h-10 rounded-none border border-lumina-outline bg-white px-3 text-sm text-lumina-on-surface outline-none transition-colors focus:border-lumina-secondary"
+                    className="h-10 rounded-md border border-lumina-outline bg-white px-3 text-sm text-lumina-on-surface outline-none transition-colors focus:border-lumina-secondary"
                     placeholder="Votre nom"
                   />
                 </div>
@@ -88,7 +115,7 @@ export function ContactScreen({ footer }) {
                     required
                     value={form.email}
                     onChange={setField('email')}
-                    className="h-10 rounded-none border border-lumina-outline bg-white px-3 text-sm text-lumina-on-surface outline-none transition-colors focus:border-lumina-secondary"
+                    className="h-10 rounded-md border border-lumina-outline bg-white px-3 text-sm text-lumina-on-surface outline-none transition-colors focus:border-lumina-secondary"
                     placeholder="vous@exemple.com"
                   />
                 </div>
@@ -102,15 +129,16 @@ export function ContactScreen({ footer }) {
                     rows={5}
                     value={form.message}
                     onChange={setField('message')}
-                    className="resize-none rounded-none border border-lumina-outline bg-white px-3 py-2 text-sm text-lumina-on-surface outline-none transition-colors focus:border-lumina-secondary"
+                    className="resize-none rounded-md border border-lumina-outline bg-white px-3 py-2 text-sm text-lumina-on-surface outline-none transition-colors focus:border-lumina-secondary"
                     placeholder="Votre message"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="mt-2 inline-flex h-11 items-center justify-center rounded-none bg-lumina-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand"
+                  disabled={isSubmitting}
+                  className="mt-2 inline-flex h-11 items-center justify-center rounded-md bg-lumina-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Envoyer
+                  {isSubmitting ? 'Envoi…' : 'Envoyer'}
                 </button>
               </form>
             )}

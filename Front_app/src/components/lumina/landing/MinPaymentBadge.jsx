@@ -5,7 +5,7 @@ export function MinPaymentBadge() {
   const { t } = useTranslation()
 
   return (
-    <div className="w-fit max-w-[85vw] bg-white/90 px-5 py-4 shadow-xl sm:max-w-[300px]">
+    <div className="w-fit max-w-[85vw] rounded-lg bg-white/90 px-5 py-4 shadow-xl sm:max-w-[300px]">
       <p className="text-xs font-medium tracking-widest text-lumina-on-surface-variant uppercase">
         {t('landing.min_payment_label', 'À partir de')}
       </p>

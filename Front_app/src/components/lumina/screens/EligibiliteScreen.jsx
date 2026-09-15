@@ -68,7 +68,7 @@ export function EligibiliteScreen({ onStartSimulator, footer }) {
           <button
             type="button"
             onClick={onStartSimulator}
-            className="inline-flex h-11 items-center justify-center rounded-none bg-lumina-primary px-8 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand w-full sm:w-auto"
+            className="inline-flex h-11 items-center justify-center rounded-md bg-lumina-primary px-8 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand w-full sm:w-auto"
           >
             Commencer ma simulation
           </button>

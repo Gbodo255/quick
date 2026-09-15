@@ -51,7 +51,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Comment contacter votre équipe ?",
-    a: "Par téléphone au +33 7 80 96 12 16 (du lundi au vendredi, 9h-18h) ou par email à support@crediteco.app.",
+    a: "Par téléphone au +33 7 80 96 12 16 (du lundi au vendredi, 9h-18h) ou par email à contacts@studcredit.com.",
   },
 ];
 

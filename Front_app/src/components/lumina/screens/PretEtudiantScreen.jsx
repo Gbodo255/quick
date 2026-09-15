@@ -57,7 +57,7 @@ export function PretEtudiantScreen({ onOpenEligibilite, footer }) {
           <button
             type="button"
             onClick={onOpenEligibilite}
-            className="inline-flex h-11 shrink-0 items-center justify-center rounded-none bg-white px-8 text-sm font-semibold text-lumina-primary transition-colors hover:bg-white/90"
+            className="inline-flex h-11 shrink-0 items-center justify-center rounded-md bg-white px-8 text-sm font-semibold text-lumina-primary transition-colors hover:bg-white/90"
           >
             Vérifier mon éligibilité
           </button>

@@ -13,7 +13,7 @@ function FormCard({ icon, title, children, onValidate, validateLabel }) {
   return (
     <div className="surface-card flex flex-col gap-4 p-4 md:p-5">
       <div className="flex items-center gap-2.5 border-b border-lumina-outline-variant/30 pb-3">
-        <span className="flex size-8 items-center justify-center rounded-none bg-lumina-surface-container text-lumina-primary">
+        <span className="flex size-8 items-center justify-center rounded-md bg-lumina-surface-container text-lumina-primary">
           <Icon name={icon} size={18} />
         </span>
         <h2 className="font-[family-name:var(--font-headline)] text-base font-semibold text-lumina-on-surface">

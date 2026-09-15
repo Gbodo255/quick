@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-export function SEO({ title, description, url = 'https://crediteco.app', image = '/og-image.png', schema = null }) {
+export function SEO({ title, description, url = 'https://studcredit.com', image = '/og-image.png', schema = null }) {
   const siteTitle = 'CreditEco - Obtenez votre crédit rapidement';
   const fullTitle = title ? `${title} | CreditEco` : siteTitle;
   const defaultDescription = "CreditEco est la solution la plus rapide pour simuler et obtenir votre prêt personnel en ligne en toute sécurité.";
@@ -31,19 +31,19 @@ export function SEO({ title, description, url = 'https://crediteco.app', image =
           "@graph": [
             {
               "@type": "Organization",
-              "@id": "https://crediteco.app/#organization",
+              "@id": "https://studcredit.com/#organization",
               "name": "CreditEco",
               "alternateName": "StudCredit",
-              "url": "https://crediteco.app",
-              "logo": "https://crediteco.app/logo.png"
+              "url": "https://studcredit.com",
+              "logo": "https://studcredit.com/logo.png"
             },
             {
               "@type": "WebSite",
-              "@id": "https://crediteco.app/#website",
-              "url": "https://crediteco.app",
+              "@id": "https://studcredit.com/#website",
+              "url": "https://studcredit.com",
               "name": "CreditEco",
               "publisher": {
-                "@id": "https://crediteco.app/#organization"
+                "@id": "https://studcredit.com/#organization"
               }
             },
             ...(schema ? [schema] : [])

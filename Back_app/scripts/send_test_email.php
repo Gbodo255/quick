@@ -20,15 +20,15 @@ echo "Expéditeur: {$from}\n";
 echo "Destinataire: {$recipient}\n\n";
 
 try {
-    Mail::raw("Bonjour,\n\nCeci est un e-mail de test envoyé depuis le système CreditEco (support@crediteco.app) pour valider la configuration d'envoi d'e-mails.\n\nCordialement,\nL'équipe CreditEco", function ($message) use ($recipient, $from) {
+    Mail::raw("Bonjour,\n\nCeci est un e-mail de test envoyé depuis le système StudCredit (contacts@studcredit.com) pour valider la configuration d'envoi d'e-mails.\n\nCordialement,\nL'équipe StudCredit", function ($message) use ($recipient, $from) {
         $message->to($recipient)
-                ->from($from, 'CreditEco Support')
-                ->subject('Test d\'envoi d\'e-mail - CreditEco');
+                ->from($from, 'StudCredit')
+                ->subject('Test d\'envoi d\'e-mail - StudCredit');
     });
 
     echo "✅ E-mail envoyé avec succès à {$recipient} !\n";
 } catch (\Throwable $e) {
     echo "❌ Échec de l'envoi de l'e-mail :\n";
     echo $e->getMessage() . "\n\n";
-    echo "Piste de solution : Pour finaliser l'envoi d'e-mails réels depuis support@crediteco.app via SMTP, il convient de renseigner le serveur SMTP et le mot de passe dans le fichier .env (MAIL_HOST, MAIL_PORT, MAIL_PASSWORD).\n";
+    echo "Piste de solution : Pour finaliser l'envoi d'e-mails réels depuis contacts@studcredit.com via SMTP, il convient de renseigner le serveur SMTP et le mot de passe dans le fichier .env (MAIL_HOST, MAIL_PORT, MAIL_PASSWORD).\n";
 }

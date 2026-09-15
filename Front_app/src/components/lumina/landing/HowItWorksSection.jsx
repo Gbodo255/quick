@@ -39,7 +39,7 @@ export function HowItWorksSection({ onOpenObjectifModal }) {
 
           <div
             className={cn(
-              'relative mt-8 min-h-64 flex-1 overflow-hidden transition-opacity duration-300 ease-in-out',
+              'relative mt-8 min-h-64 flex-1 overflow-hidden rounded-lg transition-opacity duration-300 ease-in-out',
               openItem ? 'opacity-100' : 'opacity-0',
             )}
           >
@@ -84,7 +84,7 @@ export function HowItWorksSection({ onOpenObjectifModal }) {
                       <button
                         type="button"
                         onClick={onOpenObjectifModal}
-                        className="mt-4 inline-flex h-10 items-center justify-center rounded-none bg-lumina-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand"
+                        className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-lumina-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand"
                       >
                         {t('landing.pillar_cta', 'Faire un prêt')}
                         <ArrowRight className="ml-2 h-4 w-4" />

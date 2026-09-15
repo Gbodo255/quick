@@ -150,7 +150,7 @@ export function LuminaDatePicker({
                     type="button"
                     onClick={() => handleYearSelect(year)}
                     className={cn(
-                      'rounded-none border px-3 py-2 text-sm transition text-left',
+                      'rounded-md border px-3 py-2 text-sm transition text-left',
                       draftYear === year
                         ? 'border-lumina-primary bg-lumina-surface-container text-lumina-on-surface'
                         : 'border-lumina-outline hover:border-lumina-primary hover:bg-lumina-surface-container',
@@ -176,7 +176,7 @@ export function LuminaDatePicker({
                       onClick={() => handleMonthSelect(index)}
                       disabled={disabled}
                       className={cn(
-                        'rounded-none border px-3 py-2 text-sm transition',
+                        'rounded-md border px-3 py-2 text-sm transition',
                         disabled
                           ? 'cursor-not-allowed border-lumina-outline text-lumina-on-surface-variant/70'
                           : 'border-lumina-outline hover:border-lumina-primary hover:bg-lumina-surface-container',
@@ -200,7 +200,7 @@ export function LuminaDatePicker({
                 </div>
                 <div className="grid grid-cols-7 gap-2">
                   {Array.from({ length: blankDays }).map((_, index) => (
-                    <div key={`blank-${index}`} className="h-10 rounded-none" />
+                    <div key={`blank-${index}`} className="h-10 rounded-md" />
                   ))}
                   {Array.from({ length: daysInMonth }, (_, index) => {
                     const day = index + 1
@@ -215,7 +215,7 @@ export function LuminaDatePicker({
                         onClick={() => handleDaySelect(day)}
                         disabled={disabled}
                         className={cn(
-                          'h-10 rounded-none text-sm transition',
+                          'h-10 rounded-md text-sm transition',
                           disabled
                             ? 'cursor-not-allowed bg-lumina-surface text-lumina-on-surface-variant'
                             : isSelected
