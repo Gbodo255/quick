@@ -45,6 +45,11 @@ const FaqScreen = lazy(() => import('@/components/lumina/screens/FaqScreen').the
 const ContactScreen = lazy(() => import('@/components/lumina/screens/ContactScreen').then(m => ({ default: m.ContactScreen })))
 const BlogScreen = lazy(() => import('@/components/lumina/screens/BlogScreen').then(m => ({ default: m.BlogScreen })))
 const ArticleScreen = lazy(() => import('@/components/lumina/screens/ArticleScreen').then(m => ({ default: m.ArticleScreen })))
+const PretEtudiantScreen = lazy(() => import('@/components/lumina/screens/PretEtudiantScreen').then(m => ({ default: m.PretEtudiantScreen })))
+const EligibiliteScreen = lazy(() => import('@/components/lumina/screens/EligibiliteScreen').then(m => ({ default: m.EligibiliteScreen })))
+const SiteFooter = lazy(() => import('@/components/lumina/landing/SiteFooter').then(m => ({ default: m.SiteFooter })))
+const ObjectifModal = lazy(() => import('@/components/lumina/landing/ObjectifModal').then(m => ({ default: m.ObjectifModal })))
+const DossierSuccessModal = lazy(() => import('@/components/lumina/DossierSuccessModal').then(m => ({ default: m.DossierSuccessModal })))
 
 import {
   ApiError,
@@ -88,6 +93,8 @@ export default function App() {
     if (hash === '#faq') return 'faq'
     if (hash === '#contact') return 'contact'
     if (hash === '#conseils') return 'blog'
+    if (hash === '#pret-etudiant') return 'pret-etudiant'
+    if (hash === '#eligibilite') return 'eligibilite'
     if (hash.startsWith('#article-')) return 'article'
     return 'landing'
   })
@@ -102,7 +109,7 @@ export default function App() {
   
   const [startsOnStaticPage] = useState(() => {
     const hash = window.location.hash
-    return ['#confidentialite', '#a-propos', '#mentions-legales', '#faq', '#contact', '#conseils'].includes(hash) || hash.startsWith('#article-')
+    return ['#confidentialite', '#a-propos', '#mentions-legales', '#faq', '#contact', '#conseils', '#pret-etudiant', '#eligibilite'].includes(hash) || hash.startsWith('#article-')
   })
   
   const [returnScreen, setReturnScreen] = useState('landing')
@@ -122,6 +129,8 @@ export default function App() {
   const [errors, setErrors] = useState({})
   const [globalError, setGlobalError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showObjectifModal, setShowObjectifModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
 
   const mensualite = calcMensualite(montant, duree)
   const totalRembourse = mensualite * duree
@@ -159,6 +168,8 @@ export default function App() {
       else if (hash === '#faq') setScreen('faq')
       else if (hash === '#contact') setScreen('contact')
       else if (hash === '#conseils') setScreen('blog')
+      else if (hash === '#pret-etudiant') setScreen('pret-etudiant')
+      else if (hash === '#eligibilite') setScreen('eligibilite')
       else if (hash.startsWith('#article-')) {
         setActiveArticleId(hash.replace('#article-', ''))
         setScreen('article')
@@ -222,22 +233,42 @@ export default function App() {
   }, [screen, returnScreen])
 
   const closePrivacy = useCallback(() => {
-    setScreen(returnScreen && !['privacy','about','legal','faq','contact','blog','article'].includes(returnScreen) ? returnScreen : 'landing')
-    if (window.location.hash === '#confidentialite' || ['#a-propos', '#mentions-legales', '#faq', '#contact', '#conseils'].includes(window.location.hash) || window.location.hash.startsWith('#article-')) {
+    setScreen(returnScreen && !['privacy','about','legal','faq','contact','blog','article','pret-etudiant','eligibilite'].includes(returnScreen) ? returnScreen : 'landing')
+    if (window.location.hash === '#confidentialite' || ['#a-propos', '#mentions-legales', '#faq', '#contact', '#conseils', '#pret-etudiant', '#eligibilite'].includes(window.location.hash) || window.location.hash.startsWith('#article-')) {
       window.history.pushState(null, '', window.location.pathname + window.location.search)
     }
     window.scrollTo(0, 0)
   }, [returnScreen])
 
-  const startForm = async () => {
+  const onOpenAbout = () => openScreen('about', '#a-propos')
+  const onOpenLegal = () => openScreen('legal', '#mentions-legales')
+  const onOpenFaq = () => openScreen('faq', '#faq')
+  const onOpenContact = () => openScreen('contact', '#contact')
+  const onOpenPretEtudiant = () => openScreen('pret-etudiant', '#pret-etudiant')
+  const onOpenEligibilite = () => openScreen('eligibilite', '#eligibilite')
+  const onOpenSimulator = () => {
+    setScreen('landing')
+    window.history.pushState(null, '', '#simulateur')
+    requestAnimationFrame(() => {
+      document.getElementById('simulateur')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
+  const startForm = async (motifOverride) => {
+    const motif = motifOverride || data.motif
+
     // Validate motif selection
     const localErrs = {}
-    if (!data.motif) {
+    if (!motif) {
       localErrs.motif = t('app.motif_required')
     }
     if (Object.keys(localErrs).length) {
       setErrors(localErrs)
       return
+    }
+
+    if (motifOverride && motifOverride !== data.motif) {
+      setField('motif', motifOverride)
     }
 
     setIsSubmitting(true)
@@ -246,7 +277,7 @@ export default function App() {
       const res = await createDossier({
         montant,
         duree_mois: duree,
-        motif: data.motif,
+        motif,
         revenu_net: revenuEstime ? Number(revenuEstime) : undefined,
         charges_mensuelles: data.chargesMensuelles
           ? Number(data.chargesMensuelles)
@@ -271,6 +302,56 @@ export default function App() {
       setIsSubmitting(false)
     }
   }
+
+  const openObjectifModal = () => setShowObjectifModal(true)
+  const closeObjectifModal = () => setShowObjectifModal(false)
+  const handleObjectifSelect = (motif) => {
+    setShowObjectifModal(false)
+    startForm(motif)
+  }
+
+  const siteFooter = (
+    <SiteFooter
+      onPrivacy={openPrivacy}
+      onOpenAbout={onOpenAbout}
+      onOpenLegal={onOpenLegal}
+      onOpenFaq={onOpenFaq}
+      onOpenContact={onOpenContact}
+      onOpenPretEtudiant={onOpenPretEtudiant}
+      onOpenEligibilite={onOpenEligibilite}
+      onOpenSimulator={onOpenSimulator}
+      onOpenObjectifModal={openObjectifModal}
+    />
+  )
+
+  const objectifModal = (
+    <ObjectifModal open={showObjectifModal} onClose={closeObjectifModal} onSelect={handleObjectifSelect} />
+  )
+
+  const goHome = () => {
+    setScreen('landing')
+    if (window.location.hash === '#confidentialite') {
+      window.history.pushState(null, '', window.location.pathname + window.location.search)
+    }
+    setStep(0)
+    setErrors({})
+    setGlobalError('')
+    setDossierId('')
+    setDossierToken('')
+    setSubmittedDossier(null)
+    setUploadedDocs(new Set())
+    clearDossierSession()
+    window.scrollTo(0, 0)
+  }
+
+  const closeSuccessModal = () => {
+    setShowSuccessModal(false)
+    goHome()
+  }
+
+  const dossierSuccessModal = (
+    <DossierSuccessModal open={showSuccessModal} onClose={closeSuccessModal} />
+  )
 
   const submitForm = async (code) => {
     setIsSubmitting(true)
@@ -300,12 +381,6 @@ export default function App() {
       return
     }
 
-    if (step === 4) {
-      setStep(5)
-      window.scrollTo(0, 0)
-      return
-    }
-
     setIsSubmitting(true)
     setGlobalError('')
     try {
@@ -320,8 +395,7 @@ export default function App() {
         window.scrollTo(0, 0)
       } else {
         setSubmittedDossier(res)
-        setScreen('success')
-        window.scrollTo(0, 0)
+        setShowSuccessModal(true)
       }
     } catch (err) {
       handleApiError(err)
@@ -345,27 +419,13 @@ export default function App() {
         setData((d) => ({ ...d, pieceIdentite: { name: file.name, isUploaded: true } }))
       } else if (type === 'rib') {
         setData((d) => ({ ...d, rib: { name: file.name, isUploaded: true } }))
+      } else if (type === 'certificat_scolarite') {
+        setData((d) => ({ ...d, certificatScolarite: { name: file.name, isUploaded: true } }))
       }
     } catch (err) {
       handleApiError(err)
       throw err
     }
-  }
-
-  const goHome = () => {
-    setScreen('landing')
-    if (window.location.hash === '#confidentialite') {
-      window.history.pushState(null, '', window.location.pathname + window.location.search)
-    }
-    setStep(0)
-    setErrors({})
-    setGlobalError('')
-    setDossierId('')
-    setDossierToken('')
-    setSubmittedDossier(null)
-    setUploadedDocs(new Set())
-    clearDossierSession()
-    window.scrollTo(0, 0)
   }
 
   useEffect(() => {
@@ -397,7 +457,10 @@ export default function App() {
     if (screen === 'landing') {
       return (
         <>
-          <SEO title="Simulez votre prêt personnel" />
+          <SEO
+            title="Prêt étudiant sans caution personnelle | StudCredit"
+            description="Découvrez une solution de prêt dédiée aux étudiants. Certificat de scolarité, pas de caution personnelle demandée, conditions expliquées clairement."
+          />
           {globalError && (
             <div className="fixed top-4 right-4 left-4 z-50 mx-auto max-w-lg">
               <ApiErrorBanner error={globalError} onDismiss={() => setGlobalError('')} />
@@ -408,21 +471,20 @@ export default function App() {
             setMontant={setMontant}
             duree={duree}
             setDuree={setDuree}
-            mensualite={mensualite}
-            coutTotal={coutTotal}
-            totalRembourse={totalRembourse}
             motif={data.motif}
             setMotif={(v) => setField('motif', v)}
             revenuEstime={revenuEstime}
             setRevenuEstime={setRevenuEstime}
-            errors={errors}
             onStart={startForm}
             onPrivacy={openPrivacy}
-            onOpenAbout={() => openScreen('about', '#a-propos')}
-            onOpenLegal={() => openScreen('legal', '#mentions-legales')}
-            onOpenFaq={() => openScreen('faq', '#faq')}
-            onOpenContact={() => openScreen('contact', '#contact')}
-            onOpenBlog={() => openScreen('blog', '#conseils')}
+            onOpenAbout={onOpenAbout}
+            onOpenLegal={onOpenLegal}
+            onOpenFaq={onOpenFaq}
+            onOpenContact={onOpenContact}
+            onOpenPretEtudiant={onOpenPretEtudiant}
+            onOpenEligibilite={onOpenEligibilite}
+            onOpenObjectifModal={openObjectifModal}
+            onStartWithMotif={startForm}
             isLoading={isSubmitting}
           />
         </>
@@ -445,7 +507,6 @@ export default function App() {
             montant={montant}
             duree={duree}
             mensualite={mensualite}
-            totalRembourse={totalRembourse}
             coutTotal={coutTotal}
             onNext={nextStep}
             onUploadDocument={uploadDoc}
@@ -495,21 +556,42 @@ export default function App() {
       return (
         <>
           <SEO title="Politique de confidentialité" />
-          <PrivacyPolicyScreen onBack={closePrivacy} />
+          <PrivacyPolicyScreen onBack={closePrivacy} footer={siteFooter} />
         </>
       )
     }
 
-    if (screen === 'about') return <AboutScreen onBack={closePrivacy} />
-    if (screen === 'legal') return <LegalScreen onBack={closePrivacy} />
-    if (screen === 'faq') return <FaqScreen onBack={closePrivacy} />
-    if (screen === 'contact') return <ContactScreen onBack={closePrivacy} />
-    if (screen === 'blog') return <BlogScreen onBack={closePrivacy} onReadArticle={openArticle} />
+    if (screen === 'about') return <AboutScreen onBack={closePrivacy} footer={siteFooter} />
+    if (screen === 'legal') return <LegalScreen onBack={closePrivacy} footer={siteFooter} />
+    if (screen === 'faq') return <FaqScreen onBack={closePrivacy} footer={siteFooter} />
+    if (screen === 'contact') return <ContactScreen onBack={closePrivacy} footer={siteFooter} />
+    if (screen === 'blog') return <BlogScreen onBack={closePrivacy} onReadArticle={openArticle} footer={siteFooter} />
     if (screen === 'article') return (
-      <ArticleScreen 
-        articleId={activeArticleId} 
-        onBack={() => openScreen('blog', '#conseils')} 
+      <ArticleScreen
+        articleId={activeArticleId}
+        onBack={() => openScreen('blog', '#conseils')}
         onStartSimulator={startForm}
+        footer={siteFooter}
+      />
+    )
+    if (screen === 'pret-etudiant') return (
+      <PretEtudiantScreen
+        onBack={closePrivacy}
+        onOpenEligibilite={onOpenEligibilite}
+        footer={siteFooter}
+      />
+    )
+    if (screen === 'eligibilite') return (
+      <EligibiliteScreen
+        onBack={closePrivacy}
+        onStartSimulator={() => {
+          setScreen('landing')
+          window.history.pushState(null, '', '#simulateur')
+          requestAnimationFrame(() => {
+            document.getElementById('simulateur')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          })
+        }}
+        footer={siteFooter}
       />
     )
 
@@ -540,6 +622,8 @@ export default function App() {
         }
       >
         {renderScreen()}
+        {showObjectifModal && objectifModal}
+        {showSuccessModal && dossierSuccessModal}
       </Suspense>
     </ErrorBoundary>
   )

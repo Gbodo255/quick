@@ -5,8 +5,6 @@ import de from './locales/de.json';
 import es from './locales/es.json';
 import fr from './locales/fr.json';
 
-const SUPPORTED_LANGS = ['fr', 'en', 'de', 'es'];
-
 // Toujours charger le site en français par défaut lors de l'arrivée sur le site
 const detectLanguage = () => {
   return 'fr';

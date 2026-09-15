@@ -428,7 +428,7 @@
     ═══════════════════════════════════════════ --}}
     <script type="text/php">
         if (isset($pdf)) {
-            $text = "Quickcredit · Offre de Contrat de Prêt " . "{{ $application->reference }}" . " · Page {PAGE_NUM} sur {PAGE_COUNT}";
+            $text = "{{ config('credit.brand') }} · Offre de Contrat de Prêt " . "{{ $application->reference }}" . " · Page {PAGE_NUM} sur {PAGE_COUNT}";
             $font = $fontMetrics->get_font("DejaVu Sans, sans-serif", "normal");
             $size = 7.5;
             $color = array(0.4, 0.45, 0.55);
@@ -451,7 +451,7 @@
                             <tr>
                                 @if($logoBase64)
                                 <td style="vertical-align: middle; padding-right: 12px;">
-                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="{{ config('credit.brand') }}">
                                 </td>
                                 @endif
                                 @if($logoEuBase64)
@@ -466,10 +466,10 @@
                                 @endif
                                 <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
                                     <div class="header-title-brand">
-                                        Quick<span class="header-title-accent">credit</span>
+                                        {{ config('credit.brand') }}
                                     </div>
                                     <div class="header-subtitle">
-                                        Établissement Agréé EU · Régulation 2024/762
+                                        Financement dédié aux étudiants
                                     </div>
                                 </td>
                             </tr>
@@ -491,7 +491,7 @@
             <div class="title-section">
                 <div class="doc-type">Offre Préalable de Crédit à la Consommation</div>
                 <div class="doc-title">
-                    CONTRAT DE PRÊT SOUS SEING PRIVÉ — RÉGULATION EUROPÉENNE N°2024/762
+                    CONTRAT DE PRÊT SOUS SEING PRIVÉ
                 </div>
             </div>
 
@@ -504,8 +504,8 @@
                             <span>{{ $application->reference }}</span>
                         </td>
                         <td style="width: 50%;" class="ref-item">
-                            <label>Courtier Référent :</label>
-                            <span>Julien Verran</span>
+                            <label>Établissement prêteur :</label>
+                            <span>{{ config('credit.brand') }}</span>
                         </td>
                     </tr>
                     <tr>
@@ -528,8 +528,8 @@
             {{-- OBJET DU CONTRAT --}}
             <div class="section-title">1. Objet du Contrat &amp; Cadre Réglémentaire</div>
             <p style="font-size: 9pt; color: #475569; line-height: 1.7; margin-bottom: 16px;">
-                La présente offre a pour objet de formaliser les conditions financières et juridiques du prêt accordé par l'établissement <strong>Quickcredit</strong> (ci-après désigné « le Prêteur ») à l'Emprunteur désigné au présent contrat.
-                Le présent contrat est régissant par le Code de la consommation français et par la Directive Européenne 2014/17/UE relative aux contrats de crédit aux consommateurs.
+                La présente offre a pour objet de formaliser les conditions financières et juridiques du prêt accordé par l'établissement <strong>{{ config('credit.brand') }}</strong> (ci-après désigné « le Prêteur ») à l'Emprunteur désigné au présent contrat.
+                Le présent contrat est régi par le Code de la consommation français et par la Directive Européenne 2014/17/UE relative aux contrats de crédit aux consommateurs.
             </p>
 
             {{-- PARTIES PRENANTES --}}
@@ -541,7 +541,7 @@
                             <div class="party-label">Le Prêteur &amp; Organisme de Crédit</div>
                             <div class="party-info">
                                 <p>
-                                    <strong>Quickcredit</strong><br>
+                                    <strong>{{ config('credit.brand') }}</strong><br>
                                     Service Client &amp; Engagement<br>
                                     📞 +33 7 80 96 12 16<br>
                                     ✉️ support@crediteco.app<br>
@@ -585,7 +585,7 @@
                             <tr>
                                 @if($logoBase64)
                                 <td style="vertical-align: middle; padding-right: 12px;">
-                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="{{ config('credit.brand') }}">
                                 </td>
                                 @endif
                                 @if($logoEuBase64)
@@ -600,10 +600,10 @@
                                 @endif
                                 <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
                                     <div class="header-title-brand">
-                                        Quick<span class="header-title-accent">credit</span>
+                                        {{ config('credit.brand') }}
                                     </div>
                                     <div class="header-subtitle">
-                                        Établissement Agréé EU · Régulation 2024/762
+                                        Financement dédié aux étudiants
                                     </div>
                                 </td>
                             </tr>
@@ -702,7 +702,7 @@
                             <tr>
                                 @if($logoBase64)
                                 <td style="vertical-align: middle; padding-right: 12px;">
-                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="{{ config('credit.brand') }}">
                                 </td>
                                 @endif
                                 @if($logoEuBase64)
@@ -717,10 +717,10 @@
                                 @endif
                                 <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
                                     <div class="header-title-brand">
-                                        Quick<span class="header-title-accent">credit</span>
+                                        {{ config('credit.brand') }}
                                     </div>
                                     <div class="header-subtitle">
-                                        Établissement Agréé EU · Régulation 2024/762
+                                        Financement dédié aux étudiants
                                     </div>
                                 </td>
                             </tr>
@@ -786,7 +786,7 @@
                             <tr>
                                 @if($logoBase64)
                                 <td style="vertical-align: middle; padding-right: 12px;">
-                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                    <img src="{{ $logoBase64 }}" width="40" height="40" style="border-radius: 6px; display: block;" alt="{{ config('credit.brand') }}">
                                 </td>
                                 @endif
                                 @if($logoEuBase64)
@@ -801,10 +801,10 @@
                                 @endif
                                 <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 12px;">
                                     <div class="header-title-brand">
-                                        Quick<span class="header-title-accent">credit</span>
+                                        {{ config('credit.brand') }}
                                     </div>
                                     <div class="header-subtitle">
-                                        Établissement Agréé EU · Régulation 2024/762
+                                        Financement dédié aux étudiants
                                     </div>
                                 </td>
                             </tr>
@@ -838,12 +838,12 @@
                 <tr>
                     <td style="width: 48%; vertical-align: top;">
                         <div class="sig-box">
-                            <div class="sig-label">Pour le Prêteur — Quickcredit</div>
+                            <div class="sig-label">Pour le Prêteur — {{ config('credit.brand') }}</div>
                             <div class="sig-area signed">
                                 <span style="font-weight: bold; font-family: sans-serif; font-size: 11pt;">VALIDE &amp; APPROUVÉ</span>
                             </div>
                             <div class="sig-date">
-                                Julien Verran · Courtier Référent<br>
+                                {{ config('credit.brand') }} · Service Engagement<br>
                                 Signé le {{ $generatedAt->format('d/m/Y') }}
                             </div>
                         </div>

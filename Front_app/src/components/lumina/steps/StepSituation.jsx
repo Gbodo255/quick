@@ -82,7 +82,7 @@ export function StepSituation({ data, setField, errors }) {
               />
               <div
                 className={cn(
-                  'flex h-full flex-col items-center justify-center gap-1.5 rounded-md border border-lumina-outline-variant p-3 text-center text-sm transition-all',
+                  'flex h-full flex-col items-center justify-center gap-1.5 rounded-none border border-lumina-outline-variant p-3 text-center text-sm transition-all',
                   'peer-checked:border-lumina-primary peer-checked:bg-lumina-surface-container peer-checked:shadow-sm',
                 )}
               >

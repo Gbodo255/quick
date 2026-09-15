@@ -5,21 +5,38 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system — inspiré Clenar (clenar.framer.website)
- * Neutres doux, Inter, accent violet, cartes blanches, ombres minimales.
+ * Design system — refonte inspirée Younited (younited.com)
+ * Violet électrique de marque, fonds lavande doux, typo grotesque bold,
+ * cartes et boutons largement arrondis.
  */
+html {
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+
+body {
+  max-width: 100vw;
+}
+
 :root {
   --clenar-white: #ffffff;
-  --clenar-bg: #f6f7f9;
-  --clenar-text: #3d3f40;
-  --clenar-text-muted: #9e9f9f;
-  --clenar-heading: #000000;
-  --clenar-primary: #5c46c2;
-  --clenar-primary-hover: #4a38a8;
-  --clenar-border: #efefef;
-  --clenar-surface-alt: #f6f9f6;
-  --clenar-border-subtle: rgba(61, 63, 64, 0.12);
+  --clenar-bg: #f8f4fb;
+  --clenar-text: #2a1f33;
+  --clenar-text-muted: #8b7d94;
+  --clenar-heading: #1b1221;
+  --clenar-primary: #6200fe;
+  --clenar-primary-hover: #4a00c4;
+  --clenar-border: #e7deef;
+  --clenar-surface-alt: #f1eafa;
+  --clenar-border-subtle: rgba(27, 18, 33, 0.1);
   --clenar-star: #ffba33;
+
+  /* Accents catégories (chips produits, badges) */
+  --clenar-accent-coral: #faaca8;
+  --clenar-accent-green: #67a671;
+  --clenar-accent-yellow: #fdd79a;
+  --clenar-accent-cyan: #34e2e4;
+  --clenar-accent-lilac: #e0ccff;
 
   --background: var(--clenar-bg);
   --foreground: var(--clenar-text);
@@ -39,11 +56,11 @@
   --border: var(--clenar-border);
   --input: var(--clenar-border);
   --ring: var(--clenar-primary);
-  --radius: 0.375rem;
-  --cr-radius-sm: 0.25rem;
-  --cr-radius: 0.375rem;
-  --cr-radius-md: 0.5rem;
-  --cr-radius-lg: 0.625rem;
+  --radius: 0.75rem;
+  --cr-radius-sm: 0.5rem;
+  --cr-radius: 0.75rem;
+  --cr-radius-md: 1rem;
+  --cr-radius-lg: 1.25rem;
 
   --sidebar: var(--clenar-bg);
   --sidebar-foreground: var(--clenar-text);
@@ -56,10 +73,10 @@
 }
 
 @theme inline {
-  --font-heading: 'Inter', system-ui, sans-serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-headline: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Sora', system-ui, sans-serif;
+  --font-sans: 'Sora', system-ui, sans-serif;
+  --font-body: 'Sora', system-ui, sans-serif;
+  --font-headline: 'Sora', system-ui, sans-serif;
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -93,19 +110,24 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.625rem;
-  --radius-2xl: 0.75rem;
-  --radius-3xl: 0.875rem;
-  --radius-4xl: 1rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 1.75rem;
+  --radius-4xl: 2rem;
 
   /* Alias lumina-* (compatibilité composants) */
   --color-lumina-brand: var(--clenar-primary-hover);
   --color-lumina-secondary: var(--clenar-primary);
   --color-lumina-accent: var(--clenar-primary);
   --color-lumina-accent-gold: var(--clenar-primary);
+  --color-lumina-accent-coral: var(--clenar-accent-coral);
+  --color-lumina-accent-green: var(--clenar-accent-green);
+  --color-lumina-accent-yellow: var(--clenar-accent-yellow);
+  --color-lumina-accent-cyan: var(--clenar-accent-cyan);
+  --color-lumina-accent-lilac: var(--clenar-accent-lilac);
   --color-lumina-heading: var(--clenar-heading);
   --color-lumina-background: var(--clenar-bg);
   --color-lumina-on-surface: var(--clenar-text);
@@ -173,22 +195,30 @@
   max-width: var(--spacing-container-max);
 }
 
-/* Boutons compacts — arrondis modérés */
+/* Boutons — sans bords arrondis */
 @utility btn-clenar {
-  @apply inline-flex h-9 items-center justify-center rounded-md bg-lumina-accent px-5 text-xs font-medium text-white transition-colors duration-200 hover:bg-lumina-brand;
+  @apply inline-flex h-10 items-center justify-center rounded-none bg-lumina-accent px-6 text-xs font-bold text-white transition-colors duration-200 hover:bg-lumina-brand;
 }
 
 @utility btn-clenar-outline {
-  @apply inline-flex h-9 items-center justify-center rounded-md border border-lumina-outline bg-white px-5 text-xs font-medium text-lumina-on-surface transition-colors duration-200 hover:bg-lumina-surface-container-low;
+  @apply inline-flex h-10 items-center justify-center rounded-none border border-lumina-outline bg-white px-6 text-xs font-bold text-lumina-on-surface transition-colors duration-200 hover:bg-lumina-surface-container-low;
+}
+
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Surfaces & champs — taille réduite cohérente */
 @utility surface-card {
-  @apply rounded-lg border border-lumina-outline bg-lumina-surface-lowest shadow-[var(--shadow-lumina-card)];
+  @apply rounded-none border border-lumina-outline bg-lumina-surface-lowest shadow-[var(--shadow-lumina-card)];
 }
 
 @utility field-compact {
-  @apply h-9 rounded-md border border-lumina-outline-variant bg-lumina-surface-lowest px-3 text-sm text-lumina-on-surface;
+  @apply h-9 rounded-none border border-lumina-outline-variant bg-lumina-surface-lowest px-3 text-sm text-lumina-on-surface;
 }
 
 .glass-panel {
@@ -220,9 +250,9 @@
 .hero-overlay-violet {
   background: linear-gradient(
     105deg,
-    rgba(92, 70, 194, 0.48) 0%,
-    rgba(92, 70, 194, 0.38) 50%,
-    rgba(74, 56, 168, 0.32) 100%
+    rgba(98, 0, 254, 0.5) 0%,
+    rgba(98, 0, 254, 0.38) 50%,
+    rgba(74, 0, 196, 0.32) 100%
   );
 }
 
@@ -269,4 +299,22 @@
 @keyframes wiggle {
   0%, 100% { transform: rotate(-3deg); }
   50% { transform: rotate(3deg); }
+}
+
+@keyframes dot-spinner-fade {
+  0%, 39%, 100% { opacity: 0.15; }
+  19% { opacity: 1; }
+}
+
+.dot-spinner {
+  position: relative;
+}
+
+.dot-spinner span {
+  position: absolute;
+  width: 16%;
+  height: 16%;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: dot-spinner-fade 1s linear infinite;
 }

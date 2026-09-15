@@ -51,8 +51,8 @@ export function LanguageSwitcher({ variant = 'default' }) {
   const isLight = variant === 'light';
 
   const btnClass = isLight
-    ? 'flex items-center gap-2 rounded-lg px-2 py-1.5 text-white transition-colors hover:bg-white/20'
-    : 'flex items-center gap-2 rounded-lg px-2 py-1.5 text-lumina-on-surface transition-colors hover:bg-lumina-surface-container-low';
+    ? 'flex items-center gap-2 px-2 py-1.5 text-white transition-colors hover:bg-white/20'
+    : 'flex items-center gap-2 px-2 py-1.5 text-lumina-on-surface transition-colors hover:bg-lumina-surface-container-low';
 
   return (
     <div className="relative" ref={ref}>
@@ -80,7 +80,7 @@ export function LanguageSwitcher({ variant = 'default' }) {
       {isOpen && (
         <div
           role="listbox"
-          className="absolute right-0 top-full z-50 mt-2 min-w-[100px] overflow-hidden rounded-xl border border-lumina-outline bg-lumina-surface-lowest shadow-xl"
+          className="absolute right-0 top-full z-50 mt-2 min-w-[100px] overflow-hidden border border-lumina-outline bg-lumina-surface-lowest shadow-xl"
         >
           {LANGUAGES.map((lang) => {
             const isActive = i18n.language === lang.code;

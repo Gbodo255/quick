@@ -1,50 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Api\DossierController;
-use App\Http\Controllers\Api\DossierDocumentController;
-use App\Http\Controllers\Api\DossierOtpController;
-use App\Http\Controllers\Api\HealthController;
-use App\Http\Controllers\Api\SimulationController;
-use App\Http\Controllers\Api\TranslationController;
 use App\Http\Middleware\EnsureAdminAuthenticated;
 use Illuminate\Support\Facades\Route;
-
-// Test route OUTSIDE API group
-Route::get('test', function () {
-    return response()->json(['message' => 'test works']);
-});
-
-// API Routes - Test route INSIDE API group
-Route::prefix('api')->group(function () {
-    Route::get('test', function () {
-        return response()->json(['message' => 'api test works']);
-    });
-
-    Route::prefix('v1')->group(function () {
-        Route::get('health', HealthController::class);
-        Route::post('simulate', [SimulationController::class, 'simulate']);
-
-        // Translation routes
-        Route::post('translate', [TranslationController::class, 'translate']);
-        Route::post('translate/object', [TranslationController::class, 'translateObject']);
-        Route::get('translate/usage', [TranslationController::class, 'usage']);
-
-        Route::post('dossiers', [DossierController::class, 'store']);
-        Route::get('dossiers/{reference}', [DossierController::class, 'show']);
-
-        Route::middleware('dossier.token')->group(function () {
-            Route::patch('dossiers/{reference}', [DossierController::class, 'update']);
-            Route::post('dossiers/{reference}/documents/{type}', [DossierDocumentController::class, 'store'])
-                ->whereIn('type', ['piece_identite', 'rib', 'fiches_paie']);
-            Route::delete('dossiers/{reference}/documents/{type}', [DossierDocumentController::class, 'destroy'])
-                ->whereIn('type', ['piece_identite', 'rib', 'fiches_paie']);
-            Route::post('dossiers/{reference}/otp/send', [DossierOtpController::class, 'send']);
-            Route::post('dossiers/{reference}/otp/verify', [DossierOtpController::class, 'verify']);
-            Route::post('dossiers/{reference}/processing/tick', [DossierController::class, 'advanceProcessing']);
-        });
-    });
-});
 
 // Web Routes
 Route::get('/', function () {

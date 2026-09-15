@@ -25,6 +25,7 @@ class DossierResource extends JsonResource
                 'cout_total' => (float) $this->cout_total,
                 'total_rembourse' => (float) $this->total_rembourse,
                 'motif' => $this->motif,
+                'assurance_incluse' => (bool) $this->assurance_incluse,
             ],
             'prequal' => [
                 'situation_pro' => $this->situation_pro,

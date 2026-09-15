@@ -1,11 +1,21 @@
 import { INITIAL_FORM_DATA } from '@/lib/credit'
 
+const COUNTRY_CODES = ['+352', '+33', '+32', '+41', '+49', '+34', '+39', '+44', '+1']
+
+function splitPhone(rawTelephone) {
+  const raw = rawTelephone ?? ''
+  const code = COUNTRY_CODES.find((c) => raw.startsWith(c))
+  if (!code) return { indicatifPays: '+33', telephone: raw }
+  return { indicatifPays: code, telephone: raw.slice(code.length).trim() }
+}
+
 export function dossierToFormData(dossier) {
   const prequal = dossier?.prequal ?? {}
   const identite = dossier?.identite ?? {}
   const situation = dossier?.situation ?? {}
   const simulation = dossier?.simulation ?? {}
   const consents = dossier?.consents ?? {}
+  const { indicatifPays, telephone } = splitPhone(identite.telephone)
 
   return {
     ...INITIAL_FORM_DATA,
@@ -18,7 +28,8 @@ export function dossierToFormData(dossier) {
     prenom: identite.prenom ?? '',
     nom: identite.nom ?? '',
     email: identite.email ?? '',
-    telephone: identite.telephone ?? '',
+    indicatifPays,
+    telephone,
     dateNaissance: identite.date_naissance ?? '',
     lieuNaissance: identite.lieu_naissance ?? '',
     adresse: identite.adresse ?? '',
@@ -27,6 +38,7 @@ export function dossierToFormData(dossier) {
     employeur: situation.employeur ?? '',
     anciennete: situation.anciennete ?? '',
     motif: simulation.motif ?? '',
+    assurance: simulation.assurance_incluse ?? true,
     pieceIdentiteType: dossier?.piece_identite_type ?? '',
     consent1: Boolean(consents.consent_1),
     consent2: Boolean(consents.consent_2),
@@ -36,6 +48,9 @@ export function dossierToFormData(dossier) {
       : null,
     rib: (dossier?.documents ?? []).find((d) => d.type === 'rib')
       ? { name: (dossier?.documents ?? []).find((d) => d.type === 'rib').original_filename, isUploaded: true }
+      : null,
+    certificatScolarite: (dossier?.documents ?? []).find((d) => d.type === 'certificat_scolarite')
+      ? { name: (dossier?.documents ?? []).find((d) => d.type === 'certificat_scolarite').original_filename, isUploaded: true }
       : null,
   }
 }

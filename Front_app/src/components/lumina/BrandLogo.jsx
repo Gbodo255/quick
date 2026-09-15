@@ -17,19 +17,21 @@ const SIZES = {
 
 export function BrandLogo({ className, variant = 'default', size = 'default' }) {
   const s = SIZES[size] ?? SIZES.default
+  const isInverse = variant === 'inverse'
 
   return (
     <div
       className={cn(
         'flex items-center gap-2 font-[family-name:var(--font-headline)] font-semibold tracking-tight',
         s.text,
-        variant === 'footer' ? 'text-lumina-on-surface' : 'text-lumina-heading',
+        variant === 'footer' ? 'text-lumina-on-surface' : isInverse ? 'text-white' : 'text-lumina-heading',
         className,
       )}
     >
       <span
         className={cn(
-          'flex items-center justify-center rounded-md bg-lumina-surface-container text-lumina-secondary',
+          'flex items-center justify-center rounded-md',
+          isInverse ? 'bg-white/15 text-white' : 'bg-lumina-surface-container text-lumina-secondary',
           s.box,
         )}
       >
@@ -37,7 +39,7 @@ export function BrandLogo({ className, variant = 'default', size = 'default' }) 
       </span>
       <span>
         <span>{BRAND_WORDMARK.prefix}</span>
-        <span className="text-lumina-secondary">{BRAND_WORDMARK.accent}</span>
+        <span className={isInverse ? 'text-white/85' : 'text-lumina-secondary'}>{BRAND_WORDMARK.accent}</span>
       </span>
     </div>
   )

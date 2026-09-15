@@ -1,4 +1,5 @@
 import { Icon } from '@/components/lumina/Icon'
+import { DotSpinner } from '@/components/lumina/DotSpinner'
 import { useTranslation } from 'react-i18next'
 
 export function LoadingScreen({ loadStep }) {
@@ -6,14 +7,14 @@ export function LoadingScreen({ loadStep }) {
 
   const STEPS = [
     ['badge', t('loading.step_id')],
-    ['account_balance', t('loading.step_rib')],
+    ['home', t('loading.step_rib')],
     ['monitoring', t('loading.step_profile')],
     ['mail', t('loading.step_confirm')],
   ]
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-lumina-background px-4 font-[family-name:var(--font-body)]">
-      <div className="mb-5 size-10 animate-spin rounded-full border-[3px] border-lumina-surface-container border-t-lumina-secondary" />
+      <DotSpinner size={40} className="mb-5 text-lumina-secondary" />
       <h1 className="mb-2 font-[family-name:var(--font-headline)] text-xl font-semibold text-lumina-heading">
         {t('loading.title')}
       </h1>

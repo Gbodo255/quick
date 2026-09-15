@@ -12,5 +12,5 @@ Votre dossier est actuellement en cours d'analyse par notre équipe.
 @endif
 
 Merci de votre confiance,
-L'équipe QuickCredit.
+L'équipe {{ config('credit.brand') }}.
 </x-mail::message>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { BrandLogo } from '@/components/lumina/BrandLogo'
 import { Icon } from '@/components/lumina/Icon'
+import { DotSpinner } from '@/components/lumina/DotSpinner'
 import { ApiError, sendOtp } from '@/lib/api'
 import { useTranslation } from 'react-i18next'
 
@@ -95,7 +96,7 @@ export function OtpScreen({
         <BrandLogo />
       </header>
       <div className="flex flex-1 items-center justify-center">
-        <div className="surface-card w-full max-w-md p-6 md:p-7">
+        <div className="surface-card w-full max-w-md p-4 sm:p-6 md:p-7">
           <div className="mb-5 flex justify-center">
             <div className="flex size-12 items-center justify-center rounded-md bg-lumina-surface-container">
               <Icon name="mail" filled size={24} className="text-lumina-secondary" />
@@ -121,7 +122,7 @@ export function OtpScreen({
           )}
 
 
-          <div className="mb-8 flex justify-center gap-2 md:gap-3" id="otp-container">
+          <div className="mb-8 flex justify-center gap-1.5 sm:gap-2 md:gap-3" id="otp-container">
             {digits.map((d, i) => (
               <input
                 key={i}
@@ -135,7 +136,7 @@ export function OtpScreen({
                 onChange={(e) => handleChange(i, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(i, e)}
                 onPaste={handlePaste}
-                className="size-10 rounded-md border border-lumina-outline-variant bg-white text-center font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-on-surface outline-none focus:border-lumina-secondary focus:ring-2 focus:ring-lumina-secondary/25"
+                className="size-9 shrink-0 rounded-md border border-lumina-outline-variant bg-white text-center font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-on-surface outline-none focus:border-lumina-secondary focus:ring-2 focus:ring-lumina-secondary/25 sm:size-10"
               />
             ))}
           </div>
@@ -144,10 +145,11 @@ export function OtpScreen({
             type="button"
             disabled={code.length < 6 || isSubmitting}
             onClick={handleVerify}
-            className="btn-clenar mb-4 flex w-full gap-2 disabled:opacity-50"
+            className="btn-clenar mb-4 flex w-full items-center justify-center gap-2 disabled:opacity-50"
           >
+            {isSubmitting && <DotSpinner size={16} dots={8} />}
             {isSubmitting ? t('otp.validating') : t('otp.validate_button')}
-            <Icon name="arrow_forward" size={18} />
+            {!isSubmitting && <Icon name="arrow_forward" size={18} />}
           </button>
 
           <button

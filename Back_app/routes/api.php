@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\DossierDocumentController;
 use App\Http\Controllers\Api\DossierOtpController;
 use App\Http\Controllers\Api\HealthController;
 use App\Http\Controllers\Api\SimulationController;
-use App\Http\Controllers\Api\TranslationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('api')->group(function () {
@@ -16,11 +15,6 @@ Route::middleware('api')->group(function () {
         Route::get('health', HealthController::class);
         Route::post('simulate', [SimulationController::class, 'simulate']);
 
-        // Translation routes
-        Route::post('translate', [TranslationController::class, 'translate']);
-        Route::post('translate/object', [TranslationController::class, 'translateObject']);
-        Route::get('translate/usage', [TranslationController::class, 'usage']);
-
         Route::post('dossiers', [DossierController::class, 'store'])
             ->middleware('throttle:5,1');
         Route::get('dossiers/{reference}', [DossierController::class, 'show'])
@@ -29,9 +23,9 @@ Route::middleware('api')->group(function () {
         Route::middleware('dossier.token')->group(function (): void {
             Route::patch('dossiers/{reference}', [DossierController::class, 'update']);
             Route::post('dossiers/{reference}/documents/{type}', [DossierDocumentController::class, 'store'])
-                ->whereIn('type', ['piece_identite', 'rib', 'fiches_paie']);
+                ->whereIn('type', ['piece_identite', 'rib', 'certificat_scolarite']);
             Route::delete('dossiers/{reference}/documents/{type}', [DossierDocumentController::class, 'destroy'])
-                ->whereIn('type', ['piece_identite', 'rib', 'fiches_paie']);
+                ->whereIn('type', ['piece_identite', 'rib', 'certificat_scolarite']);
             Route::post('dossiers/{reference}/otp/send', [DossierOtpController::class, 'send'])
                 ->middleware('throttle:3,1');
             Route::post('dossiers/{reference}/otp/verify', [DossierOtpController::class, 'verify'])

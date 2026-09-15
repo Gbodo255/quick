@@ -1,4 +1,3 @@
-import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 export function SEO({ title, description, url = 'https://crediteco.app', image = '/og-image.png', schema = null }) {
@@ -34,7 +33,7 @@ export function SEO({ title, description, url = 'https://crediteco.app', image =
               "@type": "Organization",
               "@id": "https://crediteco.app/#organization",
               "name": "CreditEco",
-              "alternateName": "QuickCredit",
+              "alternateName": "StudCredit",
               "url": "https://crediteco.app",
               "logo": "https://crediteco.app/logo.png"
             },

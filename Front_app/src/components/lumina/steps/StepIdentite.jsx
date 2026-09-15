@@ -1,14 +1,19 @@
-import { GlassBanner, LuminaInput, LuminaSelect } from '@/components/lumina/LuminaField'
+import { useState } from 'react'
+import { LuminaInput, LuminaSelect } from '@/components/lumina/LuminaField'
 import { LuminaDatePicker } from '@/components/lumina/LuminaDatePicker'
 import { Icon } from '@/components/lumina/Icon'
-import { BRAND } from '@/lib/credit'
+import {
+  computeInitialVisibleCards,
+  validateContactCard,
+  validateIdentityCard,
+} from '@/lib/credit'
 import { useTranslation } from 'react-i18next'
 
-function FormCard({ icon, title, children }) {
+function FormCard({ icon, title, children, onValidate, validateLabel }) {
   return (
     <div className="surface-card flex flex-col gap-4 p-4 md:p-5">
       <div className="flex items-center gap-2.5 border-b border-lumina-outline-variant/30 pb-3">
-        <span className="flex size-8 items-center justify-center rounded-md bg-lumina-surface-container text-lumina-primary">
+        <span className="flex size-8 items-center justify-center rounded-none bg-lumina-surface-container text-lumina-primary">
           <Icon name={icon} size={18} />
         </span>
         <h2 className="font-[family-name:var(--font-headline)] text-base font-semibold text-lumina-on-surface">
@@ -16,12 +21,56 @@ function FormCard({ icon, title, children }) {
         </h2>
       </div>
       {children}
+      {onValidate && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={onValidate}
+            className="btn-clenar h-9 px-4 text-xs"
+          >
+            {validateLabel}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
 
+const IDENTITY_FIELDS = ['civilite', 'prenom', 'nom', 'dateNaissance']
+const CONTACT_FIELDS = ['email', 'telephone']
+
 export function StepIdentite({ data, setField, errors }) {
   const { t } = useTranslation()
+  const [visibleCards, setVisibleCards] = useState(() => computeInitialVisibleCards(data))
+  const [localErrors, setLocalErrors] = useState({})
+
+  const fieldError = (key) => errors[key] || localErrors[key]
+
+  const clearLocalErrors = (keys) => {
+    setLocalErrors((prev) => {
+      const next = { ...prev }
+      keys.forEach((k) => delete next[k])
+      return next
+    })
+  }
+
+  const handleValidateIdentity = () => {
+    const errs = validateIdentityCard(data)
+    setLocalErrors((prev) => ({ ...prev, ...errs }))
+    if (Object.keys(errs).length === 0) {
+      clearLocalErrors(IDENTITY_FIELDS)
+      setVisibleCards((v) => Math.max(v, 2))
+    }
+  }
+
+  const handleValidateContact = () => {
+    const errs = validateContactCard(data)
+    setLocalErrors((prev) => ({ ...prev, ...errs }))
+    if (Object.keys(errs).length === 0) {
+      clearLocalErrors(CONTACT_FIELDS)
+      setVisibleCards((v) => Math.max(v, 3))
+    }
+  }
 
   const CIVILITE_OPTIONS = [
     ['M.', t('identite.civility_options.M.')],
@@ -30,11 +79,12 @@ export function StepIdentite({ data, setField, errors }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm leading-relaxed text-lumina-on-surface-variant">
-        {t('identite.intro')}
-      </p>
-
-      <FormCard icon="person" title={t('identite.identity_card')}>
+      <FormCard
+        icon="person"
+        title={t('identite.identity_card')}
+        onValidate={visibleCards === 1 ? handleValidateIdentity : undefined}
+        validateLabel={t('identite.validate_section')}
+      >
         <div className="grid gap-4 md:grid-cols-12">
           <div className="md:col-span-4">
             <LuminaSelect
@@ -44,7 +94,7 @@ export function StepIdentite({ data, setField, errors }) {
               onChange={(v) => setField('civilite', v)}
               options={CIVILITE_OPTIONS}
               placeholder={t('identite.select')}
-              error={errors.civilite}
+              error={fieldError('civilite')}
               required
             />
           </div>
@@ -56,7 +106,7 @@ export function StepIdentite({ data, setField, errors }) {
               value={data.prenom}
               onChange={(v) => setField('prenom', v)}
               placeholder="Ex: Jean"
-              error={errors.prenom}
+              error={fieldError('prenom')}
               required
             />
           </div>
@@ -68,7 +118,7 @@ export function StepIdentite({ data, setField, errors }) {
               value={data.nom}
               onChange={(v) => setField('nom', v)}
               placeholder="Ex: Dupont"
-              error={errors.nom}
+              error={fieldError('nom')}
               required
             />
           </div>
@@ -78,7 +128,7 @@ export function StepIdentite({ data, setField, errors }) {
               label={t('identite.birthdate')}
               value={data.dateNaissance}
               onChange={(v) => setField('dateNaissance', v)}
-              error={errors.dateNaissance}
+              error={fieldError('dateNaissance')}
               required
             />
           </div>
@@ -95,8 +145,14 @@ export function StepIdentite({ data, setField, errors }) {
         </div>
       </FormCard>
 
-      <FormCard icon="contact_mail" title={t('identite.contact_card')}>
-        <div className="grid gap-4 md:grid-cols-2">
+      {visibleCards >= 2 && (
+      <FormCard
+        icon="contact_mail"
+        title={t('identite.contact_card')}
+        onValidate={visibleCards === 2 ? handleValidateContact : undefined}
+        validateLabel={t('identite.validate_section')}
+      >
+        <div className="grid gap-4">
           <LuminaInput
             id="email"
             label={t('identite.email')}
@@ -105,7 +161,7 @@ export function StepIdentite({ data, setField, errors }) {
             onChange={(v) => setField('email', v)}
             placeholder="jean.dupont@email.com"
             icon={<Icon name="mail" size={20} />}
-            error={errors.email}
+            error={fieldError('email')}
             required
           />
           <div className="flex gap-2">
@@ -136,14 +192,16 @@ export function StepIdentite({ data, setField, errors }) {
                 value={data.telephone}
                 onChange={(v) => setField('telephone', v)}
                 placeholder="6 12 34 56 78"
-                error={errors.telephone}
+                error={fieldError('telephone')}
                 required
               />
             </div>
           </div>
         </div>
       </FormCard>
+      )}
 
+      {visibleCards >= 3 && (
       <FormCard icon="home" title={t('identite.address_card')}>
         <div className="grid gap-4">
           <LuminaInput
@@ -152,7 +210,7 @@ export function StepIdentite({ data, setField, errors }) {
             value={data.adresse}
             onChange={(v) => setField('adresse', v)}
             placeholder={t('identite.address_placeholder')}
-            error={errors.adresse}
+            error={fieldError('adresse')}
             required
           />
           <div className="grid gap-4 md:grid-cols-2">
@@ -163,7 +221,7 @@ export function StepIdentite({ data, setField, errors }) {
               value={data.codePostal}
               onChange={(v) => setField('codePostal', v)}
               placeholder="75008"
-              error={errors.codePostal}
+              error={fieldError('codePostal')}
               required
             />
             <LuminaInput
@@ -173,16 +231,13 @@ export function StepIdentite({ data, setField, errors }) {
               value={data.ville}
               onChange={(v) => setField('ville', v)}
               placeholder={t('identite.city_placeholder')}
-              error={errors.ville}
+              error={fieldError('ville')}
               required
             />
           </div>
         </div>
       </FormCard>
-
-      <GlassBanner icon="shield_lock" title={t('identite.gdpr_title')} variant="security">
-        {t('identite.gdpr_body', { brand: BRAND })}
-      </GlassBanner>
+      )}
     </div>
   )
 }

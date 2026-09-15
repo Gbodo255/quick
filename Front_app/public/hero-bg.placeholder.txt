@@ -1,2 +1,0 @@
-Placez votre image de fond ici sous le nom : hero-bg.jpg
-(Recommandé : 1920×1080 minimum, format JPG ou WebP)

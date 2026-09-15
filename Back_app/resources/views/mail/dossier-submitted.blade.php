@@ -17,10 +17,10 @@
                                     </td>
                                     <td style="vertical-align: middle;">
                                         <p style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 800; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; letter-spacing: -0.5px;">
-                                            Quick<span style="color: #60A5FA;">credit</span>
+                                            {{ config('credit.brand') }}
                                         </p>
                                         <p style="margin: 2px 0 0 0; color: #93C5FD; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                            Courtage &amp; Financement
+                                            Financement étudiant
                                         </p>
                                     </td>
                                 </tr>
@@ -126,10 +126,10 @@
                 </td>
                 <td style="vertical-align: top;">
                     <p style="margin: 0 0 2px 0; color: #0F172A; font-size: 16px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        Julien Verran
+                        L'équipe {{ config('credit.brand') }}
                     </p>
                     <p style="margin: 0 0 6px 0; color: #475569; font-size: 13px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                        Courtier en crédit immobilier
+                        Service client
                     </p>
                     <p style="margin: 0 0 3px 0; color: #64748B; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                         📞 <a href="tel:+33780961216" style="color: #0F172A; text-decoration: none; font-weight: 600;">+33 7 80 96 12 16</a>
@@ -159,7 +159,7 @@
                                 📞 +33 7 80 96 12 16 · 📧 support@crediteco.app · 🌐 crediteco.app
                             </p>
                             <p style="margin: 0; color: #64748B; font-size: 11px; line-height: 1.5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                                © {{ date('Y') }} Quickcredit · Données sécurisées conformément au RGPD
+                                © {{ date('Y') }} {{ config('credit.brand') }} · Données sécurisées conformément au RGPD
                             </p>
                         </td>
                     </tr>

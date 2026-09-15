@@ -1,5 +1,3 @@
-import { BrandLogo } from '@/components/lumina/BrandLogo'
-import { Icon } from '@/components/lumina/Icon'
 import { BRAND } from '@/lib/credit'
 
 const POLICY_SECTIONS = [
@@ -7,7 +5,7 @@ const POLICY_SECTIONS = [
     title: 'Responsable du traitement',
     body: [
       `${BRAND} est responsable des traitements réalisés sur la plateforme de demande de crédit.`,
-      'Pour exercer vos droits ou poser une question sur vos données, vous pouvez écrire à privacy@quickcredit.local.',
+      'Pour exercer vos droits ou poser une question sur vos données, vous pouvez écrire à privacy@studcredit.local.',
     ],
   },
   {
@@ -28,7 +26,7 @@ const POLICY_SECTIONS = [
   {
     title: 'Destinataires',
     body: [
-      'Les données sont accessibles uniquement aux personnes habilitées de Quickcredit et à nos prestataires techniques nécessaires au fonctionnement du service : hébergement, stockage, envoi d’e-mails, sécurité et maintenance.',
+      'Les données sont accessibles uniquement aux personnes habilitées de StudCredit et à nos prestataires techniques nécessaires au fonctionnement du service : hébergement, stockage, envoi d’e-mails, sécurité et maintenance.',
       'Nous ne vendons pas vos données. Elles ne sont transmises à des partenaires financiers que lorsque cela est nécessaire à l’étude de votre demande ou lorsque la loi l’exige.',
     ],
   },
@@ -71,24 +69,10 @@ const POLICY_SECTIONS = [
   },
 ]
 
-export function PrivacyPolicyScreen({ onBack }) {
+export function PrivacyPolicyScreen({ footer }) {
   return (
     <div className="min-h-svh bg-lumina-background font-[family-name:var(--font-body)] text-lumina-on-surface">
-      <header className="sticky top-0 z-50 border-b border-lumina-outline bg-lumina-surface-lowest px-4 py-3 md:px-10">
-        <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <BrandLogo />
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center gap-2 text-sm font-medium text-lumina-on-surface-variant transition-colors hover:text-lumina-secondary"
-          >
-            <Icon name="arrow_back" size={18} />
-            Retour
-          </button>
-        </div>
-      </header>
-
-      <main className="mx-auto w-full max-w-4xl px-4 py-8 md:px-6 md:py-12">
+      <main className="mx-auto w-full max-w-4xl px-6 pt-24 pb-20 md:pt-32">
         <div className="mb-8 border-b border-lumina-outline pb-6">
           <p className="mb-2 text-xs font-medium tracking-widest text-lumina-secondary uppercase">
             Données personnelles
@@ -120,6 +104,7 @@ export function PrivacyPolicyScreen({ onBack }) {
           ))}
         </div>
       </main>
+      {footer}
     </div>
   )
 }

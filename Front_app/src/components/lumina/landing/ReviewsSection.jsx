@@ -1,94 +1,94 @@
-import { Star, ShieldCheck } from 'lucide-react'
+import { useState } from 'react'
+import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 const REVIEW_INDICES = [0, 1, 2, 3, 4, 5]
 const REVIEW_IMAGES = [
-  'https://randomuser.me/api/portraits/women/44.jpg',
-  'https://randomuser.me/api/portraits/men/32.jpg',
-  'https://randomuser.me/api/portraits/men/65.jpg',
-  'https://randomuser.me/api/portraits/women/68.jpg',
-  'https://randomuser.me/api/portraits/men/12.jpg',
-  'https://randomuser.me/api/portraits/women/52.jpg',
+  'https://i.pravatar.cc/600?img=47',
+  'https://i.pravatar.cc/600?img=13',
+  'https://i.pravatar.cc/600?img=59',
+  'https://i.pravatar.cc/600?img=45',
+  'https://i.pravatar.cc/600?img=14',
+  'https://i.pravatar.cc/600?img=48',
 ]
 
 export function ReviewsSection() {
   const { t } = useTranslation()
+  const [index, setIndex] = useState(0)
+  const count = REVIEW_INDICES.length
+
+  const prev = () => setIndex((i) => (i - 1 + count) % count)
+  const next = () => setIndex((i) => (i + 1) % count)
+
   return (
-    <section id="avis" className="bg-lumina-surface-light border-y border-lumina-outline py-16 scroll-mt-24">
-      <div className="mx-auto max-w-6xl px-6">
-        
-        <div className="flex flex-col items-start justify-between gap-5 md:flex-row md:items-center">
+    <section id="avis" className="flex min-h-[85svh] flex-col justify-center bg-lumina-surface-light border-y border-lumina-outline py-16 scroll-mt-24">
+      <div className="mx-auto w-full max-w-6xl px-6">
+
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-lumina-outline bg-lumina-surface-lowest px-3 py-1 text-xs font-medium text-lumina-on-surface shadow-sm">
-              {t('landing.reviews_badge', 'Ils ont signé avec nous')}
-            </span>
-            <h2 className="mt-3 font-[family-name:var(--font-headline)] text-3xl leading-tight font-semibold md:text-4xl text-balance text-lumina-heading">
-              {t('landing.reviews_title', '2 000+ projets financés.')}
+            <h2 className="font-[family-name:var(--font-headline)] text-3xl leading-tight font-semibold md:text-4xl text-balance text-lumina-heading">
+              {t('landing.reviews_title', 'Avis et commentaires')}
             </h2>
           </div>
-          
-          <div className="flex flex-col gap-4 rounded-2xl bg-white px-5 py-4 sm:flex-row sm:items-center sm:gap-5 border border-lumina-outline shadow-sm">
-            <div className="flex flex-col items-start gap-1">
-              <div className="flex items-center gap-2">
-                <div className="flex text-[#00b67a]">
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                </div>
-                <span className="font-[family-name:var(--font-headline)] font-bold text-lumina-heading">Trustpilot</span>
-              </div>
-              <span className="text-xs text-lumina-on-surface-variant font-medium">4,8/5 {t('landing.reviews_verified', 'sur 1 247 avis vérifiés')}</span>
-            </div>
-            
-            <div className="flex items-center gap-2 border-t border-lumina-outline pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5">
-              <ShieldCheck className="h-8 w-8 shrink-0 text-lumina-primary" />
-              <span className="max-w-[120px] text-xs font-medium leading-tight text-lumina-on-surface-variant">
-                {t('landing.reviews_regulated', 'Plate-forme régulée par les autorités françaises')}
-              </span>
-            </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={prev}
+              aria-label="Avis précédent"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-lumina-outline bg-white text-lumina-on-surface transition-colors hover:bg-lumina-surface-container-low"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={next}
+              aria-label="Avis suivant"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-lumina-outline bg-white text-lumina-on-surface transition-colors hover:bg-lumina-surface-container-low"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
         </div>
-        
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {REVIEW_INDICES.map((i) => (
-            <article key={i} className="surface-card p-6 flex flex-col hover:border-lumina-primary/40 transition-colors">
-              <header className="flex items-center gap-3">
-                <img 
-                  src={REVIEW_IMAGES[i]} 
-                  alt={t(`landing.review_${i}_name`)} 
-                  loading="lazy" 
-                  className="h-11 w-11 rounded-full object-cover border-2 border-lumina-surface-light shadow-sm"
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-lumina-heading truncate">{t(`landing.review_${i}_name`)}</p>
-                  <p className="text-xs text-lumina-on-surface-variant">{t(`landing.review_${i}_city`)}</p>
+
+        <div className="mt-10 overflow-hidden">
+          <div
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${index * 100}%)` }}
+          >
+            {REVIEW_INDICES.map((i) => (
+              <div key={i} className="w-full shrink-0 px-1">
+                <div className="flex flex-col overflow-hidden rounded-none border border-lumina-outline bg-white shadow-[var(--shadow-lumina-card)] sm:flex-row">
+                  <div className="h-56 sm:h-auto sm:w-2/5">
+                    <img
+                      src={REVIEW_IMAGES[i]}
+                      alt={t(`landing.review_${i}_name`)}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <div className="relative flex flex-1 flex-col justify-center p-6 md:p-10">
+                    <div className="absolute top-6 right-6 flex gap-0.5 text-lumina-warning">
+                      <Star className="h-5 w-5 fill-current" />
+                      <Star className="h-5 w-5 fill-current" />
+                      <Star className="h-5 w-5 fill-current" />
+                      <Star className="h-5 w-5 fill-current" />
+                      <Star className="h-5 w-5 fill-current" />
+                    </div>
+                    <p className="font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-heading">
+                      {t(`landing.review_${i}_name`)}
+                    </p>
+                    <p className="mt-4 text-xl leading-relaxed text-lumina-on-surface-variant md:text-2xl">
+                      {t(`landing.review_${i}_text`)}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex gap-0.5 shrink-0 text-lumina-warning">
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                  <Star className="h-3.5 w-3.5 fill-current" />
-                </div>
-              </header>
-              <p className="mt-4 text-sm leading-relaxed text-lumina-on-surface font-medium flex-1">
-                {t(`landing.review_${i}_text`)}
-              </p>
-              <footer className="mt-4 border-t border-lumina-outline pt-3">
-                <p className="text-xs text-lumina-on-surface-variant font-medium">
-                  {t(`landing.review_${i}_project`).split('taux obtenu').map((part, index) => (
-                    <span key={index}>
-                      {index === 0 ? part : <span className="font-semibold text-lumina-primary">taux obtenu{part}</span>}
-                    </span>
-                  ))}
-                </p>
-              </footer>
-            </article>
-          ))}
+              </div>
+            ))}
+          </div>
         </div>
-        
+
       </div>
     </section>
   )

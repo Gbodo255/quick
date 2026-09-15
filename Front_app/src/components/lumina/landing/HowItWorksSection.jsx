@@ -1,86 +1,100 @@
-import { Calculator, UserPlus, ShieldCheck, Check } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { GraduationCap, ShieldCheck, FileCheck, Clock, ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/utils'
+import imgDedieEtudiants from '@/assets/why-us/dedie-etudiants.jpg'
+import imgSansCaution from '@/assets/why-us/sans-caution.jpg'
+import imgConditionsClaires from '@/assets/why-us/conditions-claires.jpg'
+import imgReponseRapide from '@/assets/why-us/reponse-rapide.jpg'
 
-export function HowItWorksSection() {
+const ITEMS = [
+  { key: 'step1', icon: GraduationCap, image: imgDedieEtudiants },
+  { key: 'step2', icon: ShieldCheck, image: imgSansCaution },
+  { key: 'step3', icon: FileCheck, image: imgConditionsClaires },
+  { key: 'step4', icon: Clock, image: imgReponseRapide },
+]
+
+export function HowItWorksSection({ onOpenObjectifModal }) {
   const { t } = useTranslation()
+  const [openKey, setOpenKey] = useState(ITEMS[0].key)
+  const openItem = ITEMS.find((p) => p.key === openKey)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setOpenKey((prev) => {
+        const idx = ITEMS.findIndex((p) => p.key === prev)
+        return ITEMS[(idx + 1) % ITEMS.length].key
+      })
+    }, 5000)
+    return () => clearTimeout(timer)
+  }, [openKey])
+
   return (
-    <section id="comment" className="mx-auto max-w-6xl px-6 py-24 scroll-mt-24">
-      <div className="max-w-2xl">
-        <span className="inline-flex items-center gap-2 rounded-full border border-lumina-outline bg-lumina-surface-lowest px-3 py-1 text-xs font-medium text-lumina-on-surface shadow-sm">
-          {t('landing.how_badge', 'Comment ça marche')}
-        </span>
-        <h2 className="mt-4 font-[family-name:var(--font-headline)] text-4xl leading-tight font-semibold md:text-5xl text-balance text-lumina-heading">
-          {t('landing.how_title', 'De la simu à la signature, en 3 étapes.')}
-        </h2>
-        <p className="mt-4 text-lumina-on-surface-variant text-lg">
-          {t('landing.how_subtitle', 'Pas de paperasse inutile, pas de jargon. Un conseiller humain, une plateforme claire.')}
-        </p>
-      </div>
-      
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="surface-card p-6 transition-transform hover:-translate-y-1 hover:shadow-lg">
-          <header className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lumina-surface-container text-lumina-primary">
-              <Calculator className="h-6 w-6" />
-            </div>
-            <div className="min-w-0">
-              <p className="font-[family-name:var(--font-headline)] text-xs font-bold text-lumina-outline-variant leading-none">01</p>
-              <h3 className="mt-1 font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-heading leading-tight">
-                {t('landing.step1_title', 'Tu simules')}
-              </h3>
-            </div>
-          </header>
-          <p className="mt-4 text-sm leading-relaxed text-lumina-on-surface-variant font-medium">
-            {t('landing.step1_text', "Ajuste les curseurs pour ton projet. Tu vois ta mensualité et ta capacité d'emprunt en 30 secondes. Gratuit, anonyme.")}
-          </p>
+    <section id="pourquoi-nous" className="mx-auto min-h-[90svh] max-w-6xl px-6 pt-16 pb-16 scroll-mt-24">
+      <div className="flex w-full flex-col gap-10 lg:flex-row lg:gap-16">
+        <div className="flex flex-col lg:order-2 lg:w-1/2">
+          <h2 className="font-[family-name:var(--font-headline)] text-2xl leading-tight font-semibold md:text-3xl text-balance text-lumina-heading">
+            {t('landing.how_title', 'Un financement conçu autour de la réalité étudiante.')}
+          </h2>
+
+          <div
+            className={cn(
+              'relative mt-8 min-h-64 flex-1 overflow-hidden transition-opacity duration-300 ease-in-out',
+              openItem ? 'opacity-100' : 'opacity-0',
+            )}
+          >
+            {openItem && (
+              <img
+                src={openItem.image}
+                alt={t(`landing.${openItem.key}_title`)}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            )}
+          </div>
         </div>
-        
-        <div className="surface-card p-6 transition-transform hover:-translate-y-1 hover:shadow-lg border-lumina-primary/30">
-          <header className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lumina-primary/10 text-lumina-primary">
-              <UserPlus className="h-6 w-6" />
-            </div>
-            <div className="min-w-0">
-              <p className="font-[family-name:var(--font-headline)] text-xs font-bold text-lumina-outline-variant leading-none">02</p>
-              <h3 className="mt-1 font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-heading leading-tight">
-                {t('landing.step2_title', "Tu t'inscris")}
-              </h3>
-            </div>
-          </header>
-          <p className="mt-4 text-sm leading-relaxed text-lumina-on-surface-variant font-medium">
-            {t('landing.step2_text', "2 minutes pour créer ton compte. Un conseiller dédié te rappelle sous 24h pour cadrer ton projet de financement.")}
-          </p>
-        </div>
-        
-        <div className="surface-card p-6 transition-transform hover:-translate-y-1 hover:shadow-lg">
-          <header className="flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-lumina-surface-container text-lumina-primary">
-              <ShieldCheck className="h-6 w-6" />
-            </div>
-            <div className="min-w-0">
-              <p className="font-[family-name:var(--font-headline)] text-xs font-bold text-lumina-outline-variant leading-none">03</p>
-              <h3 className="mt-1 font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-heading leading-tight">
-                {t('landing.step3_title', "On défend ton dossier")}
-              </h3>
-            </div>
-          </header>
-          <p className="mt-4 text-sm leading-relaxed text-lumina-on-surface-variant font-medium">
-            {t('landing.step3_text', "On constitue ton dossier et on le présente à nos 30+ banques partenaires. Tu compares les offres, tu signes la meilleure.")}
-          </p>
-        </div>
-      </div>
-      
-      <div className="mt-10 flex flex-col items-center gap-4 rounded-[2rem] bg-gradient-to-br from-lumina-primary to-[#4a38a8] p-8 text-center text-white md:flex-row md:gap-8 md:text-left shadow-lg">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white text-lumina-primary shadow-sm">
-          <Check className="h-8 w-8" strokeWidth={3} />
-        </div>
-        <div className="flex-1">
-          <p className="font-[family-name:var(--font-headline)] font-semibold text-2xl md:text-3xl leading-tight">
-            {t('landing.how_bottom_title', "Quelques jours plus tard : ton prêt validé, au meilleur taux.")}
-          </p>
-          <p className="mt-2 text-white/80 font-medium">
-            {t('landing.how_bottom_text', "On défend ton dossier auprès de nos banques partenaires. Tu compares les offres, tu signes celle qui te va.")}
-          </p>
+
+        <div className="lg:order-1 lg:w-2/5">
+          {ITEMS.map(({ key, icon: ItemIcon }, index) => {
+            const isOpen = openKey === key
+            return (
+              <div key={key} className={cn(index < ITEMS.length - 1 && 'border-b border-lumina-outline')}>
+                <button
+                  type="button"
+                  onClick={() => setOpenKey(key)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center gap-4 py-9 text-left outline-none"
+                >
+                  <ItemIcon className="h-8 w-8 shrink-0 text-lumina-primary" strokeWidth={1.5} />
+                  <h3 className="flex-1 font-[family-name:var(--font-headline)] text-lg font-semibold text-lumina-heading">
+                    {t(`landing.${key}_title`)}
+                  </h3>
+                </button>
+
+                <div
+                  className={cn(
+                    'grid transition-all duration-300 ease-in-out',
+                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+                  )}
+                >
+                  <div className="overflow-hidden">
+                    <div className="pb-9 pl-12">
+                      <p className="text-sm leading-relaxed text-lumina-on-surface-variant">
+                        {t(`landing.${key}_text`)}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={onOpenObjectifModal}
+                        className="mt-4 inline-flex h-10 items-center justify-center rounded-none bg-lumina-primary px-6 text-sm font-semibold text-white transition-colors hover:bg-lumina-brand"
+                      >
+                        {t('landing.pillar_cta', 'Faire un prêt')}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </section>

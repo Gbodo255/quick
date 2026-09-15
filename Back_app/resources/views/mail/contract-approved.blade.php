@@ -11,7 +11,7 @@
                 </td>
                 <td style="vertical-align: middle;">
                     <span style="color: #0F172A; font-size: 22px; font-weight: 800; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; letter-spacing: -0.5px;">
-                        Quick<span style="color: #2563EB;">credit</span>
+                        {{ config('credit.brand') }}
                     </span>
                 </td>
             </tr>
@@ -37,7 +37,7 @@ Vous trouverez en pièce jointe votre **Offre de Contrat de Prêt**, précisant 
 
 **Prochaines étapes :**
 1. Prenez connaissance du contrat ci-joint.
-2. Signez l'offre et retournez-la à votre courtier.
+2. Signez l'offre et retournez-la à notre équipe.
 3. Le déblocage des fonds sera effectué dès réception du contrat signé.
 @endif
 </div>
@@ -53,10 +53,10 @@ Vous trouverez en pièce jointe votre **Offre de Contrat de Prêt**, précisant 
             </td>
             <td style="vertical-align: top;">
                 <p style="margin: 0 0 2px 0; color: #0F172A; font-size: 16px; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    Julien Verran
+                    L'équipe {{ config('credit.brand') }}
                 </p>
                 <p style="margin: 0 0 6px 0; color: #475569; font-size: 13px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    Courtier en crédit immobilier
+                    Service client
                 </p>
                 <p style="margin: 0 0 3px 0; color: #64748B; font-size: 12px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     📞 <a href="tel:+33780961216" style="color: #0F172A; text-decoration: none; font-weight: 600;">+33 7 80 96 12 16</a>

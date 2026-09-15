@@ -266,7 +266,7 @@
     ═══════════════════════════════════════════ --}}
     <script type="text/php">
         if (isset($pdf)) {
-            $text = "Quickcredit · Récapitulatif de Dossier " . "{{ $application->reference }}" . " · Page {PAGE_NUM} sur {PAGE_COUNT}";
+            $text = "{{ config('credit.brand') }} · Récapitulatif de Dossier " . "{{ $application->reference }}" . " · Page {PAGE_NUM} sur {PAGE_COUNT}";
             $font = $fontMetrics->get_font("DejaVu Sans, sans-serif", "normal");
             $size = 7.5;
             $color = array(0.4, 0.45, 0.55);
@@ -286,7 +286,7 @@
                         <tr>
                             @if($logoBase64)
                             <td style="vertical-align: middle; padding-right: 10px;">
-                                <img src="{{ $logoBase64 }}" width="38" height="38" style="border-radius: 6px; display: block;" alt="QuickCredit">
+                                <img src="{{ $logoBase64 }}" width="38" height="38" style="border-radius: 6px; display: block;" alt="{{ config('credit.brand') }}">
                             </td>
                             @endif
                             @if($logoEuBase64)
@@ -301,10 +301,10 @@
                             @endif
                             <td style="vertical-align: middle; border-left: 2px solid #CBD5E1; padding-left: 10px;">
                                 <div class="header-title-brand">
-                                    Quick<span class="header-title-accent">credit</span>
+                                    {{ config('credit.brand') }}
                                 </div>
                                 <div class="header-subtitle">
-                                    Établissement Agréé EU · Régulation 2024/762
+                                    Financement dédié aux étudiants
                                 </div>
                             </td>
                         </tr>
@@ -330,7 +330,7 @@
                 <tr>
                     <td>
                         <div class="hero-title">Récapitulatif Officiel de Demande de Financement</div>
-                        <div class="hero-sub">Dossier d'emprunt enregistré auprès des services Quickcredit</div>
+                        <div class="hero-sub">Dossier d'emprunt enregistré auprès des services {{ config('credit.brand') }}</div>
                     </td>
                     <td style="text-align: right; vertical-align: middle;">
                         <span class="status-pill">Dossier Transmis · Analyse en cours</span>
@@ -369,7 +369,14 @@
                 </tr>
                 <tr>
                     <td class="lbl">Objet / Motif du projet :</td>
-                    <td class="val">{{ $application->motif ?? 'Financement de projet personnel / Trésorerie' }}</td>
+                    <td class="val">{{ match ($application->motif) {
+                        'travaux' => 'Frais de scolarité',
+                        'auto' => 'Logement étudiant',
+                        'tresorerie' => 'Matériel & fournitures',
+                        'vacances' => 'Permis de conduire',
+                        'autre' => 'Autre projet étudiant',
+                        default => 'Non renseigné',
+                    } }}</td>
                 </tr>
             </table>
         </div>
@@ -423,19 +430,22 @@
             <table class="data-table">
                 <tr>
                     <td class="lbl">Statut professionnel :</td>
-                    <td class="val">{{ $application->statut_pro ?? 'Salarié CDI' }}</td>
+                    <td class="val">{{ match ($application->situation_pro) {
+                        'cdi', 'salarie_cdi' => 'Salarié CDI / Fonctionnaire',
+                        'cdd', 'salarie_cdd' => 'Salarié CDD / Intérim',
+                        'fonctionnaire' => 'Fonctionnaire',
+                        'independant' => 'Indépendant / Chef d\'entreprise',
+                        'retraite' => 'Retraité',
+                        default => $application->situation_pro ? 'Autre' : 'Non renseigné',
+                    } }}</td>
                 </tr>
                 <tr>
                     <td class="lbl">Revenus mensuels nets :</td>
-                    <td class="val">{{ number_format($application->revenus_mensuels ?? 3500, 0, ',', ' ') }} € / mois</td>
+                    <td class="val">{{ $application->revenu_net !== null ? number_format($application->revenu_net, 0, ',', ' ') . ' € / mois' : 'Non renseigné' }}</td>
                 </tr>
                 <tr>
-                    <td class="lbl">Charges de logement :</td>
-                    <td class="val">{{ number_format($application->charges_mensuelles ?? 800, 0, ',', ' ') }} € / mois</td>
-                </tr>
-                <tr>
-                    <td class="lbl">Crédits en cours de remboursement :</td>
-                    <td class="val">{{ number_format($application->credits_en_cours ?? 0, 0, ',', ' ') }} € / mois</td>
+                    <td class="lbl">Charges mensuelles (crédits en cours) :</td>
+                    <td class="val">{{ $application->charges_mensuelles !== null ? number_format($application->charges_mensuelles, 0, ',', ' ') . ' € / mois' : 'Non renseigné' }}</td>
                 </tr>
             </table>
         </div>
@@ -486,12 +496,12 @@
                 <td style="width: 4%;"></td>
                 <td style="width: 48%; vertical-align: top;">
                     <div class="sig-box">
-                        <div class="sig-title">Pour l'Établissement Quickcredit</div>
+                        <div class="sig-title">Pour l'Établissement {{ config('credit.brand') }}</div>
                         <div style="font-size: 9pt; color: #334155; margin-bottom: 6px;">
-                            <strong>Julien Verran</strong>
+                            <strong>{{ config('credit.brand') }}</strong>
                         </div>
                         <div style="font-size: 8pt; color: #64748B; line-height: 1.5;">
-                            Courtier en crédit immobilier<br>
+                            Service Client &amp; Engagement<br>
                             📞 +33 7 80 96 12 16 · ✉️ support@crediteco.app
                         </div>
                     </div>

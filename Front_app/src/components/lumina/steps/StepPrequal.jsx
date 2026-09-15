@@ -1,11 +1,9 @@
-import { GlassBanner, LuminaInput, LuminaSelect } from '@/components/lumina/LuminaField'
+import { LuminaInput, LuminaSelect } from '@/components/lumina/LuminaField'
 import { Icon } from '@/components/lumina/Icon'
-import { isEligible } from '@/lib/credit'
 import { useTranslation } from 'react-i18next'
 
 export function StepPrequal({ data, setField, errors }) {
   const { t } = useTranslation()
-  const eligible = isEligible(data)
 
   const PRO_OPTIONS = [
     ['cdi', t('prequal.pro_options.cdi')],
@@ -23,11 +21,7 @@ export function StepPrequal({ data, setField, errors }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm leading-relaxed text-lumina-on-surface-variant">
-        {t('prequal.intro')}
-      </p>
-
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4">
         <LuminaSelect
           id="situationPro"
           label={t('prequal.pro_status')}
@@ -67,22 +61,6 @@ export function StepPrequal({ data, setField, errors }) {
           icon={<Icon name="euro" size={20} />}
         />
       </div>
-
-      {data.revenuNet && (
-        <GlassBanner
-          icon="verified_user"
-          variant={eligible ? 'success' : 'info'}
-          title={
-            eligible
-              ? t('prequal.eligible_title')
-              : t('prequal.study_title')
-          }
-        >
-          {eligible
-            ? t('prequal.eligible_body')
-            : t('prequal.study_body')}
-        </GlassBanner>
-      )}
     </div>
   )
 }

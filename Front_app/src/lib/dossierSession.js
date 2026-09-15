@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'quickcredit_dossier_session'
+const STORAGE_KEY = 'studcredit_dossier_session'
 
 export function saveDossierSession({ reference, token }) {
   sessionStorage.setItem(
