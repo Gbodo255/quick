@@ -204,10 +204,10 @@
             <div style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
                 @forelse($notes as $note)
                 <div class="note-item">
-                    <div class="note-avatar">{{ strtoupper(substr($note->user->name, 0, 2)) }}</div>
+                    <div class="note-avatar">{{ strtoupper(substr($note->user->name ?? 'Utilisateur supprimé', 0, 2)) }}</div>
                     <div class="note-content">
                         <div class="note-header">
-                            <div class="note-author">{{ $note->user->name }}</div>
+                            <div class="note-author">{{ $note->user->name ?? 'Utilisateur supprimé' }}</div>
                             <div class="note-time">{{ $note->created_at->diffForHumans() }}</div>
                         </div>
                         <div class="note-box">

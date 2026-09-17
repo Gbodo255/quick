@@ -38,7 +38,7 @@ blockquote {
 }
 
 a {
-    color: #5c46c2;
+    color: #6200fe;
 }
 
 a img {
@@ -121,7 +121,7 @@ li {
 }
 
 .header {
-    padding: 32px 16px 18px;
+    padding: 34px 16px 24px;
     text-align: center;
 }
 
@@ -131,40 +131,12 @@ li {
     text-decoration: none;
 }
 
-.brand-symbol {
-    background-color: #5c46c2;
-    border-radius: 8px;
-    color: #ffffff;
+.brand-logo {
+    border: 0;
     display: inline-block;
-    font-size: 15px;
-    font-weight: 800;
-    height: 36px;
-    line-height: 36px;
-    text-align: center;
-    vertical-align: middle;
-    width: 36px;
-}
-
-.brand-name {
-    color: #000000;
-    display: inline-block;
-    font-size: 20px;
-    font-weight: 800;
-    line-height: 36px;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-
-.brand-accent {
-    color: #5c46c2;
-}
-
-.brand-tagline {
-    color: #7a7d80;
-    font-size: 12px;
-    line-height: 1.4;
-    margin-top: 10px;
-    text-align: center;
+    height: 31px;
+    outline: none;
+    width: 205px;
 }
 
 .body {
@@ -194,7 +166,7 @@ li {
 }
 
 .mail-accent {
-    background-color: #5c46c2;
+    background-color: #6200fe;
     font-size: 0;
     line-height: 0;
 }
@@ -213,13 +185,13 @@ li {
 }
 
 .panel {
-    border: 1px solid #e7e3fb;
+    border: 1px solid #ece0ff;
     border-radius: 8px;
     margin: 24px 0;
 }
 
 .panel-content {
-    background-color: #f7f5ff;
+    background-color: #f7f2ff;
     border-radius: 8px;
     color: #3d3f40;
     padding: 18px 20px;
@@ -239,7 +211,7 @@ li {
 }
 
 .security-code {
-    color: #4a38a8;
+    color: #4a00c4;
     font-size: 32px;
     font-weight: 800;
     letter-spacing: 8px;
@@ -307,11 +279,11 @@ li {
 
 .button-blue,
 .button-primary {
-    background-color: #5c46c2;
-    border-bottom: 12px solid #5c46c2;
-    border-left: 22px solid #5c46c2;
-    border-right: 22px solid #5c46c2;
-    border-top: 12px solid #5c46c2;
+    background-color: #6200fe;
+    border-bottom: 12px solid #6200fe;
+    border-left: 22px solid #6200fe;
+    border-right: 22px solid #6200fe;
+    border-top: 12px solid #6200fe;
 }
 
 .button-green,

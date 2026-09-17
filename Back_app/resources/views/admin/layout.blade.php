@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin — QuickCredit')</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -140,9 +141,14 @@
 
         {{-- ===== TOP BAR ===== --}}
         <header class="topbar" style="position:relative;">
-            
-            {{-- Gauche: Navigation rapide --}}
-            <div style="display:flex; align-items:center; gap:0.5rem;">
+
+            {{-- Gauche: Logo + Navigation rapide --}}
+            <div style="display:flex; align-items:center; gap:1.25rem;">
+                <a href="{{ route('admin.dashboard') }}" style="display:flex; align-items:center; flex-shrink:0;">
+                    <img src="{{ asset('images/brand/logo-full-dark.svg') }}" alt="StudCredit" style="height:22px; width:auto; display:block;">
+                </a>
+                <div style="width:1px; height:24px; background:#e2e8f0; flex-shrink:0;"></div>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
                 <button onclick="if(window.history.length > 1) { window.history.back(); } else { window.location.href='{{ route('admin.dashboard') }}'; }" class="topbar-icon-btn" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; width:36px; height:36px; flex-shrink:0;" title="Retour">
                     <svg xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;stroke:#64748b;" fill="none" viewBox="0 0 24 24" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
@@ -153,6 +159,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
                 </a>
+                </div>
             </div>
 
             {{-- Droite: Notifications et Profil --}}
@@ -176,9 +183,7 @@
                         @if(auth()->check())
                         <div style="padding:1.25rem; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; background:#f8fafc;">
                             <span style="font-size:0.9rem; font-weight:700; color:#0f172a;">Notifications</span>
-                            @if(auth()->user()->unreadNotifications->count() > 0)
-                            <span style="font-size:0.7rem; font-weight:600; color:#4f46e5; background:#e0e7ff; padding:0.2rem 0.6rem; border-radius:12px;">{{ auth()->user()->unreadNotifications->count() }} nouvelles</span>
-                            @endif
+                            <span id="notif-unread-count" style="font-size:0.7rem; font-weight:600; color:#4f46e5; background:#e0e7ff; padding:0.2rem 0.6rem; border-radius:12px; {{ auth()->user()->unreadNotifications->count() > 0 ? '' : 'display:none;' }}">{{ auth()->user()->unreadNotifications->count() }} nouvelles</span>
                         </div>
                         <div id="notification-list" style="max-height:320px; overflow-y:auto; padding:0.5rem;">
                             @forelse(auth()->user()->notifications()->take(10)->get() as $notification)
@@ -188,7 +193,7 @@
                                 </div>
                                 <div>
                                     <div style="font-size:0.8rem; font-weight:600; color:#0f172a;">{{ $notification->data['message'] ?? 'Nouveau dossier' }} {{ $notification->data['reference'] ?? '' }}</div>
-                                    <div style="font-size:0.7rem; color:#64748b; margin-top:2px;">Il y a {{ $notification->created_at->diffForHumans() }}</div>
+                                    <div style="font-size:0.7rem; color:#64748b; margin-top:2px;">{{ $notification->created_at->diffForHumans() }}</div>
                                 </div>
                             </a>
                             @empty
@@ -197,7 +202,7 @@
                         </div>
                         @endif
                         <div style="padding:0.75rem; border-top:1px solid #e2e8f0; text-align:center; background:#f8fafc;">
-                            <a href="#" style="font-size:0.75rem; color:#4f46e5; text-decoration:none; font-weight:600;">Voir toutes les notifications</a>
+                            <a href="{{ route('admin.notifications.index') }}" style="font-size:0.75rem; color:#4f46e5; text-decoration:none; font-weight:600;">Voir toutes les notifications</a>
                         </div>
                     </div>
                 </div>
@@ -342,6 +347,7 @@
 
     @endif
 
+    @php $notifUnreadRoute = route('admin.notifications.unread'); @endphp
     {!! '<script>
         function toggleProfileMenu() {
             var menu    = document.getElementById("profile-menu");
@@ -355,6 +361,31 @@
             if (chevron) chevron.style.transform = isOpen ? "rotate(180deg)" : "rotate(0deg)";
         }
 
+        /* Rafraîchissement périodique des notifications (badge + liste) */
+        function refreshNotifications() {
+            fetch("' . $notifUnreadRoute . '", { headers: { "X-Requested-With": "XMLHttpRequest" } })
+                .then(function (res) { return res.ok ? res.json() : Promise.reject(); })
+                .then(function (data) {
+                    var badge = document.getElementById("notification-badge");
+                    var count = document.getElementById("notif-unread-count");
+                    var list  = document.getElementById("notification-list");
+
+                    if (badge) badge.style.display = data.count > 0 ? "block" : "none";
+                    if (count) {
+                        if (data.count > 0) {
+                            count.style.display = "inline-block";
+                            count.textContent = data.count + (data.count > 1 ? " nouvelles" : " nouvelle");
+                        } else {
+                            count.style.display = "none";
+                        }
+                    }
+                    if (list) list.innerHTML = data.html;
+                })
+                .catch(function () { /* silencieux: on retentera au prochain intervalle */ });
+        }
+
+        setInterval(refreshNotifications, 30000);
+
         function toggleNotificationsMenu() {
             var menu   = document.getElementById("notifications-menu");
             var isOpen = menu.style.display === "block";
@@ -367,6 +398,7 @@
             }
 
             menu.style.display = isOpen ? "none" : "block";
+            if (!isOpen) refreshNotifications();
         }
 
         /* Fermer en cliquant en dehors */

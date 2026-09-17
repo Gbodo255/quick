@@ -28,10 +28,6 @@ class DossierController extends Controller
 
         $application = $this->dossierService->create($request->validated());
 
-        // Notify admins
-        $admins = \App\Models\User::where('role', 'admin')->get();
-        \Illuminate\Support\Facades\Notification::send($admins, new \App\Notifications\NewCreditApplication($application));
-
         return response()->json([
             'message' => 'Dossier initialisé.',
             'token' => $application->access_token,

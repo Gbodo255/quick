@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion — Admin QuickCredit</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -115,6 +116,13 @@
                 pointer-events: none;
             "></div>
 
+            {{-- Logo plateforme --}}
+            <div class="slide-in" style="position:relative; z-index:1; display:flex; flex-direction:column; justify-content:space-between; height:100%; padding:3rem;">
+                <img src="{{ asset('images/brand/logo-full-white.svg') }}" alt="StudCredit" style="height:30px; width:auto; display:block;">
+                <p style="color:rgba(255,255,255,0.75); font-size:0.9rem; line-height:1.6; max-width:340px; font-family:'Nunito',sans-serif;">
+                    Espace d'administration — pilotez les dossiers, les clients et les indicateurs de la plateforme StudCredit.
+                </p>
+            </div>
 
         </div>
 
@@ -124,6 +132,11 @@
 
             {{-- Contenu centré --}}
             <div style="width:100%; max-width:360px;">
+
+                {{-- Logo --}}
+                <div style="display:flex; justify-content:center; margin-bottom:1.75rem;">
+                    <img src="{{ asset('images/brand/logo-full-dark.svg') }}" alt="StudCredit" style="height:26px; width:auto; display:block;">
+                </div>
 
                 {{-- Titre --}}
                 <h1 style="font-size:1.6rem; font-weight:600; color:#0f172a; margin:0 0 1.75rem 0; text-align:center; letter-spacing:-0.01em;">

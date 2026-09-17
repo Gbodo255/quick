@@ -29,6 +29,7 @@ Route::middleware([EnsureAdminAuthenticated::class])->group(function () {
     Route::post('/admin/dossiers/{application}/notes', [AdminController::class, 'storeDossierNote'])->name('admin.dossiers.notes.store');
     Route::get('/admin/dossiers/{application}', [AdminController::class, 'show'])->name('admin.dossiers.show');
     Route::get('/admin/dossiers/{application}/documents/{document}', [AdminController::class, 'downloadDocument'])->name('admin.documents.download');
+    Route::get('/admin/notifications', [AdminController::class, 'notificationsIndex'])->name('admin.notifications.index');
     Route::get('/admin/notifications/unread', [AdminController::class, 'unreadNotifications'])->name('admin.notifications.unread');
     Route::get('/admin/notifications/{id}/read', [AdminController::class, 'readNotification'])->name('admin.notifications.read');
 

@@ -37,7 +37,20 @@ class AdminController extends Controller
         $notification = auth()->user()->notifications()->findOrFail($id);
         $notification->markAsRead();
 
-        return redirect()->route('admin.dossiers.show', $notification->data['application_id'] ?? 1);
+        $applicationId = $notification->data['application_id'] ?? null;
+
+        if ($applicationId && \App\Models\CreditApplication::whereKey($applicationId)->exists()) {
+            return redirect()->route('admin.dossiers.show', $applicationId);
+        }
+
+        return redirect()->route('admin.notifications.index');
+    }
+
+    public function notificationsIndex()
+    {
+        $notifications = auth()->user()->notifications()->paginate(20);
+
+        return view('admin.notifications', compact('notifications'));
     }
 
     public function unreadNotifications()
@@ -63,7 +76,7 @@ class AdminController extends Controller
                 </div>
                 <div>
                     <div style=\"font-size:0.8rem; font-weight:600; color:#0f172a;\">{$msg} {$ref}</div>
-                    <div style=\"font-size:0.7rem; color:#64748b; margin-top:2px;\">Il y a {$time}</div>
+                    <div style=\"font-size:0.7rem; color:#64748b; margin-top:2px;\">{$time}</div>
                 </div>
             </a>";
         }
@@ -406,8 +419,8 @@ class AdminController extends Controller
 
     public function downloadDocument(CreditApplication $application, CreditApplicationDocument $document)
     {
-        if (!Auth::check() || (!Auth::user()->isAdmin() && !Auth::user()->isEmployee())) {
-            abort(403, 'Accès non autorisé aux documents.');
+        if (!Auth::check() || !Auth::user()->isAdmin()) {
+            abort(403, 'Seul un administrateur peut consulter les documents des dossiers.');
         }
 
         if ($document->credit_application_id !== $application->id) {

@@ -6,8 +6,11 @@ use App\Enums\DossierStatus;
 use App\Enums\FormStep;
 use App\Mail\DossierSubmittedMail;
 use App\Models\CreditApplication;
+use App\Models\User;
+use App\Notifications\NewCreditApplication;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -79,6 +82,11 @@ class DossierService
             $application->submitted_at = \Illuminate\Support\Carbon::now();
             $application->processing_step = 0;
             $application->save();
+
+            // Notifier les administrateurs une fois le dossier réellement complet et soumis
+            // (nom, email etc. sont garantis renseignés à ce stade par assertReadyForSubmission)
+            $admins = User::where('role', 'admin')->get();
+            Notification::send($admins, new NewCreditApplication($application));
 
             // Génération PDF et envoi de mail en tâche de fond (après envoi de la réponse HTTP) pour une soumission instantanée
             app()->terminating(function () use ($application) {
