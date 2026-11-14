@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Route;
 
 // Web Routes
 Route::get('/', function () {
+    $indexPath = public_path('index.html');
+    if (file_exists($indexPath)) {
+        return response()->file($indexPath);
+    }
     return view('welcome');
 });
 
@@ -56,5 +60,14 @@ Route::middleware([EnsureAdminAuthenticated::class])->group(function () {
     Route::patch('/admin/settings/users/{user}', [AdminController::class, 'updateUser'])->name('admin.settings.users.update');
     Route::post('/admin/settings/users/{user}/password', [AdminController::class, 'changeUserPassword'])->name('admin.settings.users.password');
     Route::delete('/admin/settings/users/{user}', [AdminController::class, 'deleteUser'])->name('admin.settings.users.delete');
+});
+
+// Fallback SPA React pour toutes les autres routes frontend
+Route::fallback(function () {
+    $indexPath = public_path('index.html');
+    if (file_exists($indexPath)) {
+        return response()->file($indexPath);
+    }
+    abort(404);
 });
 

@@ -6,7 +6,8 @@ import { calcMensualite } from './credit'
 // appel réseau réel). Repasser MOCK_MODE à false une fois le backend prêt :
 // les implémentations réelles (fetch) sont conservées plus bas, inchangées.
 // ─────────────────────────────────────────────────────────────────────────
-const MOCK_MODE = false
+const MOCK_MODE = import.meta.env.VITE_MOCK_MODE === 'true' || 
+  (import.meta.env.PROD && (!import.meta.env.VITE_API_URL || String(import.meta.env.VITE_API_URL).trim() === ''))
 
 export class ApiError extends Error {
   constructor(message, { status = 0, errors = null } = {}) {

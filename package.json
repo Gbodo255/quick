@@ -1,0 +1,9 @@
+{
+  "name": "quickcredit",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm --prefix Front_app install && npm --prefix Front_app run build",
+    "dev": "npm --prefix Front_app run dev"
+  }
+}
