@@ -11,3 +11,4 @@ Back_app/storage/framework/cache/*
 Back_app/storage/framework/sessions/*
 Back_app/storage/framework/views/*
 Front_app/dist
+

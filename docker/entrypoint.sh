@@ -49,3 +49,4 @@ php artisan view:cache
 
 echo "QuickCredit is ready! Starting services..."
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+

@@ -27,3 +27,4 @@ services:
         value: sync
       - key: DEEPL_API_KEY
         value: 5a6ff9ae-1bf2-42ed-adac-8c5913f080da:fx
+
