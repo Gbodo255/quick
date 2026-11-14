@@ -1,0 +1,13 @@
+.git
+.github
+.vscode
+.idea
+**/node_modules
+**/vendor
+**/.phpunit.result.cache
+**/*.log
+Back_app/storage/logs/*.log
+Back_app/storage/framework/cache/*
+Back_app/storage/framework/sessions/*
+Back_app/storage/framework/views/*
+Front_app/dist

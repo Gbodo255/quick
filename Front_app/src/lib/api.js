@@ -149,7 +149,11 @@ async function mockFetchDossier(reference) {
 
 // ── Implémentations réelles (fetch) — conservées pour la reconnexion future ──
 
-const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const envApiUrl = import.meta.env.VITE_API_URL
+const defaultOrigin = typeof window !== 'undefined' && window.location && window.location.origin
+  ? window.location.origin
+  : 'http://localhost:8000'
+const rawApiUrl = envApiUrl && envApiUrl.trim() !== '' ? envApiUrl : defaultOrigin
 const normalizedApiUrl = rawApiUrl.replace(/\/+$|\/api\/?$/, '')
 const API_BASE = normalizedApiUrl.endsWith('/api/v1')
   ? normalizedApiUrl
