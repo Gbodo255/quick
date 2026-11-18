@@ -4,6 +4,7 @@ import { Info } from 'lucide-react'
 import { GlassBanner, LuminaSelect } from '@/components/lumina/LuminaField'
 import { Icon } from '@/components/lumina/Icon'
 import { DotSpinner } from '@/components/lumina/DotSpinner'
+import { LivenessCard } from '@/components/lumina/LivenessCard'
 import { BRAND } from '@/lib/credit'
 import { cn } from '@/lib/utils'
 
@@ -243,6 +244,8 @@ export function StepDocuments({ data, setField, errors = {}, onUploadDocument, u
         isUploaded={uploadedDocs?.has('rib') || data.rib?.isUploaded}
         onUpload={onUploadDocument}
       />
+
+      {import.meta.env.VITE_LIVENESS_ENABLED === 'true' && <LivenessCard />}
 
       <GlassBanner icon="shield" title={t('documents.security_title', 'Sécurité bancaire garantie')} variant="security">
         {t('documents.security_body', 'Vos documents sont chiffrés de bout en bout et conservés dans un coffre-fort numérique conforme aux normes bancaires européennes.')}

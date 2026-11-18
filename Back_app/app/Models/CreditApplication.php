@@ -57,6 +57,9 @@ class CreditApplication extends Model
         'otp_verified_at',
         'submitted_at',
         'is_archived',
+        'liveness_session_id',
+        'liveness_status',
+        'liveness_checked_at',
     ];
 
     protected $casts = [

@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    // Didit (liveness) : Business Console > API & Webhooks (clé) et > Workflows (workflow_id)
+    'didit' => [
+        'api_key' => env('DIDIT_API_KEY'),
+        'workflow_id' => env('DIDIT_WORKFLOW_ID'),
+        'base_url' => env('DIDIT_BASE_URL', 'https://verification.didit.me'),
+    ],
+
 ];

@@ -7,6 +7,9 @@ COPY Front_app/package*.json ./
 RUN npm ci
 COPY Front_app/ ./
 ENV VITE_API_URL=""
+# Affiche la carte de vérification faciale (Didit) : mettre VITE_LIVENESS_ENABLED=true dans les variables Render
+ARG VITE_LIVENESS_ENABLED=false
+ENV VITE_LIVENESS_ENABLED=$VITE_LIVENESS_ENABLED
 RUN npm run build
 
 # ==========================================

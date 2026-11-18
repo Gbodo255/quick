@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\DossierController;
 use App\Http\Controllers\Api\DossierDocumentController;
+use App\Http\Controllers\Api\DossierLivenessController;
 use App\Http\Controllers\Api\DossierOtpController;
 use App\Http\Controllers\Api\HealthController;
 use App\Http\Controllers\Api\SimulationController;
@@ -33,6 +34,10 @@ Route::middleware('api')->group(function () {
                 ->middleware('throttle:3,1');
             Route::post('dossiers/{reference}/otp/verify', [DossierOtpController::class, 'verify'])
                 ->middleware('throttle:5,1');
+            Route::post('dossiers/{reference}/liveness', [DossierLivenessController::class, 'store'])
+                ->middleware('throttle:10,1');
+            Route::get('dossiers/{reference}/liveness', [DossierLivenessController::class, 'status'])
+                ->middleware('throttle:30,1');
             Route::post('dossiers/{reference}/processing/tick', [DossierController::class, 'advanceProcessing']);
         });
     });

@@ -227,6 +227,14 @@ async function realFetchDossier(reference) {
   return request('GET', `/dossiers/${reference}`)
 }
 
+// Liveness (Didit) : uniquement en réel, la carte est masquée sans VITE_LIVENESS_ENABLED.
+export function startLiveness(reference, token) {
+  return request('POST', `/dossiers/${reference}/liveness`, { token })
+}
+export function getLivenessStatus(reference, token) {
+  return request('GET', `/dossiers/${reference}/liveness`, { token })
+}
+
 // ── Exports (basculent mock/réel selon MOCK_MODE) ───────────────────────
 
 export const checkApiHealth = MOCK_MODE ? mockCheckApiHealth : realCheckApiHealth
