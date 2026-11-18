@@ -27,7 +27,8 @@ RUN npm run build
 # ==========================================
 FROM composer:2 AS vendor-builder
 WORKDIR /app
-COPY Back_app/composer*.json ./
+# composer.lock indispensable : sans lui Composer résout pour son propre PHP (8.4+) et le conteneur PHP 8.3 plante
+COPY Back_app/composer.json Back_app/composer.lock ./
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
 # ==========================================
